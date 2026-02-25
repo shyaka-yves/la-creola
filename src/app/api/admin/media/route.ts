@@ -19,14 +19,33 @@ function publicUrl(filename: string): string {
 }
 
 export async function GET() {
-  const supabase = getSupabase();
-  const { data: list, error } = await supabase.storage.from(BUCKET).list("", { sortBy: { column: "name", order: "asc" } });
+  let supabase;
+  try {
+    supabase = getSupabase();
+  } catch (err) {
+    const message =
+      err instanceof Error && err.message.includes("SUPABASE_URL")
+        ? 'Server is missing "SUPABASE_URL" or "SUPABASE_SERVICE_ROLE_KEY". Set these environment variables in your Vercel project (see .env.example).'
+        : err instanceof Error
+          ? err.message
+          : "Failed to initialize Supabase client.";
+
+    return NextResponse.json({ ok: false, error: message }, { status: 500 });
+  }
+
+  const { data: list, error } = await supabase.storage
+    .from(BUCKET)
+    .list("", { sortBy: { column: "name", order: "asc" } });
+
   if (error) {
-    const msg = error.message?.toLowerCase().includes("not found") || error.message?.toLowerCase().includes("bucket")
-      ? `Storage bucket "${BUCKET}" not found. Create a public bucket named "uploads" in Supabase Dashboard → Storage → New bucket.`
-      : error.message;
+    const msg =
+      error.message?.toLowerCase().includes("not found") ||
+      error.message?.toLowerCase().includes("bucket")
+        ? `Storage bucket "${BUCKET}" not found. Create a public bucket named "uploads" in Supabase Dashboard → Storage → New bucket.`
+        : error.message;
     return NextResponse.json({ ok: false, error: msg }, { status: 500 });
   }
+
   const files = (list ?? [])
     .filter((f) => f.name && !f.name.startsWith("."))
     .map((f) => ({
@@ -34,6 +53,7 @@ export async function GET() {
       url: publicUrl(f.name),
       type: fileType(f.name),
     }));
+
   return NextResponse.json({ ok: true, files });
 }
 
@@ -50,7 +70,20 @@ export async function POST(req: Request) {
   const filename = `${Date.now()}-${crypto.randomBytes(10).toString("hex")}${safeExt}`;
 
   const buffer = Buffer.from(await file.arrayBuffer());
-  const supabase = getSupabase();
+  let supabase;
+  try {
+    supabase = getSupabase();
+  } catch (err) {
+    const message =
+      err instanceof Error && err.message.includes("SUPABASE_URL")
+        ? 'Server is missing "SUPABASE_URL" or "SUPABASE_SERVICE_ROLE_KEY". Set these environment variables in your Vercel project (see .env.example).'
+        : err instanceof Error
+          ? err.message
+          : "Failed to initialize Supabase client.";
+
+    return NextResponse.json({ ok: false, error: message }, { status: 500 });
+  }
+
   const { error } = await supabase.storage.from(BUCKET).upload(filename, buffer, {
     contentType: file.type || undefined,
     upsert: false,

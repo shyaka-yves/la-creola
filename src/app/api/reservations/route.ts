@@ -10,7 +10,11 @@ async function sendReservationEmail(record: ReservationRecord) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return;
 
-  const from = process.env.RESEND_FROM_EMAIL ?? "La Creola <onboarding@resend.dev>";
+  // Use Resend's default onboarding sender by default so it works without a custom domain.
+  // You can override this with RESEND_FROM_EMAIL later when you have your own domain.
+  const from =
+    process.env.RESEND_FROM_EMAIL ??
+    "La Creola <onboarding@resend.dev>";
   const resend = new Resend(apiKey);
 
   const lines = [

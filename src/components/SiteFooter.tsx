@@ -12,9 +12,34 @@ export function SiteFooter() {
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-zinc-400">
               A vibrant dining destination in Kigali where bold African flavors meet Asian craftsmanship in an intimate, candlelit setting.
             </p>
-            <p className="mt-3 text-sm font-medium text-[#D4AF37]">
-              Working hours: All days from 10 AM to 1 AM
-            </p>
+            <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-zinc-300">
+              <a
+                href="https://www.instagram.com/lacreola_kigali?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-[#D4AF37]"
+              >
+                Instagram
+              </a>
+              <span className="h-1 w-1 rounded-full bg-zinc-600" />
+              <a
+                href="https://web.facebook.com/p/La-Creola-Restaurant-and-Lounge-61550407251686/?_rdc=1&_rdr#"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-[#D4AF37]"
+              >
+                Facebook
+              </a>
+              <span className="h-1 w-1 rounded-full bg-zinc-600" />
+              <a
+                href="https://www.tiktok.com/@lacreola"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-[#D4AF37]"
+              >
+                TikTok
+              </a>
+            </div>
           </div>
 
           <div>

@@ -190,10 +190,7 @@ function getDefaultContent(): SiteContent {
       addressLines: ["Kigali / Kimihurura", "KG 28 Avenue, Kigali closer Adventist Church"],
       addressNote: "Located in the heart of Kimihurura with breathtaking views of the hills of Kigali.",
       hoursLines: [
-        "Tuesday - Thursday: 6:00 PM - 12:00 AM",
-        "Friday - Saturday: 6:00 PM - 2:00 AM",
-        "Sunday: 6:00 PM - 11:00 PM",
-        "Monday: Closed",
+        "Monday - Sunday: 10:00 AM - 1:00 AM",
       ],
       email: "reservations@lacreola.com",
       phone: "+250 793 084 995",
