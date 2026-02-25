@@ -22,7 +22,10 @@ export async function GET() {
   const supabase = getSupabase();
   const { data: list, error } = await supabase.storage.from(BUCKET).list("", { sortBy: { column: "name", order: "asc" } });
   if (error) {
-    return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
+    const msg = error.message?.toLowerCase().includes("not found") || error.message?.toLowerCase().includes("bucket")
+      ? `Storage bucket "${BUCKET}" not found. Create a public bucket named "uploads" in Supabase Dashboard → Storage → New bucket.`
+      : error.message;
+    return NextResponse.json({ ok: false, error: msg }, { status: 500 });
   }
   const files = (list ?? [])
     .filter((f) => f.name && !f.name.startsWith("."))
@@ -54,7 +57,10 @@ export async function POST(req: Request) {
   });
 
   if (error) {
-    return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
+    const msg = error.message?.toLowerCase().includes("not found") || error.message?.toLowerCase().includes("bucket")
+      ? `Storage bucket "${BUCKET}" not found. Create a public bucket named "uploads" in Supabase Dashboard → Storage → New bucket.`
+      : error.message;
+    return NextResponse.json({ ok: false, error: msg }, { status: 500 });
   }
 
   return NextResponse.json({

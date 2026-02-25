@@ -4,6 +4,7 @@ import { FadeIn } from "@/components/FadeIn";
 import { Testimonials } from "@/components/Testimonials";
 import { BlogSection } from "@/components/BlogSection";
 import { listEvents } from "@/lib/eventsDb";
+import { listGalleryImages } from "@/lib/galleryDb";
 import { getSiteContent } from "@/lib/siteContent";
 
 export const dynamic = "force-dynamic";
@@ -67,8 +68,9 @@ async function EventsSection() {
 }
 
 export default async function Home() {
-  const content = await getSiteContent();
+  const [content, galleryImages] = await Promise.all([getSiteContent(), listGalleryImages()]);
   const blogTitle = content.blog.title;
+  const blogItems = content.blog.items ?? [];
 
   return (
     <div className="relative overflow-hidden">
@@ -149,7 +151,7 @@ export default async function Home() {
                 ceiling.
               </p>
               <a
-                href="/contact"
+                href="/book"
                 className="inline-flex items-center text-sm font-medium text-gold underline-offset-4 hover:underline"
               >
                 Book a Table
@@ -251,13 +253,14 @@ export default async function Home() {
             </h2>
           </FadeIn>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-            {GALLERY_IMAGES.map((image, index) => (
-              <FadeIn key={image.alt} delay={70 * index}>
+            {(galleryImages.length > 0 ? galleryImages.slice(0, 6) : []).map((image, index) => (
+              <FadeIn key={image.id} delay={70 * index}>
                 <div className="group relative h-44 overflow-hidden rounded-2xl border border-zinc-700/70 bg-zinc-900/80 shadow-lg shadow-black/70 sm:h-48 md:h-64 md:rounded-3xl">
                   <Image
-                    src={image.src}
-                    alt={image.alt}
+                    src={image.imageUrl}
+                    alt={image.label}
                     fill
+                    unoptimized={image.imageUrl.startsWith("http")}
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
@@ -265,14 +268,16 @@ export default async function Home() {
               </FadeIn>
             ))}
           </div>
-          <div className="mt-8 text-center">
-            <Link
-              href="/gallery"
-              className="inline-flex items-center justify-center rounded-full border border-zinc-600/70 px-8 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-zinc-100 hover:border-gold hover:bg-white/5"
-            >
-              View Full Gallery
-            </Link>
-          </div>
+          {galleryImages.length > 0 && (
+            <div className="mt-8 text-center">
+              <Link
+                href="/gallery"
+                className="inline-flex items-center justify-center rounded-full border border-zinc-600/70 px-8 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-zinc-100 hover:border-gold hover:bg-white/5"
+              >
+                View Full Gallery
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 
@@ -297,26 +302,10 @@ export default async function Home() {
       {/* Blog */}
       <section className="section-padding bg-black/90">
         <div className="mx-auto max-w-6xl px-4">
-          <BlogSection title={blogTitle} />
+          <BlogSection title={blogTitle} items={blogItems} />
         </div>
       </section>
     </div>
   );
 }
-
-
-const GALLERY_IMAGES = [
-  {
-    src: "/gallery-interior-1.jpg",
-    alt: "Dimly lit interior of La Creola with candlelit tables",
-  },
-  {
-    src: "/gallery-dish-1.jpg",
-    alt: "Signature fusion dish plated with gold accents",
-  },
-  {
-    src: "/gallery-bar-1.jpg",
-    alt: "Backlit bar with premium spirits at La Creola",
-  },
-];
 

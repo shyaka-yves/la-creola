@@ -68,8 +68,10 @@ export async function POST(req: Request) {
 
   try {
     await sendReservationEmail(record);
-  } catch {
-    // Email failure should not block the reservation
+  } catch (err) {
+    // Log so you can see in Vercel logs; reservation still succeeds
+    console.error("[Reservations] Email failed:", err instanceof Error ? err.message : err);
+    // If using a custom domain in Resend, set RESEND_FROM_EMAIL to that verified sender (e.g. La Creola <reservations@yourdomain.com>)
   }
 
   return NextResponse.json({ ok: true, id: record.id });

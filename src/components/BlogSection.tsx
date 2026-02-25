@@ -1,32 +1,46 @@
 import Image from "next/image";
 import { FadeIn } from "./FadeIn";
 
-const POSTS = [
+type BlogItem = {
+  category: string;
+  title: string;
+  excerpt: string;
+  imageSrc: string;
+};
+
+const FALLBACK_POSTS: BlogItem[] = [
   {
     category: "Chef's Notes",
     title: "Designing a Menu that Moves with the Seasons",
     excerpt:
-      "How our culinary team balances Kigali’s local markets with Asian pantry staples to create a menu that always feels alive.",
-    image: "/blog-seasonal.jpg",
+      "How our culinary team balances Kigali's local markets with Asian pantry staples to create a menu that always feels alive.",
+    imageSrc: "/blog-seasonal.jpg",
   },
   {
     category: "Behind the Bar",
     title: "The Art of Gold-Touched Cocktails",
     excerpt:
       "Step inside our bar program and discover how we layer aromatics, textures, and visual details into every pour.",
-    image: "/blog-cocktail.jpg",
+    imageSrc: "/blog-cocktail.jpg",
   },
   {
     category: "Culture & Space",
     title: "Crafting the Soundtrack of an Evening",
     excerpt:
       "From jazz to amapiano, how we curate the music that shapes the mood of your night at La Creola.",
-    image: "/blog-soundtrack.jpg",
+    imageSrc: "/blog-soundtrack.jpg",
   },
 ];
 
-export function BlogSection({ title }: { title?: string }) {
+export function BlogSection({
+  title,
+  items,
+}: {
+  title?: string;
+  items?: BlogItem[];
+}) {
   const heading = title || "Stories from the kitchen & bar";
+  const posts = items && items.length > 0 ? items : FALLBACK_POSTS;
 
   return (
     <div>
@@ -40,14 +54,15 @@ export function BlogSection({ title }: { title?: string }) {
       </FadeIn>
 
       <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-        {POSTS.map((post, index) => (
-          <FadeIn key={post.title} delay={80 * index}>
+        {posts.map((post, index) => (
+          <FadeIn key={`${post.title}-${index}`} delay={80 * index}>
             <article className="card-glass flex h-full flex-col overflow-hidden rounded-3xl">
               <div className="relative h-40 w-full overflow-hidden">
                 <Image
-                  src={post.image}
+                  src={post.imageSrc}
                   alt={post.title}
                   fill
+                  unoptimized={post.imageSrc.startsWith("http")}
                   className="object-cover transition-transform duration-700 hover:scale-105"
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
