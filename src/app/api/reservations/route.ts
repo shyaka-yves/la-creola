@@ -60,11 +60,39 @@ export async function POST(req: Request) {
     );
   }
 
+  // Normalize and validate requested date/time.
+  let normalizedDate: string | undefined;
+  if (date) {
+    const requested = new Date(date);
+
+    if (Number.isNaN(requested.getTime())) {
+      return NextResponse.json(
+        { ok: false, error: "Please choose a valid date and time." },
+        { status: 400 },
+      );
+    }
+
+    const now = new Date();
+    const min = new Date(now.getTime() + 2 * 60 * 60 * 1000); // 2 hours from now
+
+    if (requested < min) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "Bookings must be at least 2 hours from now. Please choose a later time.",
+        },
+        { status: 400 },
+      );
+    }
+
+    normalizedDate = requested.toISOString();
+  }
+
   const record = await addReservation({
     name,
     email,
     phone: phone || undefined,
-    date: date || undefined,
+    date: normalizedDate ?? (date || undefined),
     guests: Number.isFinite(guests) && guests > 0 ? guests : undefined,
     notes: notes || undefined,
     status: "new",
