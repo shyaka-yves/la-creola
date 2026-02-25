@@ -35,7 +35,7 @@ export default function AboutPage() {
                 ceiling.
               </p>
               <a
-                href="/contact"
+                href="/book"
                 className="gold-gradient inline-flex items-center justify-center rounded px-6 py-2.5 text-sm font-semibold text-black"
               >
                 Book a Table
