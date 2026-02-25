@@ -72,56 +72,105 @@ export default async function Home() {
   const blogTitle = content.blog.title;
   const blogItems = content.blog.items ?? [];
 
+  const hero = content.hero;
+  const about = content.about;
+  const excellence = content.excellence;
+  const menuIntro = content.menuIntro;
+
+  const galleryFromDb = galleryImages ?? [];
+  const galleryFromContent = content.gallery.items ?? [];
+  const galleryCards =
+    galleryFromDb.length > 0
+      ? galleryFromDb.slice(0, 6).map((img) => ({
+          id: img.id,
+          src: img.imageUrl,
+          alt: img.label,
+        }))
+      : galleryFromContent.slice(0, 6).map((img, index) => ({
+          id: `content-${index}`,
+          src: img.imageSrc,
+          alt: img.alt,
+        }));
+
+  const hasHeroMedia = typeof hero.mediaSrc === "string" && hero.mediaSrc.trim().length > 0;
+
   return (
     <div className="relative overflow-hidden">
       {/* Hero */}
       <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden bg-gradient-to-b from-zinc-900 via-black to-black sm:min-h-[88vh] lg:min-h-[90vh]">
-        {/* Hero media: video background */}
-        <>
-          <video
-            src="/uploads/pop.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            className="absolute inset-0 h-full w-full object-cover opacity-60"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/85 to-black/95" />
-        </>
+        {/* Hero media: from content with fallback */}
+        {hasHeroMedia ? (
+          <>
+            {hero.mediaType === "video" ? (
+              <video
+                src={hero.mediaSrc}
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="auto"
+                className="absolute inset-0 h-full w-full object-cover opacity-60"
+              />
+            ) : (
+              <img
+                src={hero.mediaSrc}
+                alt={hero.headline || hero.brand || "Hero background"}
+                className="absolute inset-0 h-full w-full object-cover opacity-60"
+              />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/85 to-black/95" />
+          </>
+        ) : (
+          <>
+            <video
+              src="/uploads/pop.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              className="absolute inset-0 h-full w-full object-cover opacity-60"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/85 to-black/95" />
+          </>
+        )}
 
         <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-4 py-8 text-center sm:py-12">
           <FadeIn>
             <h1 className="heading-font text-4xl font-semibold tracking-[0.2em] text-[#D4AF37] sm:text-5xl md:text-6xl">
-              La Creola
+              {hero.headline || hero.brand || "La Creola"}
             </h1>
           </FadeIn>
 
-          <FadeIn delay={120}>
-            <p className="mt-6 max-w-2xl text-sm text-zinc-200 sm:text-base md:text-lg">
-              Kigali · Fine Dining
-            </p>
-          </FadeIn>
+          {hero.tagline && (
+            <FadeIn delay={120}>
+              <p className="mt-6 max-w-2xl text-sm text-zinc-200 sm:text-base md:text-lg">
+                {hero.tagline}
+              </p>
+            </FadeIn>
+          )}
 
-          <FadeIn delay={180}>
-            <p className="mt-4 max-w-2xl text-xs text-zinc-300 sm:text-sm">
-              An exquisite culinary sanctuary blending African and Asian inspirations in Kigali.
-            </p>
-          </FadeIn>
+          {hero.subheadline && (
+            <FadeIn delay={180}>
+              <p className="mt-4 max-w-2xl text-xs text-zinc-300 sm:text-sm">
+                {hero.subheadline}
+              </p>
+            </FadeIn>
+          )}
 
           <FadeIn delay={220}>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <a
-                href="/about"
+                href={hero.primaryCtaHref || "/book"}
                 className="gold-gradient inline-flex items-center justify-center rounded-full px-10 py-3 text-sm font-semibold tracking-wide text-black shadow-lg shadow-yellow-500/25 transition hover:shadow-yellow-400/40"
               >
-                Explore
+                {hero.primaryCtaLabel || "Book a Table"}
               </a>
               <Link
-                href="/menu"
+                href={hero.secondaryCtaHref || "/menu"}
                 className="inline-flex items-center justify-center rounded-full border border-zinc-500/60 px-10 py-3 text-sm font-semibold tracking-wide text-zinc-50 transition hover:border-gold hover:bg-white/5"
               >
-                View Menu
+                {hero.secondaryCtaLabel || "View Menu"}
               </Link>
             </div>
           </FadeIn>
@@ -134,27 +183,26 @@ export default async function Home() {
           <FadeIn className="w-full md:w-1/2">
             <div className="space-y-5">
               <p className="text-xs uppercase tracking-[0.25em] text-gold">
-                About La Creola
+                {about.eyebrow || "About La Creola"}
               </p>
               <h2 className="heading-font text-2xl font-semibold text-white sm:text-3xl">
-                La Creola is a vibrant dining destination
+                {about.title || "La Creola is a vibrant dining destination"}
               </h2>
-              <p className="text-sm leading-relaxed text-zinc-300 sm:text-base">
-                We curate a sensory experience that celebrates the rhythm of Kigali nights. Our menu
-                is an intimate dialogue between bold African flavors and delicate Asian
-                craftsmanship, plated with meticulous artistry and served in a space designed for
-                lingering.
-              </p>
-              <p className="text-sm leading-relaxed text-zinc-300 sm:text-base">
-                From candlelit dinners to private celebrations, La Creola is where refined
-                hospitality, crafted cocktails, and a soulful soundtrack meet under a softly lit
-                ceiling.
-              </p>
+              {(about.paragraphs && about.paragraphs.length > 0
+                ? about.paragraphs
+                : [
+                    "La Creola brings together bold African spirit and refined Asian influence in a way that feels both familiar and refreshingly new.",
+                  ]
+              ).map((p, idx) => (
+                <p key={idx} className="text-sm leading-relaxed text-zinc-300 sm:text-base">
+                  {p}
+                </p>
+              ))}
               <a
-                href="/book"
+                href={about.ctaHref || "/book"}
                 className="inline-flex items-center text-sm font-medium text-gold underline-offset-4 hover:underline"
               >
-                Book a Table
+                {about.ctaLabel || "Book a Table"}
               </a>
             </div>
           </FadeIn>
@@ -162,8 +210,8 @@ export default async function Home() {
           <FadeIn delay={120} className="w-full md:w-1/2">
             <div className="relative h-64 overflow-hidden rounded-2xl border border-zinc-700/70 bg-zinc-900 shadow-2xl sm:h-72 md:h-[420px] md:rounded-3xl">
               <img
-                src="/uploads/FRIDAYYY.png"
-                alt="La Creola is a vibrant dining destination"
+                src={about.imageSrc || "/uploads/FRIDAYYY.png"}
+                alt={about.title || "About La Creola"}
                 className="absolute inset-0 h-full w-full object-cover opacity-80"
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-black/60 via-transparent to-black/50" />
@@ -173,43 +221,54 @@ export default async function Home() {
       </section>
 
       {/* Excellence */}
-      {true && (
+      {(excellence.title || excellence.description || excellence.imageSrc) && (
         <section className="section-padding bg-gradient-to-b from-black via-slate-950 to-black">
           <div className="mx-auto flex max-w-6xl flex-col items-center gap-10 px-4 md:flex-row">
             <FadeIn className="w-full md:w-1/2">
               <div className="space-y-6">
-                <p className="text-xs uppercase tracking-[0.25em] text-gold">The Standard</p>
-                <h2 className="heading-font text-2xl font-semibold text-white sm:text-3xl">
-                  La Creola Excellence
-                </h2>
-                <p className="text-sm leading-relaxed text-zinc-300 sm:text-base">
-                  Our chefs compose each plate as a story of provenance and precision. Seasonal
-                  ingredients, curated wines, and bespoke pairings converge in a dining experience
-                  where every detail—from glassware to garnish—is intentionally designed.
+                <p className="text-xs uppercase tracking-[0.25em] text-gold">
+                  {excellence.eyebrow || "The Standard"}
                 </p>
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="rounded-3xl border border-zinc-700/70 bg-black/40 px-6 py-5 shadow-xl shadow-black/40">
-                    <p className="heading-font text-3xl font-semibold text-gold">3+</p>
-                    <p className="mt-1 text-xs uppercase tracking-[0.2em] text-zinc-400">
-                      Years Experience
-                    </p>
+                <h2 className="heading-font text-2xl font-semibold text-white sm:text-3xl">
+                  {excellence.title || "La Creola Excellence"}
+                </h2>
+                {(
+                  excellence.description
+                    ? [excellence.description]
+                    : [
+                        "Our chefs compose each plate as a story of provenance and precision. Seasonal ingredients, curated wines, and bespoke pairings converge in a dining experience where every detail—from glassware to garnish—is intentionally designed.",
+                      ]
+                ).map((p, idx) => (
+                  <p key={idx} className="text-sm leading-relaxed text-zinc-300 sm:text-base">
+                    {p}
+                  </p>
+                ))}
+                {excellence.stats && excellence.stats.length > 0 && (
+                  <div className="grid grid-cols-2 gap-6">
+                    {excellence.stats.map((stat, idx) => (
+                      <div
+                        key={`${stat.label}-${idx}`}
+                        className="rounded-3xl border border-zinc-700/70 bg-black/40 px-6 py-5 shadow-xl shadow-black/40"
+                      >
+                        <p className="heading-font text-3xl font-semibold text-gold">
+                          {stat.value}
+                        </p>
+                        <p className="mt-1 text-xs uppercase tracking-[0.2em] text-zinc-400">
+                          {stat.label}
+                        </p>
+                      </div>
+                    ))}
                   </div>
-                  <div className="rounded-3xl border border-zinc-700/70 bg-black/40 px-6 py-5 shadow-xl shadow-black/40">
-                    <p className="heading-font text-3xl font-semibold text-gold">5.0</p>
-                    <p className="mt-1 text-xs uppercase tracking-[0.2em] text-zinc-400">
-                      Client Rating
-                    </p>
-                  </div>
-                </div>
+                )}
               </div>
             </FadeIn>
 
-            {true && (
+            {excellence.imageSrc && (
               <FadeIn delay={150} className="w-full md:w-1/2">
                 <div className="relative h-64 overflow-hidden rounded-2xl border border-zinc-700/70 bg-zinc-900 shadow-[0_25px_80px_rgba(0,0,0,0.85)] sm:h-72 md:h-[420px] md:rounded-3xl">
                   <img
-                    src="/uploads/FRIDAYYY.png"
-                    alt="La Creola Excellence"
+                    src={excellence.imageSrc}
+                    alt={excellence.title || "La Creola Excellence"}
                     className="absolute inset-0 h-full w-full object-cover opacity-90"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
@@ -221,22 +280,22 @@ export default async function Home() {
       )}
 
       {/* Menu Intro */}
-      {true && (
-        <section className="section-padding bg-black/90">
-          <div className="mx-auto max-w-4xl px-4 text-center">
-            <FadeIn>
-              <p className="text-xs uppercase tracking-[0.25em] text-gold">Tasting Notes</p>
-              <h2 className="heading-font mt-3 text-2xl font-semibold text-white sm:text-3xl">
-                A fusion of African soul &amp; Asian finesse
-              </h2>
-              <p className="mt-4 text-sm leading-relaxed text-zinc-300 sm:text-base">
-                From delicate sashimi with Rwandan citrus to slow-braised cuts infused with aromatic
-                spices, our menu is designed for sharing.
-              </p>
-            </FadeIn>
-          </div>
-        </section>
-      )}
+      <section className="section-padding bg-black/90">
+        <div className="mx-auto max-w-4xl px-4 text-center">
+          <FadeIn>
+            <p className="text-xs uppercase tracking-[0.25em] text-gold">
+              {menuIntro.eyebrow || "Tasting Notes"}
+            </p>
+            <h2 className="heading-font mt-3 text-2xl font-semibold text-white sm:text-3xl">
+              {menuIntro.title || "A fusion of African soul & Asian finesse"}
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-zinc-300 sm:text-base">
+              {menuIntro.description ||
+                "From delicate sashimi with Rwandan citrus to slow-braised cuts infused with aromatic spices, our menu is designed for sharing."}
+            </p>
+          </FadeIn>
+        </div>
+      </section>
 
       {/* Upcoming Events */}
       <EventsSection />
@@ -246,37 +305,41 @@ export default async function Home() {
         <div className="mx-auto max-w-6xl px-4">
           <FadeIn className="mb-8 text-center">
             <p className="text-xs uppercase tracking-[0.25em] text-gold">
-              Inside La Creola
+              {content.gallery.eyebrow || "Inside La Creola"}
             </p>
             <h2 className="heading-font mt-3 text-2xl font-semibold text-white sm:text-3xl">
-              Gallery
+              {content.gallery.title || "Gallery"}
             </h2>
           </FadeIn>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-            {(galleryImages.length > 0 ? galleryImages.slice(0, 6) : []).map((image, index) => (
-              <FadeIn key={image.id} delay={70 * index}>
-                <div className="group relative h-44 overflow-hidden rounded-2xl border border-zinc-700/70 bg-zinc-900/80 shadow-lg shadow-black/70 sm:h-48 md:h-64 md:rounded-3xl">
-                  <Image
-                    src={image.imageUrl}
-                    alt={image.label}
-                    fill
-                    unoptimized={image.imageUrl.startsWith("http")}
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-          {galleryImages.length > 0 && (
-            <div className="mt-8 text-center">
-              <Link
-                href="/gallery"
-                className="inline-flex items-center justify-center rounded-full border border-zinc-600/70 px-8 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-zinc-100 hover:border-gold hover:bg-white/5"
-              >
-                View Full Gallery
-              </Link>
-            </div>
+          {galleryCards.length === 0 ? (
+            <p className="text-center text-sm text-zinc-400">Gallery images coming soon.</p>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+                {galleryCards.map((image, index) => (
+                  <FadeIn key={image.id} delay={70 * index}>
+                    <div className="group relative h-44 overflow-hidden rounded-2xl border border-zinc-700/70 bg-zinc-900/80 shadow-lg shadow-black/70 sm:h-48 md:h-64 md:rounded-3xl">
+                      <Image
+                        src={image.src}
+                        alt={image.alt}
+                        fill
+                        unoptimized={image.src.startsWith("http")}
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                    </div>
+                  </FadeIn>
+                ))}
+              </div>
+              <div className="mt-8 text-center">
+                <Link
+                  href="/gallery"
+                  className="inline-flex items-center justify-center rounded-full border border-zinc-600/70 px-8 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-zinc-100 hover:border-gold hover:bg-white/5"
+                >
+                  View Full Gallery
+                </Link>
+              </div>
+            </>
           )}
         </div>
       </section>

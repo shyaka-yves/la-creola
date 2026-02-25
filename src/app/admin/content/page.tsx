@@ -138,48 +138,108 @@ export default function AdminContentPage() {
               setContent((c: any) => ({ ...c, hero: { ...c.hero, mediaType: v } }))
             }
           />
-          <Select
-            label="Media file"
-            value={content.hero.mediaSrc}
-            options={[
-              { label: "— Select —", value: "" },
-              ...(content.hero.mediaType === "video"
-                ? videoOptions.map((m) => ({ label: m.name, value: m.url }))
-                : imageOptions.map((m) => ({ label: m.name, value: m.url }))),
-            ]}
-            onChange={(v) =>
-              setContent((c: any) => ({ ...c, hero: { ...c.hero, mediaSrc: v } }))
-            }
-          />
+          <div className="space-y-3">
+            <Select
+              label="Choose from Media Library"
+              value={content.hero.mediaSrc}
+              options={[
+                { label: "— Select —", value: "" },
+                ...(content.hero.mediaType === "video"
+                  ? videoOptions.map((m) => ({ label: m.name, value: m.url }))
+                  : imageOptions.map((m) => ({ label: m.name, value: m.url }))),
+              ]}
+              onChange={(v) =>
+                setContent((c: any) => ({ ...c, hero: { ...c.hero, mediaSrc: v } }))
+              }
+            />
+            <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">
+                Or paste media URL / path
+              </p>
+              <input
+                type="text"
+                value={content.hero.mediaSrc}
+                onChange={(e) =>
+                  setContent((c: any) => ({
+                    ...c,
+                    hero: { ...c.hero, mediaSrc: e.target.value },
+                  }))
+                }
+                placeholder="e.g. /uploads/hero.mp4 or https://..."
+                className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[#D4AF37] focus:outline-none"
+              />
+            </div>
+          </div>
         </div>
       </EditorCard>
 
       <EditorCard title="About section image">
-        <Select
-          label="Image"
-          value={content.about.imageSrc}
-          options={[
-            { label: "— Select —", value: "" },
-            ...imageOptions.map((m) => ({ label: m.name, value: m.url })),
-          ]}
-          onChange={(v) =>
-            setContent((c: any) => ({ ...c, about: { ...c.about, imageSrc: v } }))
-          }
-        />
+        <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
+          <Select
+            label="Choose from Media Library"
+            value={content.about.imageSrc}
+            options={[
+              { label: "— Select —", value: "" },
+              ...imageOptions.map((m) => ({ label: m.name, value: m.url })),
+            ]}
+            onChange={(v) =>
+              setContent((c: any) => ({ ...c, about: { ...c.about, imageSrc: v } }))
+            }
+          />
+          <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">
+              Or paste image URL / path
+            </p>
+            <input
+              type="text"
+              value={content.about.imageSrc}
+              onChange={(e) =>
+                setContent((c: any) => ({
+                  ...c,
+                  about: { ...c.about, imageSrc: e.target.value },
+                }))
+              }
+              placeholder="e.g. /uploads/about.jpg or https://..."
+              className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[#D4AF37] focus:outline-none"
+            />
+          </div>
+        </div>
       </EditorCard>
 
       <EditorCard title="Excellence section image">
-        <Select
-          label="Image"
-          value={content.excellence.imageSrc}
-          options={[
-            { label: "— Select —", value: "" },
-            ...imageOptions.map((m) => ({ label: m.name, value: m.url })),
-          ]}
-          onChange={(v) =>
-            setContent((c: any) => ({ ...c, excellence: { ...c.excellence, imageSrc: v } }))
-          }
-        />
+        <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
+          <Select
+            label="Choose from Media Library"
+            value={content.excellence.imageSrc}
+            options={[
+              { label: "— Select —", value: "" },
+              ...imageOptions.map((m) => ({ label: m.name, value: m.url })),
+            ]}
+            onChange={(v) =>
+              setContent((c: any) => ({
+                ...c,
+                excellence: { ...c.excellence, imageSrc: v },
+              }))
+            }
+          />
+          <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">
+              Or paste image URL / path
+            </p>
+            <input
+              type="text"
+              value={content.excellence.imageSrc}
+              onChange={(e) =>
+                setContent((c: any) => ({
+                  ...c,
+                  excellence: { ...c.excellence, imageSrc: e.target.value },
+                }))
+              }
+              placeholder="e.g. /uploads/excellence.jpg or https://..."
+              className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[#D4AF37] focus:outline-none"
+            />
+          </div>
+        </div>
       </EditorCard>
 
       <EditorCard title="Events section images">

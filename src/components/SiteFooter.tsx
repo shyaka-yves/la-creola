@@ -4,8 +4,8 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-zinc-800 bg-black/95">
       <div className="mx-auto max-w-6xl px-4 py-8 sm:py-10">
-        <div className="grid gap-8 sm:grid-cols-2 sm:gap-10">
-          <div>
+        <div className="grid gap-8 sm:grid-cols-3 sm:gap-10">
+          <div className="sm:col-span-1">
             <p className="heading-font text-base tracking-[0.18em] text-white sm:text-lg">
               La creola
             </p>
@@ -14,7 +14,7 @@ export function SiteFooter() {
             </p>
           </div>
 
-          <div>
+          <div className="sm:col-span-1">
             <p className="text-sm font-semibold text-[#D4AF37]">Quick Links</p>
             <ul className="mt-3 space-y-2 text-sm text-zinc-300">
               <li>
@@ -43,8 +43,11 @@ export function SiteFooter() {
                 </Link>
               </li>
             </ul>
+          </div>
 
-            <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-zinc-300">
+          <div className="sm:col-span-1 sm:text-right">
+            <p className="text-sm font-semibold text-[#D4AF37]">Social</p>
+            <div className="mt-3 flex flex-wrap items-center gap-4 text-sm text-zinc-300 sm:justify-end">
               <a
                 href="https://www.instagram.com/lacreola_kigali?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
                 target="_blank"
