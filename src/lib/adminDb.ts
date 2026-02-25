@@ -1,79 +1,50 @@
-import { promises as fs } from "node:fs";
-import path from "node:path";
+import { getSupabase } from "@/lib/supabaseServer";
 
 export type AdminUser = {
   id: string;
   username: string;
-  passwordHash: string; // bcrypt hash
+  passwordHash: string;
   createdAt: string;
   lastLogin?: string;
 };
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const ADMINS_PATH = path.join(DATA_DIR, "admins.json");
-
-async function ensureDataDir(): Promise<void> {
-  try {
-    await fs.mkdir(DATA_DIR, { recursive: true });
-  } catch {
-    // Directory exists
-  }
-}
-
-async function readAdmins(): Promise<AdminUser[]> {
-  await ensureDataDir();
-  try {
-    const raw = await fs.readFile(ADMINS_PATH, "utf8");
-    return JSON.parse(raw) as AdminUser[];
-  } catch {
-    return [];
-  }
-}
-
-async function writeAdmins(admins: AdminUser[]): Promise<void> {
-  await ensureDataDir();
-  await fs.writeFile(ADMINS_PATH, JSON.stringify(admins, null, 2), "utf8");
-}
+const mapRow = (r: { id: string; username: string; password_hash: string; created_at: string; last_login: string | null }): AdminUser => ({
+  id: r.id,
+  username: r.username,
+  passwordHash: r.password_hash,
+  createdAt: r.created_at,
+  lastLogin: r.last_login ?? undefined,
+});
 
 export async function listAdmins(): Promise<AdminUser[]> {
-  return readAdmins();
+  const supabase = getSupabase();
+  const { data, error } = await supabase.from("admins").select("id, username, password_hash, created_at, last_login").order("created_at", { ascending: false });
+  if (error) throw error;
+  return (data ?? []).map(mapRow);
 }
 
 export async function findAdminByUsername(username: string): Promise<AdminUser | null> {
-  const admins = await readAdmins();
-  return admins.find((a) => a.username === username) ?? null;
-}
-
-function generateId(): string {
-  return `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+  const supabase = getSupabase();
+  const { data, error } = await supabase.from("admins").select("id, username, password_hash, created_at, last_login").eq("username", username).maybeSingle();
+  if (error) throw error;
+  return data ? mapRow(data) : null;
 }
 
 export async function createAdmin(username: string, passwordHash: string): Promise<AdminUser> {
-  const admins = await readAdmins();
-  const admin: AdminUser = {
-    id: generateId(),
-    username,
-    passwordHash,
-    createdAt: new Date().toISOString(),
-  };
-  admins.push(admin);
-  await writeAdmins(admins);
-  return admin;
+  const supabase = getSupabase();
+  const { data, error } = await supabase.from("admins").insert({ username, password_hash: passwordHash }).select("id, username, password_hash, created_at, last_login").single();
+  if (error) throw error;
+  return mapRow(data);
 }
 
 export async function updateAdminLastLogin(username: string): Promise<void> {
-  const admins = await readAdmins();
-  const admin = admins.find((a) => a.username === username);
-  if (admin) {
-    admin.lastLogin = new Date().toISOString();
-    await writeAdmins(admins);
-  }
+  const supabase = getSupabase();
+  await supabase.from("admins").update({ last_login: new Date().toISOString() }).eq("username", username);
 }
 
 export async function deleteAdmin(id: string): Promise<boolean> {
-  const admins = await readAdmins();
-  const filtered = admins.filter((a) => a.id !== id);
-  if (filtered.length === admins.length) return false;
-  await writeAdmins(filtered);
+  const supabase = getSupabase();
+  const { error } = await supabase.from("admins").delete().eq("id", id);
+  if (error) return false;
   return true;
 }

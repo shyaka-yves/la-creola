@@ -1,11 +1,6 @@
 import { NextResponse } from "next/server";
-import crypto from "node:crypto";
 import { Resend } from "resend";
-import {
-  listReservations,
-  saveReservations,
-  type ReservationRecord,
-} from "@/lib/siteContent";
+import { addReservation, type ReservationRecord } from "@/lib/reservationsDb";
 
 export const runtime = "nodejs";
 
@@ -61,9 +56,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const record: ReservationRecord = {
-    id: crypto.randomBytes(12).toString("hex"),
-    createdAt: new Date().toISOString(),
+  const record = await addReservation({
     name,
     email,
     phone: phone || undefined,
@@ -71,11 +64,7 @@ export async function POST(req: Request) {
     guests: Number.isFinite(guests) && guests > 0 ? guests : undefined,
     notes: notes || undefined,
     status: "new",
-  };
-
-  const existing = await listReservations();
-  existing.unshift(record);
-  await saveReservations(existing);
+  });
 
   try {
     await sendReservationEmail(record);

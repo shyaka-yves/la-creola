@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
-import { promises as fs } from "node:fs";
-import path from "node:path";
+import { getSupabase } from "@/lib/supabaseServer";
 
 export const runtime = "nodejs";
 
-const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
+const BUCKET = "uploads";
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as { name?: string } | null;
@@ -14,14 +13,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Invalid filename" }, { status: 400 });
   }
 
-  const target = path.join(UPLOAD_DIR, name);
+  const supabase = getSupabase();
+  const { error } = await supabase.storage.from(BUCKET).remove([name]);
 
-  try {
-    await fs.unlink(target);
-  } catch {
-    return NextResponse.json({ ok: false, error: "File not found" }, { status: 404 });
+  if (error) {
+    return NextResponse.json({ ok: false, error: error.message }, { status: error.message === "Object not found" ? 404 : 500 });
   }
 
   return NextResponse.json({ ok: true });
 }
-

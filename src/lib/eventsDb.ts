@@ -1,5 +1,4 @@
-import { promises as fs } from "node:fs";
-import path from "node:path";
+import { getSupabase } from "@/lib/supabaseServer";
 
 export type Event = {
   id: string;
@@ -11,35 +10,25 @@ export type Event = {
   createdAt: string;
 };
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const EVENTS_PATH = path.join(DATA_DIR, "events.json");
+const mapRow = (r: { id: string; date: string; title: string; description: string; image_url: string; order: number; created_at: string }): Event => ({
+  id: r.id,
+  date: r.date,
+  title: r.title,
+  description: r.description,
+  imageUrl: r.image_url,
+  order: r.order,
+  createdAt: r.created_at,
+});
 
-async function ensureDataDir(): Promise<void> {
+export async function listEvents(): Promise<Event[]> {
   try {
-    await fs.mkdir(DATA_DIR, { recursive: true });
-  } catch {
-    // Directory exists
-  }
-}
-
-async function readEvents(): Promise<Event[]> {
-  await ensureDataDir();
-  try {
-    const raw = await fs.readFile(EVENTS_PATH, "utf8");
-    return JSON.parse(raw) as Event[];
+    const supabase = getSupabase();
+    const { data, error } = await supabase.from("events").select("*").order("order", { ascending: true });
+    if (error) return [];
+    return (data ?? []).map(mapRow);
   } catch {
     return [];
   }
-}
-
-async function writeEvents(events: Event[]): Promise<void> {
-  await ensureDataDir();
-  await fs.writeFile(EVENTS_PATH, JSON.stringify(events, null, 2), "utf8");
-}
-
-export async function listEvents(): Promise<Event[]> {
-  const events = await readEvents();
-  return events.sort((a, b) => a.order - b.order);
 }
 
 export async function addEvent(
@@ -49,49 +38,43 @@ export async function addEvent(
   imageUrl: string,
   order?: number
 ): Promise<Event> {
-  const events = await readEvents();
-  const maxOrder = events.length > 0 ? Math.max(...events.map((e) => e.order)) : -1;
-  const event: Event = {
-    id: `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`,
-    date,
-    title,
-    description,
-    imageUrl,
-    order: order ?? maxOrder + 1,
-    createdAt: new Date().toISOString(),
-  };
-  events.push(event);
-  await writeEvents(events);
-  return event;
+  const supabase = getSupabase();
+  const existing = await listEvents();
+  const nextOrder = order ?? (existing.length > 0 ? Math.max(...existing.map((e) => e.order)) + 1 : 0);
+  const { data, error } = await supabase
+    .from("events")
+    .insert({ date, title, description, image_url: imageUrl, order: nextOrder })
+    .select()
+    .single();
+  if (error) throw error;
+  return mapRow(data);
 }
 
 export async function updateEvent(
   id: string,
   updates: Partial<Pick<Event, "date" | "title" | "description" | "imageUrl" | "order">>
 ): Promise<boolean> {
-  const events = await readEvents();
-  const index = events.findIndex((e) => e.id === id);
-  if (index === -1) return false;
-  events[index] = { ...events[index], ...updates };
-  await writeEvents(events);
-  return true;
+  const supabase = getSupabase();
+  const row: Record<string, unknown> = {};
+  if (updates.date !== undefined) row.date = updates.date;
+  if (updates.title !== undefined) row.title = updates.title;
+  if (updates.description !== undefined) row.description = updates.description;
+  if (updates.imageUrl !== undefined) row.image_url = updates.imageUrl;
+  if (updates.order !== undefined) row.order = updates.order;
+  if (Object.keys(row).length === 0) return true;
+  const { error } = await supabase.from("events").update(row).eq("id", id);
+  return !error;
 }
 
 export async function deleteEvent(id: string): Promise<boolean> {
-  const events = await readEvents();
-  const filtered = events.filter((e) => e.id !== id);
-  if (filtered.length === events.length) return false;
-  await writeEvents(filtered);
-  return true;
+  const supabase = getSupabase();
+  const { error } = await supabase.from("events").delete().eq("id", id);
+  return !error;
 }
 
 export async function reorderEvents(ids: string[]): Promise<void> {
-  const events = await readEvents();
-  const idMap = new Map(ids.map((id, index) => [id, index]));
-  events.forEach((event) => {
-    if (idMap.has(event.id)) {
-      event.order = idMap.get(event.id)!;
-    }
-  });
-  await writeEvents(events);
+  const supabase = getSupabase();
+  for (let i = 0; i < ids.length; i++) {
+    await supabase.from("events").update({ order: i }).eq("id", ids[i]);
+  }
 }

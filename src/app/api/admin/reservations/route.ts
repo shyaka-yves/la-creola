@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { listReservations, saveReservations, type ReservationRecord } from "@/lib/siteContent";
+import { listReservations, updateReservationStatus, type ReservationRecord } from "@/lib/reservationsDb";
 
 export const runtime = "nodejs";
 
@@ -19,14 +19,10 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ ok: false, error: "Invalid payload" }, { status: 400 });
   }
 
-  const items = await listReservations();
-  const idx = items.findIndex((r) => r.id === id);
-  if (idx === -1) {
+  const updated = await updateReservationStatus(id, status);
+  if (!updated) {
     return NextResponse.json({ ok: false, error: "Not found" }, { status: 404 });
   }
-
-  items[idx] = { ...items[idx], status };
-  await saveReservations(items);
   return NextResponse.json({ ok: true });
 }
 

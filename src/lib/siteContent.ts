@@ -1,5 +1,4 @@
-import { promises as fs } from "node:fs";
-import path from "node:path";
+import { getSupabase } from "@/lib/supabaseServer";
 
 export type HeroContent = {
   brand: string;
@@ -125,13 +124,7 @@ export type ReservationRecord = {
   status: "new" | "contacted" | "closed";
 };
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const CONTENT_PATH = path.join(DATA_DIR, "content.json");
-const RESERVATIONS_PATH = path.join(DATA_DIR, "reservations.json");
-
-async function ensureDataDir() {
-  await fs.mkdir(DATA_DIR, { recursive: true });
-}
+const CONTENT_ROW_ID = "default";
 
 function getDefaultContent(): SiteContent {
   return {
@@ -221,51 +214,33 @@ function getDefaultContent(): SiteContent {
 }
 
 export async function getSiteContent(): Promise<SiteContent> {
-  await ensureDataDir();
+  const defaults = getDefaultContent();
   try {
-    const raw = await fs.readFile(CONTENT_PATH, "utf8");
-    const parsed = JSON.parse(raw) as SiteContent;
-    // Merge with defaults to ensure all fields exist
-    const defaults = getDefaultContent();
+    const supabase = getSupabase();
+    const { data, error } = await supabase.from("content").select("data").eq("id", CONTENT_ROW_ID).maybeSingle();
+    if (error || !data?.data || typeof data.data !== "object") return defaults;
+    const parsed = data.data as Partial<SiteContent>;
     return {
-      hero: { ...defaults.hero, ...parsed.hero },
-      about: { ...defaults.about, ...parsed.about },
-      excellence: { ...defaults.excellence, ...parsed.excellence },
-      menuIntro: { ...defaults.menuIntro, ...parsed.menuIntro },
-      events: { ...defaults.events, ...parsed.events },
-      gallery: { ...defaults.gallery, ...parsed.gallery },
-      testimonials: { ...defaults.testimonials, ...parsed.testimonials },
-      blog: { ...defaults.blog, ...parsed.blog },
-      contact: { ...defaults.contact, ...parsed.contact },
-      menu: { ...defaults.menu, ...parsed.menu },
-      specialty: { ...defaults.specialty, ...parsed.specialty },
-      specialOffers: { ...defaults.specialOffers, ...parsed.specialOffers },
-    };
+    hero: { ...defaults.hero, ...parsed.hero },
+    about: { ...defaults.about, ...parsed.about },
+    excellence: { ...defaults.excellence, ...parsed.excellence },
+    menuIntro: { ...defaults.menuIntro, ...parsed.menuIntro },
+    events: { ...defaults.events, ...parsed.events },
+    gallery: { ...defaults.gallery, ...parsed.gallery },
+    testimonials: { ...defaults.testimonials, ...parsed.testimonials },
+    blog: { ...defaults.blog, ...parsed.blog },
+    contact: { ...defaults.contact, ...parsed.contact },
+    menu: { ...defaults.menu, ...parsed.menu },
+    specialty: { ...defaults.specialty, ...parsed.specialty },
+    specialOffers: { ...defaults.specialOffers, ...parsed.specialOffers },
+  };
   } catch {
-    // File doesn't exist or is invalid, return defaults and save them
-    const defaults = getDefaultContent();
-    await saveSiteContent(defaults);
     return defaults;
   }
 }
 
 export async function saveSiteContent(next: SiteContent): Promise<void> {
-  await ensureDataDir();
-  await fs.writeFile(CONTENT_PATH, JSON.stringify(next, null, 2), "utf8");
-}
-
-export async function listReservations(): Promise<ReservationRecord[]> {
-  await ensureDataDir();
-  try {
-    const raw = await fs.readFile(RESERVATIONS_PATH, "utf8");
-    return JSON.parse(raw) as ReservationRecord[];
-  } catch {
-    return [];
-  }
-}
-
-export async function saveReservations(next: ReservationRecord[]): Promise<void> {
-  await ensureDataDir();
-  await fs.writeFile(RESERVATIONS_PATH, JSON.stringify(next, null, 2), "utf8");
+  const supabase = getSupabase();
+  await supabase.from("content").upsert({ id: CONTENT_ROW_ID, data: next, updated_at: new Date().toISOString() }, { onConflict: "id" });
 }
 

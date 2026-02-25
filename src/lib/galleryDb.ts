@@ -1,5 +1,4 @@
-import { promises as fs } from "node:fs";
-import path from "node:path";
+import { getSupabase } from "@/lib/supabaseServer";
 
 export type GalleryImage = {
   id: string;
@@ -9,83 +8,61 @@ export type GalleryImage = {
   createdAt: string;
 };
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const GALLERY_PATH = path.join(DATA_DIR, "gallery.json");
+const mapRow = (r: { id: string; image_url: string; label: string; order: number; created_at: string }): GalleryImage => ({
+  id: r.id,
+  imageUrl: r.image_url,
+  label: r.label,
+  order: r.order,
+  createdAt: r.created_at,
+});
 
-async function ensureDataDir(): Promise<void> {
+export async function listGalleryImages(): Promise<GalleryImage[]> {
   try {
-    await fs.mkdir(DATA_DIR, { recursive: true });
-  } catch {
-    // Directory exists
-  }
-}
-
-async function readGallery(): Promise<GalleryImage[]> {
-  await ensureDataDir();
-  try {
-    const raw = await fs.readFile(GALLERY_PATH, "utf8");
-    return JSON.parse(raw) as GalleryImage[];
+    const supabase = getSupabase();
+    const { data, error } = await supabase.from("gallery").select("*").order("order", { ascending: true });
+    if (error) return [];
+    return (data ?? []).map(mapRow);
   } catch {
     return [];
   }
 }
 
-async function writeGallery(images: GalleryImage[]): Promise<void> {
-  await ensureDataDir();
-  await fs.writeFile(GALLERY_PATH, JSON.stringify(images, null, 2), "utf8");
-}
-
-export async function listGalleryImages(): Promise<GalleryImage[]> {
-  const images = await readGallery();
-  return images.sort((a, b) => a.order - b.order);
-}
-
-export async function addGalleryImage(
-  imageUrl: string,
-  label: string,
-  order?: number
-): Promise<GalleryImage> {
-  const images = await readGallery();
-  const maxOrder = images.length > 0 ? Math.max(...images.map((i) => i.order)) : -1;
-  const image: GalleryImage = {
-    id: `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`,
-    imageUrl,
-    label,
-    order: order ?? maxOrder + 1,
-    createdAt: new Date().toISOString(),
-  };
-  images.push(image);
-  await writeGallery(images);
-  return image;
+export async function addGalleryImage(imageUrl: string, label: string, order?: number): Promise<GalleryImage> {
+  const supabase = getSupabase();
+  const existing = await listGalleryImages();
+  const nextOrder = order ?? (existing.length > 0 ? Math.max(...existing.map((i) => i.order)) + 1 : 0);
+  const { data, error } = await supabase
+    .from("gallery")
+    .insert({ image_url: imageUrl, label, order: nextOrder })
+    .select()
+    .single();
+  if (error) throw error;
+  return mapRow(data);
 }
 
 export async function updateGalleryImage(
   id: string,
   updates: Partial<Pick<GalleryImage, "label" | "order" | "imageUrl">>
 ): Promise<boolean> {
-  const images = await readGallery();
-  const index = images.findIndex((i) => i.id === id);
-  if (index === -1) return false;
-  images[index] = { ...images[index], ...updates };
-  await writeGallery(images);
-  return true;
+  const supabase = getSupabase();
+  const row: Record<string, unknown> = {};
+  if (updates.label !== undefined) row.label = updates.label;
+  if (updates.order !== undefined) row.order = updates.order;
+  if (updates.imageUrl !== undefined) row.image_url = updates.imageUrl;
+  if (Object.keys(row).length === 0) return true;
+  const { error } = await supabase.from("gallery").update(row).eq("id", id);
+  return !error;
 }
 
 export async function deleteGalleryImage(id: string): Promise<boolean> {
-  const images = await readGallery();
-  const filtered = images.filter((i) => i.id !== id);
-  if (filtered.length === images.length) return false;
-  await writeGallery(filtered);
-  return true;
+  const supabase = getSupabase();
+  const { error } = await supabase.from("gallery").delete().eq("id", id);
+  return !error;
 }
 
 export async function reorderGalleryImages(ids: string[]): Promise<void> {
-  const images = await readGallery();
-  const idMap = new Map(ids.map((id, index) => [id, index]));
-  images.forEach((img) => {
-    if (idMap.has(img.id)) {
-      img.order = idMap.get(img.id)!;
-    }
-  });
-  await writeGallery(images);
+  const supabase = getSupabase();
+  for (let i = 0; i < ids.length; i++) {
+    await supabase.from("gallery").update({ order: i }).eq("id", ids[i]);
+  }
 }
