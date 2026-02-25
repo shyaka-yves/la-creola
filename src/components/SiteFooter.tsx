@@ -37,11 +37,7 @@ export function SiteFooter() {
                   Contact
                 </Link>
               </li>
-              <li>
-                <Link href="/admin" className="hover:text-[#D4AF37]">
-                  Login Admin
-                </Link>
-              </li>
+              
             </ul>
           </div>
 
