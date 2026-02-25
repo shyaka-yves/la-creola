@@ -46,7 +46,7 @@ export function SiteFooter() {
           </div>
 
           <div className="sm:col-span-1 sm:text-right">
-            <p className="text-sm font-semibold text-[#D4AF37]">Social</p>
+            <p className="text-sm font-semibold text-[#D4AF37]">Our Social Media Platforms</p>
             <div className="mt-3 flex flex-wrap items-center gap-4 text-sm text-zinc-300 sm:justify-end">
               <a
                 href="https://www.instagram.com/lacreola_kigali?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="

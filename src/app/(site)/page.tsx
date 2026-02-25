@@ -109,16 +109,16 @@ export default async function Home() {
                 muted
                 playsInline
                 preload="auto"
-                className="absolute inset-0 h-full w-full object-cover opacity-60"
+                className="absolute inset-0 h-full w-full object-cover opacity-70"
               />
             ) : (
               <img
                 src={hero.mediaSrc}
                 alt={hero.headline || hero.brand || "Hero background"}
-                className="absolute inset-0 h-full w-full object-cover opacity-60"
+                className="absolute inset-0 h-full w-full object-cover opacity-80"
               />
             )}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/85 to-black/95" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/70 to-black/90" />
           </>
         ) : (
           <>
@@ -129,9 +129,9 @@ export default async function Home() {
               muted
               playsInline
               preload="auto"
-              className="absolute inset-0 h-full w-full object-cover opacity-60"
+              className="absolute inset-0 h-full w-full object-cover opacity-70"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/85 to-black/95" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/70 to-black/90" />
           </>
         )}
 
