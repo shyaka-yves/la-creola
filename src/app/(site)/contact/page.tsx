@@ -31,19 +31,19 @@ export default function ContactPage() {
                 <p className="text-sm font-medium text-[#D4AF37]">Hours</p>
                 <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
                   <span className="whitespace-nowrap">Tuesday - Thursday</span>
-                  <span className="whitespace-nowrap text-zinc-400">6:00 PM - 12:00 AM</span>
+                  <span className="whitespace-nowrap text-zinc-400">10:00 AM - 1:00 AM</span>
                 </div>
                 <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
                   <span className="whitespace-nowrap">Friday - Saturday</span>
-                  <span className="whitespace-nowrap text-zinc-400">6:00 PM - 2:00 AM</span>
+                  <span className="whitespace-nowrap text-zinc-400">10:00 AM - 1:00 AM</span>
                 </div>
                 <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
                   <span className="whitespace-nowrap">Sunday</span>
-                  <span className="whitespace-nowrap text-zinc-400">6:00 PM - 11:00 PM</span>
+                  <span className="whitespace-nowrap text-zinc-400">10:00 AM - 1:00 AM</span>
                 </div>
                 <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
                   <span className="whitespace-nowrap">Monday</span>
-                  <span className="whitespace-nowrap text-zinc-400">Closed</span>
+                  <span className="whitespace-nowrap text-zinc-400">10:00 AM - 1:00 AM</span>
                 </div>
               </div>
 
