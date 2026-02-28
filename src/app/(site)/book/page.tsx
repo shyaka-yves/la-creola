@@ -40,6 +40,11 @@ export default function BookPage() {
       return;
     }
 
+    if (new Date(dateTime).getTime() < new Date(minDateTime).getTime()) {
+      setError('Reservations must be made at least 2 hours in advance. Please select a later time.');
+      return;
+    }
+
     setSubmitting(true);
     try {
       const res = await fetch('/api/reservations', {
@@ -148,36 +153,10 @@ export default function BookPage() {
                   value={dateTime}
                   onChange={(e) => setDateTime(e.target.value)}
                   min={minDateTime}
-                  className="w-full rounded-full border border-zinc-700 bg-black/60 px-4 py-2.5 pr-10 text-sm text-white outline-none ring-0 transition focus:border-gold"
+                  style={{ colorScheme: 'dark' }}
+                  className="w-full rounded-full border border-zinc-700 bg-black/60 px-4 py-2.5 text-sm text-white outline-none ring-0 transition focus:border-gold [&::-webkit-calendar-picker-indicator]:cursor-pointer"
                   required
                 />
-                <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-zinc-500">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    className="h-4 w-4"
-                    aria-hidden="true"
-                  >
-                    <rect
-                      x="3"
-                      y="4"
-                      width="18"
-                      height="18"
-                      rx="2"
-                      ry="2"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                    />
-                    <path
-                      d="M3 9h18M9 3v4M15 3v4"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </span>
               </div>
               <p className="mt-1 text-[11px] text-zinc-500">
                 You can&apos;t select past times; minimum is 2 hours from now.
