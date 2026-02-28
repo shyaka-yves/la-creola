@@ -33,7 +33,7 @@ async function EventsSection() {
         <div className="mt-8 grid gap-6 sm:mt-10 sm:grid-cols-2 lg:grid-cols-3">
           {events.slice(0, 3).map((event, index) => (
             <FadeIn key={event.id} delay={80 * index}>
-                <article className="card-glass mx-auto flex h-full max-w-[260px] flex-col overflow-hidden rounded-3xl">
+              <article className="card-glass mx-auto flex h-full max-w-[260px] flex-col overflow-hidden rounded-3xl">
                 <div className="relative w-full aspect-[4/5] overflow-hidden">
                   <Image
                     src={event.imageUrl}
@@ -82,22 +82,22 @@ export default async function Home() {
   const galleryCards =
     galleryFromDb.length > 0
       ? galleryFromDb.slice(0, 6).map((img) => ({
-          id: img.id,
-          src: img.imageUrl,
-          alt: img.label,
-        }))
+        id: img.id,
+        src: img.imageUrl,
+        alt: img.label,
+      }))
       : galleryFromContent.slice(0, 6).map((img, index) => ({
-          id: `content-${index}`,
-          src: img.imageSrc,
-          alt: img.alt,
-        }));
+        id: `content-${index}`,
+        src: img.imageSrc,
+        alt: img.alt,
+      }));
 
   const hasHeroMedia = typeof hero.mediaSrc === "string" && hero.mediaSrc.trim().length > 0;
 
   return (
     <div className="relative overflow-hidden">
       {/* Hero */}
-      <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden bg-gradient-to-b from-zinc-900 via-black to-black sm:min-h-[88vh] lg:min-h-[90vh]">
+      <section className="relative flex min-h-[70vh] sm:min-h-[85vh] items-center justify-center overflow-hidden bg-gradient-to-b from-zinc-900 via-black to-black lg:min-h-[90vh]">
         {/* Hero media: from content with fallback */}
         {hasHeroMedia ? (
           <>
@@ -191,8 +191,8 @@ export default async function Home() {
               {(about.paragraphs && about.paragraphs.length > 0
                 ? about.paragraphs
                 : [
-                    "La Creola brings together bold African spirit and refined Asian influence in a way that feels both familiar and refreshingly new.",
-                  ]
+                  "La Creola brings together bold African spirit and refined Asian influence in a way that feels both familiar and refreshingly new.",
+                ]
               ).map((p, idx) => (
                 <p key={idx} className="text-sm leading-relaxed text-zinc-300 sm:text-base">
                   {p}
@@ -223,9 +223,9 @@ export default async function Home() {
       {/* Excellence */}
       {(excellence.title || excellence.description || excellence.imageSrc) && (
         <section className="section-padding bg-gradient-to-b from-black via-slate-950 to-black">
-          <div className="mx-auto flex max-w-6xl flex-col items-center gap-10 px-4 md:flex-row">
-            <FadeIn className="w-full md:w-1/2">
-              <div className="space-y-6">
+          <div className={`mx-auto flex max-w-6xl flex-col items-center gap-10 px-4 ${excellence.imageSrc ? 'md:flex-row' : ''}`}>
+            <FadeIn className={`w-full ${excellence.imageSrc ? 'md:w-1/2' : 'max-w-3xl text-center'}`}>
+              <div className={`space-y-6 ${excellence.imageSrc ? '' : 'flex flex-col items-center'}`}>
                 <p className="text-xs uppercase tracking-[0.25em] text-gold">
                   {excellence.eyebrow || "The Standard"}
                 </p>
@@ -236,8 +236,8 @@ export default async function Home() {
                   excellence.description
                     ? [excellence.description]
                     : [
-                        "Our chefs compose each plate as a story of provenance and precision. Seasonal ingredients, curated wines, and bespoke pairings converge in a dining experience where every detail—from glassware to garnish—is intentionally designed.",
-                      ]
+                      "Our chefs compose each plate as a story of provenance and precision. Seasonal ingredients, curated wines, and bespoke pairings converge in a dining experience where every detail—from glassware to garnish—is intentionally designed.",
+                    ]
                 ).map((p, idx) => (
                   <p key={idx} className="text-sm leading-relaxed text-zinc-300 sm:text-base">
                     {p}

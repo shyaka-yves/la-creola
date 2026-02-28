@@ -75,7 +75,7 @@ export default function ContactPage() {
           </FadeIn>
 
           <FadeIn delay={120} className="w-full md:w-[55%] lg:w-[60%] md:flex md:justify-end">
-            <div className="h-[400px] w-full overflow-hidden rounded-3xl border border-zinc-700/70 bg-black/40 shadow-[0_25px_80px_rgba(0,0,0,0.85)] sm:h-[500px] md:h-[650px] lg:h-[750px] md:w-[95%] lg:w-full max-w-none">
+            <div className="h-[350px] w-full overflow-hidden rounded-3xl border border-zinc-700/70 bg-black/40 shadow-[0_25px_80px_rgba(0,0,0,0.85)] sm:h-[450px] md:h-[480px] lg:h-[500px] md:w-[95%] lg:w-full max-w-none">
               <iframe
                 title="La Creola Kigali"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d390.110208989431!2d30.085970473208192!3d-1.9614453068728352!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca777ef43544b%3A0xb1c95bbfefb7ff00!2sLa%20Creola!5e0!3m2!1sen!2srw!4v1771455504152!5m2!1sen!2srw"

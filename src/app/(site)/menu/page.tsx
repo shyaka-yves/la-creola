@@ -8,7 +8,7 @@ export default async function MenuPage() {
 
   return (
     <div className="relative overflow-hidden">
-      <section className="relative flex min-h-[50vh] items-center justify-center bg-black/95">
+      <section className="relative flex py-20 sm:py-28 items-center justify-center bg-black/95">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900 via-zinc-950 to-black opacity-90" />
         <FadeIn className="relative z-10 px-4 text-center">
           <h1 className="heading-font text-4xl font-bold uppercase text-[#D4AF37] sm:text-5xl md:text-6xl">

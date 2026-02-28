@@ -14,7 +14,7 @@ export function SiteFooter() {
             </p>
           </div>
 
-          <div className="flex flex-col items-center text-center sm:col-span-1">
+          <div className="sm:col-span-1 sm:flex sm:flex-col sm:items-center sm:text-center">
             <p className="text-sm font-semibold text-[#D4AF37]">Quick Links</p>
             <ul className="mt-3 space-y-2 text-sm text-zinc-300">
               <li>
