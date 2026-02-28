@@ -8,30 +8,6 @@ type BlogItem = {
   imageSrc: string;
 };
 
-const FALLBACK_POSTS: BlogItem[] = [
-  {
-    category: "Chef's Notes",
-    title: "Designing a Menu that Moves with the Seasons",
-    excerpt:
-      "How our culinary team balances Kigali's local markets with Asian pantry staples to create a menu that always feels alive.",
-    imageSrc: "/blog-seasonal.jpg",
-  },
-  {
-    category: "Behind the Bar",
-    title: "The Art of Gold-Touched Cocktails",
-    excerpt:
-      "Step inside our bar program and discover how we layer aromatics, textures, and visual details into every pour.",
-    imageSrc: "/blog-cocktail.jpg",
-  },
-  {
-    category: "Culture & Space",
-    title: "Crafting the Soundtrack of an Evening",
-    excerpt:
-      "From jazz to amapiano, how we curate the music that shapes the mood of your night at La Creola.",
-    imageSrc: "/blog-soundtrack.jpg",
-  },
-];
-
 export function BlogSection({
   title,
   eyebrow,
@@ -43,7 +19,7 @@ export function BlogSection({
 }) {
   const heading = title || "Stories from the kitchen & bar";
   const smallCasing = eyebrow || "From Our Blog";
-  const posts = items && items.length > 0 ? items : FALLBACK_POSTS;
+  const posts = items || [];
 
   return (
     <div>
