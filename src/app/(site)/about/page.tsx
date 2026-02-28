@@ -1,8 +1,11 @@
 import { FadeIn } from "@/components/FadeIn";
+import { getSiteContent } from "@/lib/siteContent";
 
 export const dynamic = "force-dynamic";
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const content = await getSiteContent();
+
   return (
     <div className="relative overflow-hidden">
       <section className="section-padding bg-black/95">
@@ -10,8 +13,8 @@ export default function AboutPage() {
           <FadeIn className="w-full md:w-1/2">
             <div className="relative h-64 overflow-hidden rounded-2xl border border-white/20 bg-zinc-900 shadow-2xl sm:h-72 md:h-[420px] md:rounded-3xl">
               <img
-                src="/uploads/FRIDAYYY.png"
-                alt="La Creola is a vibrant dining destination"
+                src={content.about.imageSrc || "/uploads/FRIDAYYY.png"}
+                alt={content.about.title || "About La Creola"}
                 className="absolute inset-0 h-full w-full object-cover opacity-80"
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-black/60 via-transparent to-black/50" />

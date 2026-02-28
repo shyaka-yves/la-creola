@@ -14,7 +14,7 @@ export default function ContactPage() {
                   Visit Us
                 </h1>
                 <div className="mt-4 h-px w-20 bg-[#D4AF37]/70" />
-                  <p className="mt-6 w-full max-w-none text-sm leading-relaxed text-zinc-300 sm:text-base">
+                <p className="mt-6 w-full max-w-none text-sm leading-relaxed text-zinc-300 sm:text-base">
                   Located in the heart of Kimihurura with breathtaking views of the hills of Kigali.
                 </p>
               </div>
@@ -55,27 +55,27 @@ export default function ContactPage() {
 
               <div className="pt-2">
                 <div className="flex flex-col gap-4">
-                <a
-                  href="/book"
+                  <a
+                    href="/book"
                     className="gold-gradient inline-flex h-11 w-[280px] items-center justify-center whitespace-nowrap rounded-md px-8 text-xs font-semibold uppercase tracking-[0.18em] text-black shadow-md shadow-yellow-500/25 hover:shadow-yellow-400/40"
-                >
-                  Make Reservation
-                </a>
-                <a
-                  href="https://maps.google.com/?q=KG+28+Avenue+Kigali+Kimihurura"
-                  target="_blank"
-                  rel="noreferrer"
+                  >
+                    Make Reservation
+                  </a>
+                  <a
+                    href="https://maps.google.com/?q=KG+28+Avenue+Kigali+Kimihurura"
+                    target="_blank"
+                    rel="noreferrer"
                     className="inline-flex h-11 w-[280px] items-center justify-center whitespace-nowrap rounded-md border border-[#D4AF37] px-8 text-xs font-semibold uppercase tracking-[0.18em] text-[#D4AF37] hover:bg-[#D4AF37]/10"
-                >
-                  Get Directions
-                </a>
-              </div>
+                  >
+                    Get Directions
+                  </a>
+                </div>
               </div>
             </div>
           </FadeIn>
 
-          <FadeIn delay={120} className="w-full md:w-1/2 md:flex md:justify-end">
-            <div className="h-[320px] w-full overflow-hidden rounded-3xl border border-zinc-700/70 bg-black/40 shadow-[0_25px_80px_rgba(0,0,0,0.85)] sm:h-[380px] md:h-[440px] md:w-[820px]">
+          <FadeIn delay={120} className="w-full md:w-[55%] lg:w-[60%] md:flex md:justify-end">
+            <div className="h-[400px] w-full overflow-hidden rounded-3xl border border-zinc-700/70 bg-black/40 shadow-[0_25px_80px_rgba(0,0,0,0.85)] sm:h-[500px] md:h-[650px] lg:h-[750px] md:w-[95%] lg:w-full max-w-none">
               <iframe
                 title="La Creola Kigali"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d390.110208989431!2d30.085970473208192!3d-1.9614453068728352!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca777ef43544b%3A0xb1c95bbfefb7ff00!2sLa%20Creola!5e0!3m2!1sen!2srw!4v1771455504152!5m2!1sen!2srw"

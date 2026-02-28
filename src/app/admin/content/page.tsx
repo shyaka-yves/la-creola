@@ -22,6 +22,10 @@ export default function AdminContentPage() {
     () => media.filter((m) => m.type === "video"),
     [media]
   );
+  const pdfOptions = useMemo(
+    () => media.filter((m) => m.type === "pdf"),
+    [media]
+  );
 
   async function loadAll() {
     setLoading(true);
@@ -266,26 +270,126 @@ export default function AdminContentPage() {
         </div>
       </EditorCard>
 
-      <EditorCard title="Gallery images">
-        <div className="grid gap-4 md:grid-cols-2">
-          {(content.gallery.items ?? []).map((_: any, i: number) => (
-            <Select
-              key={i}
-              label={`Gallery ${i + 1} image`}
-              value={content.gallery.items[i].imageSrc}
-              options={[
-                { label: "— Select —", value: "" },
-                ...imageOptions.map((m) => ({ label: m.name, value: m.url })),
-              ]}
-              onChange={(v) =>
-                setContent((c: any) => {
-                  const items = [...(c.gallery.items ?? [])];
-                  if (!items[i]) items[i] = { imageSrc: "", alt: "" };
-                  items[i] = { ...items[i], imageSrc: v };
-                  return { ...c, gallery: { ...c.gallery, items } };
-                })
+      <EditorCard title="Menu PDF">
+        <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
+          <Select
+            label="Choose from Media Library"
+            value={content.menu?.pdfUrl || ""}
+            options={[
+              { label: "— Select —", value: "" },
+              ...pdfOptions.map((m) => ({ label: m.name, value: m.url })),
+            ]}
+            onChange={(v) =>
+              setContent((c: any) => ({
+                ...c,
+                menu: { ...c.menu, pdfUrl: v },
+              }))
+            }
+          />
+          <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">
+              Or paste PDF URL / path
+            </p>
+            <input
+              type="text"
+              value={content.menu?.pdfUrl || ""}
+              onChange={(e) =>
+                setContent((c: any) => ({
+                  ...c,
+                  menu: { ...c.menu, pdfUrl: e.target.value },
+                }))
               }
+              placeholder="e.g. /uploads/menu.pdf or https://..."
+              className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[#D4AF37] focus:outline-none"
             />
+          </div>
+        </div>
+      </EditorCard>
+
+      <EditorCard title="Blog section">
+        <div className="grid gap-8">
+          {(content.blog.items ?? []).map((_: any, i: number) => (
+            <div key={i} className="space-y-4 border-b border-zinc-800 pb-6 last:border-0 last:pb-0">
+              <p className="text-sm font-semibold text-zinc-300">Blog Item {i + 1}</p>
+              <div className="grid gap-4 md:grid-cols-2">
+                <Select
+                  label="Image"
+                  value={content.blog.items[i].imageSrc || ""}
+                  options={[
+                    { label: "— Select —", value: "" },
+                    ...imageOptions.map((m) => ({ label: m.name, value: m.url })),
+                  ]}
+                  onChange={(v) =>
+                    setContent((c: any) => {
+                      const items = [...(c.blog.items ?? [])];
+                      if (!items[i]) items[i] = { category: "", title: "", excerpt: "", imageSrc: "" };
+                      items[i] = { ...items[i], imageSrc: v };
+                      return { ...c, blog: { ...c.blog, items } };
+                    })
+                  }
+                />
+
+                <div className="space-y-4">
+                  <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">
+                      Category
+                    </p>
+                    <input
+                      type="text"
+                      value={content.blog.items[i].category || ""}
+                      onChange={(e) =>
+                        setContent((c: any) => {
+                          const items = [...(c.blog.items ?? [])];
+                          if (!items[i]) items[i] = { category: "", title: "", excerpt: "", imageSrc: "" };
+                          items[i] = { ...items[i], category: e.target.value };
+                          return { ...c, blog: { ...c.blog, items } };
+                        })
+                      }
+                      placeholder="e.g. Chef's Notes"
+                      className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[#D4AF37] focus:outline-none"
+                    />
+                  </div>
+
+                  <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">
+                      Title
+                    </p>
+                    <input
+                      type="text"
+                      value={content.blog.items[i].title || ""}
+                      onChange={(e) =>
+                        setContent((c: any) => {
+                          const items = [...(c.blog.items ?? [])];
+                          if (!items[i]) items[i] = { category: "", title: "", excerpt: "", imageSrc: "" };
+                          items[i] = { ...items[i], title: e.target.value };
+                          return { ...c, blog: { ...c.blog, items } };
+                        })
+                      }
+                      className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[#D4AF37] focus:outline-none"
+                    />
+                  </div>
+
+                  <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">
+                      Excerpt
+                    </p>
+                    <textarea
+                      value={content.blog.items[i].excerpt || ""}
+                      onChange={(e) =>
+                        setContent((c: any) => {
+                          const items = [...(c.blog.items ?? [])];
+                          if (!items[i]) items[i] = { category: "", title: "", excerpt: "", imageSrc: "" };
+                          items[i] = { ...items[i], excerpt: e.target.value };
+                          return { ...c, blog: { ...c.blog, items } };
+                        })
+                      }
+                      rows={3}
+                      className="mt-2 w-full rounded-xl border border-zinc-700/80 bg-black/70 p-3 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[#D4AF37] focus:outline-none"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       </EditorCard>
