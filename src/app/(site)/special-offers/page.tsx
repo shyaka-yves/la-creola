@@ -1,5 +1,11 @@
 import { FadeIn } from "@/components/FadeIn";
 import { getSiteContent } from "@/lib/siteContent";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Special Offers | La Creola",
+  description: "View our current dining specials, packages, and seasonal offers.",
+};
 
 export const dynamic = "force-dynamic";
 

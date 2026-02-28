@@ -1,6 +1,13 @@
 import Image from "next/image";
 import { FadeIn } from "@/components/FadeIn";
+import { getSiteContent } from "@/lib/siteContent";
 import { listEvents } from "@/lib/eventsDb";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Upcoming Events | La Creola",
+  description: "Discover upcoming nightlife and dining events at La Creola.",
+};
 
 export const dynamic = "force-dynamic";
 

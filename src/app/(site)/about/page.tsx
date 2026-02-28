@@ -1,5 +1,11 @@
 import { FadeIn } from "@/components/FadeIn";
 import { getSiteContent } from "@/lib/siteContent";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Us | La Creola",
+  description: "Learn more about the story behind La Creola.",
+};
 
 export const dynamic = "force-dynamic";
 

@@ -1,8 +1,15 @@
 import { FadeIn } from "@/components/FadeIn";
+import { getSiteContent } from "@/lib/siteContent";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contact Us | La Creola",
+  description: "Get in touch or find the La Creola location in Kigali.",
+};
 
 export const dynamic = "force-dynamic";
 
-export default function ContactPage() {
+export default async function ContactPage() {
   return (
     <div className="relative overflow-hidden">
       <section className="section-padding bg-gradient-to-b from-black via-slate-950 to-black">

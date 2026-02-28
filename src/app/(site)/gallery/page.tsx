@@ -2,6 +2,12 @@ import Image from "next/image";
 import { FadeIn } from "@/components/FadeIn";
 import { listGalleryImages } from "@/lib/galleryDb";
 import { getSiteContent } from "@/lib/siteContent";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Gallery | La Creola",
+  description: "Explore the ambiance, dishes, and environment of La Creola.",
+};
 
 export const dynamic = "force-dynamic";
 
@@ -13,15 +19,15 @@ export default async function GalleryPage() {
   const images =
     galleryFromDb.length > 0
       ? galleryFromDb.map((img) => ({
-          id: img.id,
-          src: img.imageUrl,
-          label: img.label,
-        }))
+        id: img.id,
+        src: img.imageUrl,
+        label: img.label,
+      }))
       : galleryFromContent.map((img, index) => ({
-          id: `content-${index}`,
-          src: img.imageSrc,
-          label: img.alt,
-        }));
+        id: `content-${index}`,
+        src: img.imageSrc,
+        label: img.alt,
+      }));
 
   return (
     <div className="relative overflow-hidden">
