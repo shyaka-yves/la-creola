@@ -4,7 +4,7 @@ import { addReservation, type ReservationRecord } from "@/lib/reservationsDb";
 
 export const runtime = "nodejs";
 
-const RESERVATIONS_EMAIL = "shyakayvany@gmail.com";
+const RESERVATIONS_EMAIL = "bushali716@gmail.com";
 
 async function sendReservationEmail(record: ReservationRecord) {
   const apiKey = process.env.RESEND_API_KEY;
@@ -14,7 +14,7 @@ async function sendReservationEmail(record: ReservationRecord) {
   // You can override this with RESEND_FROM_EMAIL later when you have your own domain.
   const from =
     process.env.RESEND_FROM_EMAIL ??
-    "La Creola <onboarding@resend.dev>";
+    "La Creola Website <onboarding@resend.dev>";
   const resend = new Resend(apiKey);
 
   const lines = [
@@ -37,13 +37,13 @@ async function sendReservationEmail(record: ReservationRecord) {
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as
     | {
-        name?: string;
-        email?: string;
-        phone?: string;
-        date?: string;
-        guests?: number;
-        notes?: string;
-      }
+      name?: string;
+      email?: string;
+      phone?: string;
+      date?: string;
+      guests?: number;
+      notes?: string;
+    }
     | null;
 
   const name = (body?.name ?? "").trim();
