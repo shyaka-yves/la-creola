@@ -36,7 +36,7 @@ export default async function EventsPage() {
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {events.map((event, index) => (
                 <FadeIn key={event.id} delay={80 * index}>
-                  <article className="card-glass mx-auto flex h-full max-w-[260px] flex-col overflow-hidden rounded-3xl transition hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-black/60">
+                  <article className="card-glass mx-auto flex h-full w-full sm:w-auto sm:max-w-[260px] flex-col overflow-hidden rounded-3xl transition hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-black/60">
                     <div className="relative w-full aspect-[4/5] overflow-hidden">
                       <Image
                         src={event.imageUrl}

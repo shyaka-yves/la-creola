@@ -33,7 +33,7 @@ async function EventsSection() {
         <div className="mt-8 grid gap-6 sm:mt-10 sm:grid-cols-2 lg:grid-cols-3">
           {events.slice(0, 3).map((event, index) => (
             <FadeIn key={event.id} delay={80 * index}>
-              <article className="card-glass mx-auto flex h-full max-w-[260px] flex-col overflow-hidden rounded-3xl">
+              <article className="card-glass mx-auto flex h-full w-full sm:w-auto sm:max-w-[260px] flex-col overflow-hidden rounded-3xl">
                 <div className="relative w-full aspect-[4/3] overflow-hidden">
                   <Image
                     src={event.imageUrl}

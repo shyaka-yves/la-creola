@@ -56,10 +56,10 @@ export function BlogSection({
         </h2>
       </FadeIn>
 
-      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5">
         {posts.map((post, index) => (
           <FadeIn key={`${post.title}-${index}`} delay={80 * index}>
-            <article className="card-glass flex h-full flex-col overflow-hidden rounded-3xl">
+            <article className="card-glass flex h-full flex-col overflow-hidden rounded-3xl transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50">
               <div className="relative h-40 w-full overflow-hidden">
                 <Image
                   src={post.imageSrc}

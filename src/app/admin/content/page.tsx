@@ -376,9 +376,24 @@ export default function AdminContentPage() {
 
         <div className="grid gap-8">
           {(content.blog.items ?? []).map((_: any, i: number) => (
-            <div key={i} className="space-y-4 border-b border-zinc-800 pb-6 last:border-0 last:pb-0">
-              <p className="text-sm font-semibold text-zinc-300">Blog Item {i + 1}</p>
-              <div className="grid gap-4 md:grid-cols-2">
+            <div key={i} className="relative space-y-4 rounded-3xl border border-zinc-800 bg-black/20 p-6">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold text-zinc-300">Blog Item {i + 1}</p>
+                <button
+                  onClick={() =>
+                    setContent((c: any) => {
+                      const items = [...(c.blog.items ?? [])];
+                      items.splice(i, 1);
+                      return { ...c, blog: { ...c.blog, items } };
+                    })
+                  }
+                  className="text-xs font-medium text-red-400 hover:text-red-300 transition"
+                  type="button"
+                >
+                  Remove
+                </button>
+              </div>
+              <div className="grid gap-4 md:grid-cols-2 mt-4">
                 <Select
                   label="Image"
                   value={content.blog.items[i].imageSrc || ""}
@@ -458,30 +473,25 @@ export default function AdminContentPage() {
               </div>
             </div>
           ))}
-        </div>
-      </EditorCard>
 
-      <EditorCard title="Blog section images">
-        <div className="grid gap-4 md:grid-cols-2">
-          {(content.blog.items ?? []).map((_: any, i: number) => (
-            <Select
-              key={i}
-              label={`Blog ${i + 1} image`}
-              value={content.blog.items[i].imageSrc}
-              options={[
-                { label: "— Select —", value: "" },
-                ...imageOptions.map((m) => ({ label: m.name, value: m.url })),
-              ]}
-              onChange={(v) =>
-                setContent((c: any) => {
-                  const items = [...(c.blog.items ?? [])];
-                  if (!items[i]) items[i] = { category: "", title: "", excerpt: "", imageSrc: "" };
-                  items[i] = { ...items[i], imageSrc: v };
-                  return { ...c, blog: { ...c.blog, items } };
-                })
-              }
-            />
-          ))}
+          <button
+            type="button"
+            onClick={() =>
+              setContent((c: any) => ({
+                ...c,
+                blog: {
+                  ...c.blog,
+                  items: [
+                    ...(c.blog.items ?? []),
+                    { category: "", title: "", excerpt: "", imageSrc: "" },
+                  ],
+                },
+              }))
+            }
+            className="mt-4 flex w-full items-center justify-center rounded-3xl border-2 border-dashed border-zinc-700/50 bg-black/20 py-8 text-sm font-semibold text-zinc-400 transition hover:border-[#D4AF37] hover:text-[#D4AF37]"
+          >
+            + Add New Blog Item
+          </button>
         </div>
       </EditorCard>
     </div>
