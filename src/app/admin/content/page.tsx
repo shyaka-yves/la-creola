@@ -270,6 +270,42 @@ export default function AdminContentPage() {
         </div>
       </EditorCard>
 
+      <EditorCard title="Tasting Notes section image (Menu Intro)">
+        <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
+          <Select
+            label="Choose from Media Library"
+            value={content.menuIntro?.imageSrc || ""}
+            options={[
+              { label: "— Select —", value: "" },
+              ...imageOptions.map((m) => ({ label: m.name, value: m.url })),
+            ]}
+            onChange={(v) =>
+              setContent((c: any) => ({
+                ...c,
+                menuIntro: { ...c.menuIntro, imageSrc: v },
+              }))
+            }
+          />
+          <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">
+              Or paste image URL / path
+            </p>
+            <input
+              type="text"
+              value={content.menuIntro?.imageSrc || ""}
+              onChange={(e) =>
+                setContent((c: any) => ({
+                  ...c,
+                  menuIntro: { ...c.menuIntro, imageSrc: e.target.value },
+                }))
+              }
+              placeholder="e.g. /uploads/tasting-notes.jpg or https://..."
+              className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[#D4AF37] focus:outline-none"
+            />
+          </div>
+        </div>
+      </EditorCard>
+
       <EditorCard title="Menu PDF">
         <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
           <Select
@@ -307,6 +343,37 @@ export default function AdminContentPage() {
       </EditorCard>
 
       <EditorCard title="Blog section">
+        <div className="mb-8 grid gap-4 md:grid-cols-2">
+          <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">
+              Section Eyebrow
+            </p>
+            <input
+              type="text"
+              value={content.blog.eyebrow || ""}
+              onChange={(e) =>
+                setContent((c: any) => ({ ...c, blog: { ...c.blog, eyebrow: e.target.value } }))
+              }
+              placeholder="e.g. From Our Blog"
+              className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[#D4AF37] focus:outline-none"
+            />
+          </div>
+          <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">
+              Section Title
+            </p>
+            <input
+              type="text"
+              value={content.blog.title || ""}
+              onChange={(e) =>
+                setContent((c: any) => ({ ...c, blog: { ...c.blog, title: e.target.value } }))
+              }
+              placeholder="e.g. Latest News & Updates"
+              className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[#D4AF37] focus:outline-none"
+            />
+          </div>
+        </div>
+
         <div className="grid gap-8">
           {(content.blog.items ?? []).map((_: any, i: number) => (
             <div key={i} className="space-y-4 border-b border-zinc-800 pb-6 last:border-0 last:pb-0">

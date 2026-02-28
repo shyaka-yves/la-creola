@@ -34,7 +34,7 @@ async function EventsSection() {
           {events.slice(0, 3).map((event, index) => (
             <FadeIn key={event.id} delay={80 * index}>
               <article className="card-glass mx-auto flex h-full max-w-[260px] flex-col overflow-hidden rounded-3xl">
-                <div className="relative w-full aspect-[4/5] overflow-hidden">
+                <div className="relative w-full aspect-[4/3] overflow-hidden">
                   <Image
                     src={event.imageUrl}
                     alt={event.title}
@@ -281,7 +281,7 @@ export default async function Home() {
 
       {/* Menu Intro */}
       <section className="section-padding bg-black/90">
-        <div className="mx-auto max-w-4xl px-4 text-center">
+        <div className={`mx-auto max-w-6xl px-4 ${menuIntro.imageSrc ? 'grid gap-12 lg:grid-cols-2 lg:items-center' : 'text-center max-w-4xl'}`}>
           <FadeIn>
             <p className="text-xs uppercase tracking-[0.25em] text-gold">
               {menuIntro.eyebrow || "Tasting Notes"}
@@ -294,6 +294,19 @@ export default async function Home() {
                 "From delicate sashimi with Rwandan citrus to slow-braised cuts infused with aromatic spices, our menu is designed for sharing."}
             </p>
           </FadeIn>
+
+          {menuIntro.imageSrc && (
+            <FadeIn delay={150}>
+              <div className="relative h-[300px] w-full overflow-hidden rounded-2xl border border-zinc-700/70 bg-zinc-900 shadow-xl sm:h-[400px]">
+                <img
+                  src={menuIntro.imageSrc}
+                  alt={menuIntro.title || "Tasting Notes"}
+                  className="absolute inset-0 h-full w-full object-cover opacity-90"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-black/60 via-transparent to-black/20" />
+              </div>
+            </FadeIn>
+          )}
         </div>
       </section>
 
@@ -365,7 +378,7 @@ export default async function Home() {
       {/* Blog */}
       <section className="section-padding bg-black/90">
         <div className="mx-auto max-w-6xl px-4">
-          <BlogSection title={blogTitle} items={blogItems} />
+          <BlogSection eyebrow={content.blog.eyebrow} title={blogTitle} items={blogItems} />
         </div>
       </section>
     </div>

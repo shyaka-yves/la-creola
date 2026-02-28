@@ -34,19 +34,22 @@ const FALLBACK_POSTS: BlogItem[] = [
 
 export function BlogSection({
   title,
+  eyebrow,
   items,
 }: {
   title?: string;
+  eyebrow?: string;
   items?: BlogItem[];
 }) {
   const heading = title || "Stories from the kitchen & bar";
+  const smallCasing = eyebrow || "From Our Blog";
   const posts = items && items.length > 0 ? items : FALLBACK_POSTS;
 
   return (
     <div>
       <FadeIn className="mb-8 text-center">
         <p className="text-xs uppercase tracking-[0.25em] text-gold">
-          From Our Blog
+          {smallCasing}
         </p>
         <h2 className="heading-font mt-3 text-2xl font-semibold text-white sm:text-3xl">
           {heading}

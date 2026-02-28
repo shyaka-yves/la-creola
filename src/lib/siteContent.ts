@@ -81,6 +81,7 @@ export type MenuIntroContent = {
   eyebrow: string;
   title: string;
   description: string;
+  imageSrc: string;
 };
 
 export type MenuContent = {
@@ -162,6 +163,7 @@ function getDefaultContent(): SiteContent {
       eyebrow: "Tasting Notes",
       title: "A fusion of African soul & Asian finesse",
       description: "Our menu changes with the markets and the moods of the city.",
+      imageSrc: "",
     },
     events: {
       eyebrow: "Upcoming Events",
@@ -218,19 +220,19 @@ export async function getSiteContent(): Promise<SiteContent> {
     if (error || !data?.data || typeof data.data !== "object") return defaults;
     const parsed = data.data as Partial<SiteContent>;
     return {
-    hero: { ...defaults.hero, ...parsed.hero },
-    about: { ...defaults.about, ...parsed.about },
-    excellence: { ...defaults.excellence, ...parsed.excellence },
-    menuIntro: { ...defaults.menuIntro, ...parsed.menuIntro },
-    events: { ...defaults.events, ...parsed.events },
-    gallery: { ...defaults.gallery, ...parsed.gallery },
-    testimonials: { ...defaults.testimonials, ...parsed.testimonials },
-    blog: { ...defaults.blog, ...parsed.blog },
-    contact: { ...defaults.contact, ...parsed.contact },
-    menu: { ...defaults.menu, ...parsed.menu },
-    specialty: { ...defaults.specialty, ...parsed.specialty },
-    specialOffers: { ...defaults.specialOffers, ...parsed.specialOffers },
-  };
+      hero: { ...defaults.hero, ...parsed.hero },
+      about: { ...defaults.about, ...parsed.about },
+      excellence: { ...defaults.excellence, ...parsed.excellence },
+      menuIntro: { ...defaults.menuIntro, ...parsed.menuIntro },
+      events: { ...defaults.events, ...parsed.events },
+      gallery: { ...defaults.gallery, ...parsed.gallery },
+      testimonials: { ...defaults.testimonials, ...parsed.testimonials },
+      blog: { ...defaults.blog, ...parsed.blog },
+      contact: { ...defaults.contact, ...parsed.contact },
+      menu: { ...defaults.menu, ...parsed.menu },
+      specialty: { ...defaults.specialty, ...parsed.specialty },
+      specialOffers: { ...defaults.specialOffers, ...parsed.specialOffers },
+    };
   } catch {
     return defaults;
   }
