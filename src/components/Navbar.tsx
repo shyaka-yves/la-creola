@@ -60,7 +60,7 @@ export function Navbar() {
           )}
         </Link>
 
-        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-10 text-[13px] font-medium uppercase tracking-[0.3em] text-zinc-400 lg:flex xl:gap-14">
+        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-12 text-[12px] font-medium uppercase tracking-[0.5em] text-zinc-100 lg:flex xl:gap-16">
           {NAV_ITEMS.slice(0, 2).map((item) => (
             <Link
               key={item.href}
@@ -79,9 +79,6 @@ export function Navbar() {
               aria-haspopup="true"
             >
               RESTAURANT
-              <svg className={`h-4 w-4 transition-transform ${restaurantOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
             </button>
             {restaurantOpen && (
               <div className="absolute left-1/2 top-full z-50 mt-1 min-w-[180px] -translate-x-1/2 rounded border border-zinc-700 bg-black py-2 shadow-xl">
@@ -112,7 +109,7 @@ export function Navbar() {
         <div className="flex items-center gap-3">
           <a
             href="/book"
-            className="hidden border border-[#EFD077]/50 bg-transparent px-8 py-3 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-[#EFD077] hover:text-black lg:inline-flex"
+            className="hidden border border-[#EFD077] bg-transparent px-8 py-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#EFD077] transition-all hover:bg-[#EFD077] hover:text-black lg:inline-flex"
           >
             BOOK A TABLE
           </a>

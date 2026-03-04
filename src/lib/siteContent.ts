@@ -27,6 +27,7 @@ export type ExcellenceContent = {
   eyebrow: string;
   title: string;
   description: string;
+  quote: string;
   stats: Array<{ value: string; label: string }>;
   imageSrc: string;
 };
@@ -88,6 +89,11 @@ export type MenuContent = {
   pdfUrl: string;
 };
 
+export type DescriptionContent = {
+  heading: string;
+  paragraphs: string[];
+};
+
 export type SpecialtyContent = {
   title: string;
   content: string;
@@ -102,6 +108,7 @@ export type SiteContent = {
   hero: HeroContent;
   about: AboutContent;
   excellence: ExcellenceContent;
+  descriptionSection: DescriptionContent;
   menuIntro: MenuIntroContent;
   events: EventsContent;
   gallery: GalleryContent;
@@ -131,93 +138,133 @@ function getDefaultContent(): SiteContent {
   return {
     hero: {
       brand: "La Creola",
-      tagline: "The finest Rwandan dining experience",
+      tagline: "An Equisite Culinary Saga - African and Asian Tapas and cocktails",
       headline: "La Creola",
       subheadline: "",
-      primaryCtaLabel: "Book a Table",
+      primaryCtaLabel: "BOOK A TABLE",
       primaryCtaHref: "/book",
-      secondaryCtaLabel: "Our Menu",
+      secondaryCtaLabel: "VIEW MENU",
       secondaryCtaHref: "/menu",
-      mediaType: "image",
-      mediaSrc: "",
-      overlay: "",
+      mediaType: "video",
+      mediaSrc: "/uploads/bg.mp4",
+      overlay: "rgba(0,0,0,0.4)",
     },
     about: {
-      eyebrow: "About La Creola",
+      eyebrow: "ABOUT LA CREOLA",
       title: "For a truly unique culinary experience",
       paragraphs: [
-        "La Creola brings together bold African spirit and refined Asian influence in a way that feels both familiar and refreshingly new. Our vibrant atmosphere and attentive service create unforgettable memories.",
+        "La Creola is a vibrant dining destination in Kigali, offering a refined fusion of African and Asian flavors. Our menu is built around sharing plates, bold tastes, and creative cocktails — designed for discovery, connection, and enjoyment.",
+        "Whether you’re joining us for a relaxed meal or an energetic evening, every visit is crafted to feel memorable.",
+        "Experience the full La Creola dining experience, and try our menu – meaning “I leave it up to you” in Kigali."
       ],
-      imageSrc: "/interior.jpg",
-      ctaLabel: "Book a Table",
-      ctaHref: "/book",
+      imageSrc: "/uploads/FRIDAYYY.png",
+      ctaLabel: "READ OUR STORY",
+      ctaHref: "/about",
     },
     excellence: {
-      eyebrow: "The Standard",
+      eyebrow: "THE STANDARD",
       title: "La Creola Excellence",
-      description: "",
-      stats: [],
-      imageSrc: "",
+      description: "Our chefs compose each plate as a story of provenance and precision. Seasonal ingredients, curated wines, and bespoke pairings converge in a dining experience where every detail—from glassware to garnish—is intentionally designed.",
+      quote: "Sharing the essence of Rwanda with a world-class twist.",
+      stats: [
+        { value: "20+", label: "Awards" },
+        { value: "5k+", label: "Happy Guests" }
+      ],
+      imageSrc: "/uploads/cocktail-sq.png",
+    },
+    descriptionSection: {
+      heading: "A TASTE OF KIGALI",
+      paragraphs: [
+        "Inspired by diverse culinary cultures, La Creola blends African soul with Asian finesse. Our tapas-style menu allows guests to explore a variety of flavors in one sitting, while our cocktails complement the journey with creativity and balance.",
+        "It’s not just about food — it’s about atmosphere, rhythm, and the joy of experiencing something different."
+      ]
     },
     menuIntro: {
-      eyebrow: "Tasting Notes",
+      eyebrow: "TASTING NOTES",
       title: "A fusion of African soul & Asian finesse",
       description: "Our menu changes with the markets and the moods of the city.",
-      imageSrc: "",
+      imageSrc: "/uploads/dish-1.png",
     },
     events: {
-      eyebrow: "Upcoming Events",
+      eyebrow: "UPCOMING EVENTS",
       title: "Upcoming Party Events",
-      description: "Experience exotic flavors and vibrant culture.",
-      items: [],
+      description: "Experience only the best night life story at La Creola",
+      items: [
+        {
+          date: "Oct 27, 2024",
+          title: "Neon Night Party",
+          description: "Experience the ultimate neon glow party with live DJs and neon-themed cocktails.",
+          imageSrc: "/uploads/party-1.png",
+        },
+        {
+          date: "Oct 28, 2024",
+          title: "Beats Sunset Vibe",
+          description: "Relaxing sunset vibes with smooth beats and refreshing drinks by the hills.",
+          imageSrc: "/uploads/party-2.png",
+        },
+        {
+          date: "Oct 31, 2024",
+          title: "Halloween Costume Bash",
+          description: "Join us for the most mysterious night of the year. Best costume wins a prize!",
+          imageSrc: "/uploads/party-3.png",
+        }
+      ],
     },
     gallery: {
-      eyebrow: "Inside La Creola",
+      eyebrow: "INSIDE LA CREOLA",
       title: "Our Gallery",
       items: [],
     },
     testimonials: {
-      eyebrow: "Testimonials",
+      eyebrow: "TESTIMONIALS",
       title: "What Our Clients Say",
       subtitle: "",
-      items: [],
+      items: [
+        {
+          quote: "The combination of flavors is something I haven't experienced elsewhere in Kigali. The atmosphere is just perfect for a night out.",
+          name: "SOPHIA MUKAMANZI",
+          rating: 5
+        },
+        {
+          quote: "A truly unique fusion experience. The cocktails are inventive and the staff makes you feel right at home.",
+          name: "DAVID KAGAME",
+          rating: 5
+        }
+      ],
     },
     blog: {
-      eyebrow: "From Our Blog",
+      eyebrow: "FROM OUR BLOG",
       title: "Latest News & Updates",
       items: [
         {
-          category: "Chef's Notes",
-          title: "Designing a Menu that Moves with the Seasons",
-          excerpt:
-            "How our culinary team balances Kigali's local markets with Asian pantry staples to create a menu that always feels alive.",
-          imageSrc: "/blog-seasonal.jpg",
+          category: "FOOD & DRINKS",
+          title: "Summer cocktails that bring the vibe",
+          excerpt: "Discover our new seasonal cocktail menu featuring local ingredients and exotic spirits.",
+          imageSrc: "/uploads/blog-1.png",
         },
         {
-          category: "Behind the Bar",
-          title: "The Art of Gold-Touched Cocktails",
-          excerpt:
-            "Step inside our bar program and discover how we layer aromatics, textures, and visual details into every pour.",
-          imageSrc: "/blog-cocktail.jpg",
+          category: "KITCHEN",
+          title: "Chef’s notes: The art of fusion",
+          excerpt: "Our lead chef shares the inspiration behind combining Rwandan spices with Japanese techniques.",
+          imageSrc: "/uploads/blog-2.png",
         },
         {
-          category: "Culture & Space",
-          title: "Crafting the Soundtrack of an Evening",
-          excerpt:
-            "From jazz to amapiano, how we curate the music that shapes the mood of your night at La Creola.",
-          imageSrc: "/blog-soundtrack.jpg",
-        },
+          category: "EVENTS",
+          title: "Halloween party at la creola",
+          excerpt: "A look back at our most successful themed night yet. See the highlights and costumes.",
+          imageSrc: "/uploads/party-3.png",
+        }
       ],
     },
     contact: {
       title: "Visit Us",
-      addressLines: ["Kigali / Kimihurura", "KG 28 Avenue, Kigali closer Adventist Church"],
-      addressNote: "Located in the heart of Kimihurura with breathtaking views of the hills of Kigali.",
+      addressLines: ["Kigali, Rwanda", "KG 674 St, Kimihurura"],
+      addressNote: "Located in the heart of Kimihurura.",
       hoursLines: [
-        "Monday - Sunday: 10:00 AM - 1:00 AM",
+        "Monday - Sunday: 10:00 AM - 12:00 PM",
       ],
-      email: "reservations@lacreola.com",
-      phone: "+250 793 084 995",
+      email: "info@lacreola.rw",
+      phone: "+250 788 300 000",
       mapEmbedSrc: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d390.110208989431!2d30.085970473208192!3d-1.9614453068728352!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca777ef43544b%3A0xb1c95bbfefb7ff00!2sLa%20Creola!5e0!3m2!1sen!2srw!4v1771455504152!5m2!1sen!2srw",
     },
     menu: {
@@ -245,6 +292,7 @@ export async function getSiteContent(): Promise<SiteContent> {
       hero: { ...defaults.hero, ...parsed.hero },
       about: { ...defaults.about, ...parsed.about },
       excellence: { ...defaults.excellence, ...parsed.excellence },
+      descriptionSection: { ...defaults.descriptionSection, ...parsed.descriptionSection },
       menuIntro: { ...defaults.menuIntro, ...parsed.menuIntro },
       events: { ...defaults.events, ...parsed.events },
       gallery: { ...defaults.gallery, ...parsed.gallery },

@@ -129,47 +129,164 @@ export default function AdminContentPage() {
         </div>
       ) : null}
 
-      <EditorCard title="Hero background">
-        <div className="grid gap-4 md:grid-cols-2">
-          <Select
-            label="Media type"
-            value={content.hero.mediaType}
-            options={[
-              { label: "Image", value: "image" },
-              { label: "Video", value: "video" },
-            ]}
-            onChange={(v) =>
-              setContent((c: any) => ({ ...c, hero: { ...c.hero, mediaType: v } }))
-            }
-          />
-          <div className="space-y-3">
+      <EditorCard title="Hero Content">
+        <div className="grid gap-6">
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Brand Name</p>
+              <input
+                type="text"
+                value={content.hero.brand}
+                onChange={(e) => setContent((c: any) => ({ ...c, hero: { ...c.hero, brand: e.target.value } }))}
+                className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 focus:border-[#D4AF37] focus:outline-none"
+              />
+            </div>
+            <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Tagline</p>
+              <input
+                type="text"
+                value={content.hero.tagline}
+                onChange={(e) => setContent((c: any) => ({ ...c, hero: { ...c.hero, tagline: e.target.value } }))}
+                className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 focus:border-[#D4AF37] focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Primary CTA (Label)</p>
+              <input
+                type="text"
+                value={content.hero.primaryCtaLabel}
+                onChange={(e) => setContent((c: any) => ({ ...c, hero: { ...c.hero, primaryCtaLabel: e.target.value } }))}
+                className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 focus:border-[#D4AF37] focus:outline-none"
+              />
+            </div>
+            <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Secondary CTA (Label)</p>
+              <input
+                type="text"
+                value={content.hero.secondaryCtaLabel}
+                onChange={(e) => setContent((c: any) => ({ ...c, hero: { ...c.hero, secondaryCtaLabel: e.target.value } }))}
+                className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 focus:border-[#D4AF37] focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
             <Select
-              label="Choose from Media Library"
-              value={content.hero.mediaSrc}
+              label="Media type"
+              value={content.hero.mediaType}
               options={[
-                { label: "— Select —", value: "" },
-                ...(content.hero.mediaType === "video"
-                  ? videoOptions.map((m) => ({ label: m.name, value: m.url }))
-                  : imageOptions.map((m) => ({ label: m.name, value: m.url }))),
+                { label: "Image", value: "image" },
+                { label: "Video", value: "video" },
               ]}
               onChange={(v) =>
-                setContent((c: any) => ({ ...c, hero: { ...c.hero, mediaSrc: v } }))
+                setContent((c: any) => ({ ...c, hero: { ...c.hero, mediaType: v } }))
+              }
+            />
+            <div className="space-y-3">
+              <Select
+                label="Choose from Media Library"
+                value={content.hero.mediaSrc}
+                options={[
+                  { label: "— Select —", value: "" },
+                  ...(content.hero.mediaType === "video"
+                    ? videoOptions.map((m) => ({ label: m.name, value: m.url }))
+                    : imageOptions.map((m) => ({ label: m.name, value: m.url }))),
+                ]}
+                onChange={(v) =>
+                  setContent((c: any) => ({ ...c, hero: { ...c.hero, mediaSrc: v } }))
+                }
+              />
+              <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">
+                  Or paste media URL / path
+                </p>
+                <input
+                  type="text"
+                  value={content.hero.mediaSrc}
+                  onChange={(e) =>
+                    setContent((c: any) => ({
+                      ...c,
+                      hero: { ...c.hero, mediaSrc: e.target.value },
+                    }))
+                  }
+                  placeholder="e.g. /uploads/hero.mp4 or https://..."
+                  className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[#D4AF37] focus:outline-none"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </EditorCard>
+
+      <EditorCard title="About La Creola">
+        <div className="space-y-6">
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Eyebrow</p>
+              <input
+                type="text"
+                value={content.about.eyebrow}
+                onChange={(e) => setContent((c: any) => ({ ...c, about: { ...c.about, eyebrow: e.target.value } }))}
+                className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 focus:border-[#D4AF37] focus:outline-none"
+              />
+            </div>
+            <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Title</p>
+              <input
+                type="text"
+                value={content.about.title}
+                onChange={(e) => setContent((c: any) => ({ ...c, about: { ...c.about, title: e.target.value } }))}
+                className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 focus:border-[#D4AF37] focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            {(content.about.paragraphs || []).map((p: string, i: number) => (
+              <div key={i} className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Paragraph {i + 1}</p>
+                <textarea
+                  value={p}
+                  onChange={(e) => setContent((c: any) => {
+                    const paras = [...(c.about.paragraphs || [])];
+                    paras[i] = e.target.value;
+                    return { ...c, about: { ...c.about, paragraphs: paras } };
+                  })}
+                  rows={3}
+                  className="mt-2 w-full rounded-xl border border-zinc-700/80 bg-black/70 p-3 text-sm text-zinc-100 focus:border-[#D4AF37] focus:outline-none"
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
+            <Select
+              label="Choose Image from Media Library"
+              value={content.about.imageSrc}
+              options={[
+                { label: "— Select —", value: "" },
+                ...imageOptions.map((m) => ({ label: m.name, value: m.url })),
+              ]}
+              onChange={(v) =>
+                setContent((c: any) => ({ ...c, about: { ...c.about, imageSrc: v } }))
               }
             />
             <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
               <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">
-                Or paste media URL / path
+                Or paste image URL / path
               </p>
               <input
                 type="text"
-                value={content.hero.mediaSrc}
+                value={content.about.imageSrc}
                 onChange={(e) =>
                   setContent((c: any) => ({
                     ...c,
-                    hero: { ...c.hero, mediaSrc: e.target.value },
+                    about: { ...c.about, imageSrc: e.target.value },
                   }))
                 }
-                placeholder="e.g. /uploads/hero.mp4 or https://..."
                 className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[#D4AF37] focus:outline-none"
               />
             </div>
@@ -177,72 +294,91 @@ export default function AdminContentPage() {
         </div>
       </EditorCard>
 
-      <EditorCard title="About section image">
-        <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
-          <Select
-            label="Choose from Media Library"
-            value={content.about.imageSrc}
-            options={[
-              { label: "— Select —", value: "" },
-              ...imageOptions.map((m) => ({ label: m.name, value: m.url })),
-            ]}
-            onChange={(v) =>
-              setContent((c: any) => ({ ...c, about: { ...c.about, imageSrc: v } }))
-            }
-          />
+      <EditorCard title="Excellence section content">
+        <div className="space-y-6">
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Heading</p>
+              <input
+                type="text"
+                value={content.excellence.title}
+                onChange={(e) => setContent((c: any) => ({ ...c, excellence: { ...c.excellence, title: e.target.value } }))}
+                className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 focus:border-[#D4AF37] focus:outline-none"
+              />
+            </div>
+            <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Quote/Accent Text</p>
+              <input
+                type="text"
+                value={content.excellence.quote || ""}
+                onChange={(e) => setContent((c: any) => ({ ...c, excellence: { ...c.excellence, quote: e.target.value } }))}
+                className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 focus:border-[#D4AF37] focus:outline-none"
+              />
+            </div>
+          </div>
           <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
-            <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">
-              Or paste image URL / path
-            </p>
-            <input
-              type="text"
-              value={content.about.imageSrc}
-              onChange={(e) =>
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Description Body</p>
+            <textarea
+              value={content.excellence.description}
+              onChange={(e) => setContent((c: any) => ({ ...c, excellence: { ...c.excellence, description: e.target.value } }))}
+              rows={4}
+              className="mt-2 w-full rounded-xl border border-zinc-700/80 bg-black/70 p-3 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[#D4AF37] focus:outline-none"
+            />
+          </div>
+          <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
+            <Select
+              label="Choose Image from Media Library"
+              value={content.excellence.imageSrc}
+              options={[
+                { label: "— Select —", value: "" },
+                ...imageOptions.map((m) => ({ label: m.name, value: m.url })),
+              ]}
+              onChange={(v) =>
                 setContent((c: any) => ({
                   ...c,
-                  about: { ...c.about, imageSrc: e.target.value },
+                  excellence: { ...c.excellence, imageSrc: v },
                 }))
               }
-              placeholder="e.g. /uploads/about.jpg or https://..."
-              className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[#D4AF37] focus:outline-none"
             />
+            <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Or paste image URL</p>
+              <input
+                type="text"
+                value={content.excellence.imageSrc}
+                onChange={(e) => setContent((c: any) => ({ ...c, excellence: { ...c.excellence, imageSrc: e.target.value } }))}
+                className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 focus:border-[#D4AF37] focus:outline-none"
+              />
+            </div>
           </div>
         </div>
       </EditorCard>
 
-      <EditorCard title="Excellence section image">
-        <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
-          <Select
-            label="Choose from Media Library"
-            value={content.excellence.imageSrc}
-            options={[
-              { label: "— Select —", value: "" },
-              ...imageOptions.map((m) => ({ label: m.name, value: m.url })),
-            ]}
-            onChange={(v) =>
-              setContent((c: any) => ({
-                ...c,
-                excellence: { ...c.excellence, imageSrc: v },
-              }))
-            }
-          />
+      <EditorCard title="A Taste of Kigali (Description Section)">
+        <div className="space-y-6">
           <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
-            <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">
-              Or paste image URL / path
-            </p>
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Heading</p>
             <input
               type="text"
-              value={content.excellence.imageSrc}
-              onChange={(e) =>
-                setContent((c: any) => ({
-                  ...c,
-                  excellence: { ...c.excellence, imageSrc: e.target.value },
-                }))
-              }
-              placeholder="e.g. /uploads/excellence.jpg or https://..."
-              className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-[#D4AF37] focus:outline-none"
+              value={content.descriptionSection?.heading || ""}
+              onChange={(e) => setContent((c: any) => ({ ...c, descriptionSection: { ...c.descriptionSection, heading: e.target.value } }))}
+              className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 focus:border-[#D4AF37] focus:outline-none"
             />
           </div>
+          {(content.descriptionSection?.paragraphs || []).map((p: string, i: number) => (
+            <div key={i} className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Paragraph {i + 1}</p>
+              <textarea
+                value={p}
+                onChange={(e) => setContent((c: any) => {
+                  const paras = [...(c.descriptionSection.paragraphs || [])];
+                  paras[i] = e.target.value;
+                  return { ...c, descriptionSection: { ...c.descriptionSection, paragraphs: paras } };
+                })}
+                rows={3}
+                className="mt-2 w-full rounded-xl border border-zinc-700/80 bg-black/70 p-3 text-sm text-zinc-100 focus:border-[#D4AF37] focus:outline-none"
+              />
+            </div>
+          ))}
         </div>
       </EditorCard>
 
@@ -492,6 +628,150 @@ export default function AdminContentPage() {
           >
             + Add New Blog Item
           </button>
+        </div>
+      </EditorCard>
+
+      <EditorCard title="Testimonials section">
+        <div className="grid gap-8">
+          {(content.testimonials.items ?? []).map((_: any, i: number) => (
+            <div key={i} className="relative space-y-4 rounded-3xl border border-zinc-800 bg-black/20 p-6">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold text-zinc-300">Testimonial {i + 1}</p>
+                <button
+                  onClick={() =>
+                    setContent((c: any) => {
+                      const items = [...(c.testimonials.items ?? [])];
+                      items.splice(i, 1);
+                      return { ...c, testimonials: { ...c.testimonials, items } };
+                    })
+                  }
+                  className="text-xs font-medium text-red-400 hover:text-red-300 transition"
+                  type="button"
+                >
+                  Remove
+                </button>
+              </div>
+              <div className="space-y-4 mt-4">
+                <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+                  <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Name</p>
+                  <input
+                    type="text"
+                    value={content.testimonials.items[i].name || ""}
+                    onChange={(e) =>
+                      setContent((c: any) => {
+                        const items = [...(c.testimonials.items ?? [])];
+                        items[i] = { ...items[i], name: e.target.value };
+                        return { ...c, testimonials: { ...c.testimonials, items } };
+                      })
+                    }
+                    className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 focus:border-[#D4AF37] focus:outline-none"
+                  />
+                </div>
+                <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+                  <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Quote</p>
+                  <textarea
+                    value={content.testimonials.items[i].quote || ""}
+                    onChange={(e) =>
+                      setContent((c: any) => {
+                        const items = [...(c.testimonials.items ?? [])];
+                        items[i] = { ...items[i], quote: e.target.value };
+                        return { ...c, testimonials: { ...c.testimonials, items } };
+                      })
+                    }
+                    rows={3}
+                    className="mt-2 w-full rounded-xl border border-zinc-700/80 bg-black/70 p-3 text-sm text-zinc-100 focus:border-[#D4AF37] focus:outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() =>
+              setContent((c: any) => ({
+                ...c,
+                testimonials: {
+                  ...c.testimonials,
+                  items: [
+                    ...(c.testimonials.items ?? []),
+                    { quote: "", name: "", rating: 5 },
+                  ],
+                },
+              }))
+            }
+            className="mt-4 flex w-full items-center justify-center rounded-3xl border-2 border-dashed border-zinc-700/50 bg-black/20 py-8 text-sm font-semibold text-zinc-400 transition hover:border-[#D4AF37] hover:text-[#D4AF37]"
+          >
+            + Add New Testimonial
+          </button>
+        </div>
+      </EditorCard>
+
+      <EditorCard title="Menu & Specials">
+        <div className="space-y-6">
+          <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Menu PDF URL</p>
+            <input
+              type="text"
+              value={content.menu.pdfUrl || ""}
+              onChange={(e) => setContent((c: any) => ({ ...c, menu: { ...c.menu, pdfUrl: e.target.value } }))}
+              placeholder="e.g. /menu.pdf or https://..."
+              className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 focus:border-[#D4AF37] focus:outline-none"
+            />
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Specialty Title</p>
+              <input
+                type="text"
+                value={content.specialty.title || ""}
+                onChange={(e) => setContent((c: any) => ({ ...c, specialty: { ...c.specialty, title: e.target.value } }))}
+                className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 focus:border-[#D4AF37] focus:outline-none"
+              />
+            </div>
+            <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Special Offers Title</p>
+              <input
+                type="text"
+                value={content.specialOffers.title || ""}
+                onChange={(e) => setContent((c: any) => ({ ...c, specialOffers: { ...c.specialOffers, title: e.target.value } }))}
+                className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 focus:border-[#D4AF37] focus:outline-none"
+              />
+            </div>
+          </div>
+        </div>
+      </EditorCard>
+
+      <EditorCard title="Contact Information">
+        <div className="space-y-6">
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Phone</p>
+              <input
+                type="text"
+                value={content.contact.phone || ""}
+                onChange={(e) => setContent((c: any) => ({ ...c, contact: { ...c.contact, phone: e.target.value } }))}
+                className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 focus:border-[#D4AF37] focus:outline-none"
+              />
+            </div>
+            <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Email</p>
+              <input
+                type="text"
+                value={content.contact.email || ""}
+                onChange={(e) => setContent((c: any) => ({ ...c, contact: { ...c.contact, email: e.target.value } }))}
+                className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 focus:border-[#D4AF37] focus:outline-none"
+              />
+            </div>
+          </div>
+          <div className="rounded-2xl border border-zinc-800 bg-black/40 p-4">
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">Map Embed URL (iframe src)</p>
+            <input
+              type="text"
+              value={content.contact.mapEmbedSrc || ""}
+              onChange={(e) => setContent((c: any) => ({ ...c, contact: { ...c.contact, mapEmbedSrc: e.target.value } }))}
+              className="mt-2 h-10 w-full rounded-full border border-zinc-700/80 bg-black/70 px-4 text-sm text-zinc-100 focus:border-[#D4AF37] focus:outline-none"
+            />
+          </div>
         </div>
       </EditorCard>
     </div>

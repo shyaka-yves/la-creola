@@ -14,7 +14,7 @@ export default async function AboutPage() {
 
   return (
     <div className="relative overflow-hidden">
-      <section className="section-padding bg-black/95 min-h-[calc(100vh-80px)] flex items-center">
+      <section className="bg-black/95 pt-24 pb-12 sm:pt-32 sm:pb-16 md:pt-40 md:pb-20 min-h-[calc(100vh-80px)] flex items-center">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-12 px-6 lg:flex-row lg:gap-16">
           <FadeIn className="w-full lg:w-1/2">
             <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-white/10 bg-zinc-900 shadow-2xl lg:rounded-2xl">

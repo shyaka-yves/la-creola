@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 export default async function ContactPage() {
   return (
     <div className="relative overflow-hidden">
-      <section className="section-padding bg-gradient-to-b from-black via-slate-950 to-black">
+      <section className="bg-black/95 pt-24 pb-6 sm:pt-32 sm:pb-8 md:pt-40 md:pb-10">
         <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 md:flex-row md:items-start md:gap-14">
           <FadeIn className="w-full md:w-1/2">
             <div className="space-y-9">

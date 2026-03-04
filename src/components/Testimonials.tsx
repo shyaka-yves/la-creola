@@ -24,9 +24,14 @@ const TESTIMONIALS = [
   },
 ];
 
-export function Testimonials() {
+export function Testimonials({
+  items,
+}: {
+  items?: Array<{ quote: string; name: string; rating: number }>;
+}) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const active = TESTIMONIALS[activeIndex];
+  const data = items && items.length > 0 ? items : TESTIMONIALS;
+  const active = data[activeIndex];
 
   return (
     <FadeIn>
@@ -61,14 +66,14 @@ export function Testimonials() {
         <div className="absolute top-1/2 -translate-y-1/2 flex w-full justify-between left-0 px-2 lg:-px-8 pointer-events-none">
           <button
             type="button"
-            onClick={() => setActiveIndex((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)}
+            onClick={() => setActiveIndex((prev) => (prev - 1 + data.length) % data.length)}
             className="pointer-events-auto inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/5 bg-black/40 text-zinc-500 hover:border-[#EFD077] hover:text-[#EFD077] hover:bg-black/60 transition-all duration-300 backdrop-blur-sm"
           >
             ‹
           </button>
           <button
             type="button"
-            onClick={() => setActiveIndex((prev) => (prev + 1) % TESTIMONIALS.length)}
+            onClick={() => setActiveIndex((prev) => (prev + 1) % data.length)}
             className="pointer-events-auto inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/5 bg-black/40 text-zinc-500 hover:border-[#EFD077] hover:text-[#EFD077] hover:bg-black/60 transition-all duration-300 backdrop-blur-sm"
           >
             ›
@@ -77,7 +82,7 @@ export function Testimonials() {
 
         {/* Pagination Dots */}
         <div className="mt-10 flex justify-center gap-4">
-          {TESTIMONIALS.map((_, index) => (
+          {data.map((_, index) => (
             <button
               key={index}
               onClick={() => setActiveIndex(index)}
