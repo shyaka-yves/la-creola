@@ -60,7 +60,7 @@ export function Navbar() {
           )}
         </Link>
 
-        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 text-sm font-medium uppercase tracking-wide text-white lg:flex xl:gap-10">
+        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 text-[13px] font-normal uppercase tracking-widest text-zinc-400 lg:flex xl:gap-10">
           {NAV_ITEMS.slice(0, 2).map((item) => (
             <Link
               key={item.href}
@@ -136,9 +136,8 @@ export function Navbar() {
 
       {/* Mobile menu */}
       <div
-        className={`fixed inset-x-0 top-[52px] z-40 overflow-y-auto bg-black transition-all duration-300 lg:hidden ${
-          mobileOpen ? "opacity-100" : "pointer-events-none opacity-0"
-        }`}
+        className={`fixed inset-x-0 top-[52px] z-40 overflow-y-auto bg-black transition-all duration-300 lg:hidden ${mobileOpen ? "opacity-100" : "pointer-events-none opacity-0"
+          }`}
         style={{ height: mobileOpen ? "calc(100vh - 52px)" : 0 }}
       >
         <nav className="flex flex-col px-4 py-6">
