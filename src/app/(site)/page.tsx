@@ -143,7 +143,7 @@ export default async function Home() {
 
           <FadeIn delay={120}>
             <p className="max-w-2xl text-[13px] font-light uppercase tracking-[0.4em] text-zinc-400 sm:text-sm md:text-base">
-              The essence of Kigali nights, where African soul meets Asian finesse.
+              An Equisite Culinary Saga - African and Asian Tapas and cocktails
             </p>
           </FadeIn>
 
@@ -190,9 +190,11 @@ export default async function Home() {
 
               <div className="space-y-8">
                 <p className="text-lg leading-relaxed text-zinc-300 font-light">
-                  At La Creola, we believe dining is more than just food — it&apos;s a story, a
-                  feeling, and a journey. Located in the heart of Kigali, La Creola brings together
-                  bold African spirit and refined Asian influence.
+                  La Creola is a vibrant dining destination in Kigali, offering a refined fusion of African and Asian flavors. Our menu is built around sharing plates, bold tastes, and creative cocktails — designed for discovery, connection, and enjoyment.
+
+                  Whether you’re joining us for a relaxed meal or an energetic evening, every visit is crafted to feel memorable.
+
+                  Experience the full La Creola dining experience, and try our menu – meaning “I leave it up to you” in Kigali.
                 </p>
                 <div className="space-y-6 text-[15px] leading-relaxed text-zinc-400">
                   <p>
