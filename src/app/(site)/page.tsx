@@ -12,23 +12,23 @@ export const dynamic = "force-dynamic";
 const MOCK_EVENTS = [
   {
     id: "1",
-    eyebrow: "COCKTAILS / NIGHT PARTY",
-    title: "Vibe Rebel affair",
-    description: "The ultimate night of dance and music on the decks",
-    imageUrl: "/uploads/FRIDAYYY.png", // Fallback, would ideally be the rebel glass
+    eyebrow: "MUSIC / NIGHT PARTY",
+    title: "Neon Night Party",
+    description: "The ultimate night of dance and electronic music on the decks",
+    imageUrl: "/uploads/FRIDAYYY.png",
   },
   {
     id: "2",
-    eyebrow: "FOOD & DRINKS",
-    title: "Fiesta Thursday",
-    description: "Traditional flavors with a modern twist",
+    eyebrow: "SUNSET / COCKTAILS",
+    title: "Beats Sunset Vibe",
+    description: "Relaxing rhythms with a selection of premium cocktails",
     imageUrl: "/uploads/FRIDAYYY.png",
   },
   {
     id: "3",
-    eyebrow: "CHEFS SELECTION",
-    title: "Fine Picking",
-    description: "The soul of the flavors",
+    eyebrow: "ANNUAL EVENT",
+    title: "Halloween Costume Bash",
+    description: "Creepy vibes and unforgettable memories in the heart of Kigali",
     imageUrl: "/uploads/FRIDAYYY.png",
   },
 ];
@@ -37,21 +37,17 @@ async function EventsSection() {
   return (
     <section className="section-padding bg-black">
       <div className="mx-auto max-w-6xl px-4">
-        <FadeIn className="text-center mb-12">
-          <p className="text-[10px] uppercase tracking-[0.3em] text-[#D4AF37]">
-            EVENINGS AT LA CREOLA
-          </p>
-          <h2 className="heading-font mt-4 text-3xl font-medium tracking-tight text-[#EFD077] md:text-4xl">
+        <FadeIn className="text-center mb-16">
+          <h2 className="heading-font text-5xl font-medium tracking-tight text-[#EFD077] md:text-6xl">
             Upcoming Party Events
           </h2>
-          <p className="mt-4 text-sm text-zinc-400 max-w-2xl mx-auto">
-            Experience unforgettable nights with curated DJs, live performances, and tasting menus
-            crafted for celebration.
+          <p className="mt-4 text-[10px] uppercase tracking-[0.4em] text-zinc-500">
+            Experience only the best night life story at La Creola
           </p>
-          <div className="h-0.5 w-12 bg-[#EFD077] mx-auto mt-6" />
+          <div className="h-0.5 w-12 bg-[#EFD077] mx-auto mt-8" />
         </FadeIn>
 
-        <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
           {MOCK_EVENTS.map((event, index) => (
             <FadeIn key={event.id} delay={80 * index}>
               <article className="card-glass flex h-full flex-col overflow-hidden rounded-2xl border-white/5 transition hover:-translate-y-1">
@@ -64,19 +60,19 @@ async function EventsSection() {
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                 </div>
-                <div className="flex flex-1 flex-col px-6 pb-6 pt-5">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#D4AF37]">
+                <div className="flex flex-1 flex-col px-6 pb-8 pt-6">
+                  <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
                     {event.eyebrow}
                   </p>
-                  <h3 className="mt-3 text-lg font-medium tracking-tight text-white">
+                  <h3 className="mt-3 text-xl font-medium tracking-tight text-white group-hover:text-[#EFD077] transition-colors">
                     {event.title}
                   </h3>
-                  <p className="mt-2 text-[13px] leading-relaxed text-zinc-400">{event.description}</p>
+                  <p className="mt-3 text-[13px] leading-relaxed text-zinc-400 font-light">{event.description}</p>
                   <Link
                     href="/book"
-                    className="mt-6 inline-flex items-center justify-center rounded-full bg-[#EFD077] px-6 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black shadow-lg shadow-yellow-500/20 transition hover:bg-[#FDE68A]"
+                    className="mt-8 inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-[#EFD077] to-[#D4AF37] px-8 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-black shadow-xl shadow-yellow-500/10 hover:brightness-110 active:scale-95 transition-all"
                   >
-                    LEARN MORE
+                    View More
                   </Link>
                 </div>
               </article>
@@ -104,9 +100,9 @@ export default async function Home() {
       imageSrc: "/uploads/FRIDAYYY.png",
     },
     {
-      category: "TEAM",
-      title: "Monalisa Joining the news center in kigali",
-      excerpt: "A journey through the story of our cafe and bakery shop news center.",
+      category: "EVENTS",
+      title: "Halloween party at la creola",
+      excerpt: "A look back at the best moments from our most vibrant night yet.",
       imageSrc: "/uploads/FRIDAYYY.png",
     }
   ];
@@ -148,16 +144,16 @@ export default async function Home() {
           </FadeIn>
 
           <FadeIn delay={220}>
-            <div className="mt-14 flex flex-col gap-6 sm:flex-row">
+            <div className="mt-14 flex flex-col gap-8 sm:flex-row">
               <a
                 href="/book"
-                className="inline-flex items-center justify-center rounded-lg bg-[#FDE68A] px-12 py-4 text-[10px] font-bold uppercase tracking-[0.3em] text-black transition-all hover:scale-105 active:scale-95 shadow-xl shadow-yellow-500/10"
+                className="inline-flex items-center justify-center rounded-lg bg-[#FDE68A] px-14 py-4 text-[11px] font-bold uppercase tracking-[0.4em] text-black transition-all hover:brightness-110 active:scale-95 shadow-2xl shadow-yellow-500/10"
               >
                 BOOK A TABLE
               </a>
               <Link
                 href="/menu"
-                className="inline-flex items-center justify-center rounded-lg border border-white/20 px-12 py-4 text-[10px] font-bold uppercase tracking-[0.3em] text-white transition-all hover:border-[#FDE68A] hover:bg-white/5 active:scale-95"
+                className="inline-flex items-center justify-center rounded-lg border border-white/30 px-14 py-4 text-[11px] font-bold uppercase tracking-[0.4em] text-white transition-all hover:bg-white/5 active:scale-95"
               >
                 VIEW MENU
               </Link>
@@ -170,7 +166,7 @@ export default async function Home() {
       <section className="section-padding py-24 lg:py-32">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-16 px-6 lg:flex-row lg:gap-24">
           <FadeIn className="w-full lg:w-1/2">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-zinc-900 shadow-2xl border border-white/5">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-zinc-900 shadow-2xl border border-white/5">
               <img
                 src="/uploads/FRIDAYYY.png"
                 alt="About La Creola"
@@ -180,7 +176,7 @@ export default async function Home() {
           </FadeIn>
 
           <FadeIn delay={120} className="w-full lg:w-1/2">
-            <div className="space-y-10">
+            <div className="space-y-12">
               <div className="space-y-4">
                 <h2 className="heading-font text-5xl font-medium tracking-tight text-[#EFD077] md:text-7xl lg:text-8xl">
                   About La Creola
@@ -188,34 +184,26 @@ export default async function Home() {
                 <div className="h-0.5 w-16 bg-[#EFD077]" />
               </div>
 
-              <div className="space-y-8">
-                <p className="text-lg leading-relaxed text-zinc-300 font-light">
+              <div className="space-y-10">
+                <p className="text-xl leading-relaxed text-zinc-300 font-light">
                   La Creola is a vibrant dining destination in Kigali, offering a refined fusion of African and Asian flavors. Our menu is built around sharing plates, bold tastes, and creative cocktails — designed for discovery, connection, and enjoyment.
-
+                </p>
+                <p className="text-[15px] leading-relaxed text-zinc-400 font-light">
                   Whether you’re joining us for a relaxed meal or an energetic evening, every visit is crafted to feel memorable.
-
+                </p>
+                <p className="text-[15px] leading-relaxed text-zinc-400 font-light italic">
                   Experience the full La Creola dining experience, and try our menu – meaning “I leave it up to you” in Kigali.
                 </p>
-                <div className="space-y-6 text-[15px] leading-relaxed text-zinc-400">
-                  <p>
-                    Our culinary philosophy is rooted in fusion without compromise: blending vibrant
-                    spices, fresh local ingredients, and innovative techniques to create dishes that
-                    surprise and delight.
-                  </p>
-                  <p>
-                    Whether you&apos;re here for an evening dinner, a relaxed lunch, or a vibrant night with friends, La Creola is where refined hospitality meets a soulful soundtrack.
-                  </p>
-                </div>
               </div>
 
-              <div className="flex gap-16 pt-8 border-t border-white/10">
+              <div className="flex gap-16 pt-10 border-t border-white/10">
                 <div>
-                  <p className="heading-font text-4xl font-semibold text-[#EFD077]">25+</p>
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 mt-2">Years of Excellence</p>
+                  <p className="heading-font text-5xl font-semibold text-[#EFD077]">25+</p>
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 mt-2 font-bold">Years of Excellence</p>
                 </div>
                 <div>
-                  <p className="heading-font text-4xl font-semibold text-[#EFD077]">100+</p>
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 mt-2">Signature Dishes</p>
+                  <p className="heading-font text-5xl font-semibold text-[#EFD077]">100+</p>
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 mt-2 font-bold">Signature Dishes</p>
                 </div>
               </div>
             </div>
@@ -224,7 +212,7 @@ export default async function Home() {
       </section>
 
       {/* Excellence Section */}
-      <section className="section-padding py-24 lg:py-32 bg-[#030712]">
+      <section className="section-padding py-24 lg:py-32 bg-black">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-16 px-6 lg:flex-row-reverse lg:gap-24">
           <FadeIn className="w-full lg:w-1/2">
             <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-zinc-900 shadow-2xl border border-white/5 max-w-md mx-auto lg:mx-0 lg:ml-auto">
@@ -239,29 +227,29 @@ export default async function Home() {
           <FadeIn delay={120} className="w-full lg:w-1/2">
             <div className="space-y-10">
               <div className="space-y-4">
-                <h2 className="heading-font text-4xl font-medium tracking-tight text-[#EFD077] md:text-6xl">
+                <h2 className="heading-font text-5xl font-medium tracking-tight text-[#EFD077] md:text-7xl">
                   La Creola Excellence
                 </h2>
                 <div className="h-0.5 w-16 bg-[#EFD077]" />
               </div>
 
-              <div className="space-y-8 text-[15px] leading-relaxed text-zinc-400">
+              <div className="space-y-8 text-[15px] leading-relaxed text-zinc-400 font-light">
                 <p>
                   Our chefs compose each plate as a story of provenance and precision. Seasonal ingredients, curated wines, and bespoke pairings converge in a dining experience where every detail—from glassware to garnish—is intentionally designed.
                 </p>
-                <p className="italic text-zinc-500">
+                <p className="italic text-zinc-500 text-[14px]">
                   Sharing the essence of Rwanda with a world-class twist.
                 </p>
               </div>
 
-              <div className="flex gap-16 pt-8 border-t border-white/10">
-                <div className="border-l-2 border-[#EFD077] pl-6">
-                  <p className="heading-font text-4xl font-semibold text-[#EFD077]">20+</p>
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 mt-2">Awards</p>
+              <div className="flex gap-16 pt-8">
+                <div className="border-l-2 border-[#EFD077] pl-8 py-1">
+                  <p className="heading-font text-5xl font-semibold text-[#EFD077]">20+</p>
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 mt-2 font-bold">Awards</p>
                 </div>
-                <div className="border-l-2 border-[#EFD077] pl-6">
-                  <p className="heading-font text-4xl font-semibold text-[#EFD077]">5k+</p>
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 mt-2">Happy Guests</p>
+                <div className="border-l-2 border-[#EFD077] pl-8 py-1">
+                  <p className="heading-font text-5xl font-semibold text-[#EFD077]">5k+</p>
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 mt-2 font-bold">Happy Guests</p>
                 </div>
               </div>
             </div>

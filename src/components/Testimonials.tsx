@@ -30,55 +30,58 @@ export function Testimonials() {
 
   return (
     <FadeIn>
-      <div className="relative mx-auto max-w-4xl">
-        <div className="card-glass overflow-hidden rounded-2xl bg-[#030712] px-8 py-12 text-center shadow-2xl border-white/5">
+      <div className="relative mx-auto max-w-4xl px-4">
+        <div className="card-glass overflow-hidden rounded-3xl bg-[#030712] px-10 py-16 text-center shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] border-white/[0.03]">
           <div className="relative">
-            <p className="text-3xl text-gold/80 mb-6">“</p>
-            <p className="mx-auto max-w-2xl text-[15px] leading-relaxed text-zinc-300 font-light italic">
+            <div className="flex justify-center mb-8">
+              <span className="text-4xl text-[#EFD077] opacity-60 italic font-serif">“</span>
+            </div>
+
+            <p className="mx-auto max-w-2xl text-[16px] leading-[1.8] text-zinc-300 font-light italic tracking-wide">
               {active.quote}
             </p>
 
-            <div className="mt-8 flex flex-col items-center gap-3">
-              <div>
-                <p className="text-sm font-semibold tracking-wide text-white">{active.name}</p>
-                <p className="text-[11px] uppercase tracking-widest text-zinc-500 mt-1">Visited la Creola</p>
-              </div>
-              <div className="flex items-center gap-1.5 text-gold text-xs">
+            <div className="mt-12 flex flex-col items-center gap-4">
+              <div className="flex items-center gap-1.5 text-[#EFD077] text-xs mb-1">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <span key={i} className={i < active.rating ? "text-gold" : "text-zinc-700"}>
+                  <span key={i} className={i < active.rating ? "text-[#EFD077]" : "text-zinc-800"}>
                     ★
                   </span>
                 ))}
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm font-semibold tracking-[0.1em] text-white uppercase">{active.name}</p>
+                <p className="text-[9px] uppercase tracking-[0.5em] text-zinc-500 font-bold">Visited la Creola</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Navigation Arrows */}
-        <div className="absolute top-1/2 -translate-y-1/2 flex w-full justify-between px-4 lg:-px-12 pointer-events-none">
+        <div className="absolute top-1/2 -translate-y-1/2 flex w-full justify-between left-0 px-2 lg:-px-8 pointer-events-none">
           <button
             type="button"
             onClick={() => setActiveIndex((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)}
-            className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-zinc-400 hover:border-gold hover:text-gold transition-colors"
+            className="pointer-events-auto inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/5 bg-black/40 text-zinc-500 hover:border-[#EFD077] hover:text-[#EFD077] hover:bg-black/60 transition-all duration-300 backdrop-blur-sm"
           >
             ‹
           </button>
           <button
             type="button"
             onClick={() => setActiveIndex((prev) => (prev + 1) % TESTIMONIALS.length)}
-            className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-zinc-400 hover:border-gold hover:text-gold transition-colors"
+            className="pointer-events-auto inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/5 bg-black/40 text-zinc-500 hover:border-[#EFD077] hover:text-[#EFD077] hover:bg-black/60 transition-all duration-300 backdrop-blur-sm"
           >
             ›
           </button>
         </div>
 
         {/* Pagination Dots */}
-        <div className="mt-8 flex justify-center gap-3">
+        <div className="mt-10 flex justify-center gap-4">
           {TESTIMONIALS.map((_, index) => (
             <button
               key={index}
               onClick={() => setActiveIndex(index)}
-              className={`h-1 rounded-full transition-all ${index === activeIndex ? "w-6 bg-gold" : "w-2 bg-zinc-800"
+              className={`h-0.5 transition-all duration-500 ${index === activeIndex ? "w-10 bg-[#EFD077]" : "w-4 bg-zinc-800"
                 }`}
             />
           ))}

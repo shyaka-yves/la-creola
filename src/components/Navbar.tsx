@@ -60,12 +60,12 @@ export function Navbar() {
           )}
         </Link>
 
-        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 text-[13px] font-normal uppercase tracking-widest text-zinc-400 lg:flex xl:gap-10">
+        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-10 text-[10px] font-medium uppercase tracking-[0.4em] text-zinc-400 lg:flex xl:gap-14">
           {NAV_ITEMS.slice(0, 2).map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="transition-colors hover:text-[#D4AF37]"
+              className="transition-colors hover:text-[#EFD077]"
             >
               {item.label}
             </Link>
@@ -74,7 +74,7 @@ export function Navbar() {
             <button
               type="button"
               onClick={() => setRestaurantOpen((o) => !o)}
-              className="flex items-center gap-1 transition-colors hover:text-[#D4AF37]"
+              className="flex items-center gap-1 transition-colors hover:text-[#EFD077]"
               aria-expanded={restaurantOpen}
               aria-haspopup="true"
             >
@@ -102,7 +102,7 @@ export function Navbar() {
             <Link
               key={item.href}
               href={item.href}
-              className="transition-colors hover:text-[#D4AF37]"
+              className="transition-colors hover:text-[#EFD077]"
             >
               {item.label}
             </Link>
@@ -112,7 +112,7 @@ export function Navbar() {
         <div className="flex items-center gap-3">
           <a
             href="/book"
-            className="hidden border border-[#D4AF37] bg-transparent px-4 py-2 text-xs font-medium uppercase tracking-widest text-white transition-colors hover:bg-[#D4AF37] hover:text-black lg:inline-flex lg:px-5 lg:py-2.5 lg:text-sm"
+            className="hidden border border-[#EFD077]/50 bg-transparent px-6 py-2.5 text-[10px] font-bold uppercase tracking-[0.3em] text-white transition-all hover:bg-[#EFD077] hover:text-black lg:inline-flex"
           >
             BOOK A TABLE
           </a>
