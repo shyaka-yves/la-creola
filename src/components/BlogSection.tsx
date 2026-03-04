@@ -24,10 +24,10 @@ export function BlogSection({
   return (
     <div>
       <FadeIn className="mb-12 text-center">
-        <p className="text-[10px] uppercase tracking-[0.3em] text-[#D4AF37]">
+        <p className="text-[13px] uppercase tracking-[0.4em] text-[#D4AF37]">
           {smallCasing}
         </p>
-        <h2 className="heading-font mt-4 text-3xl font-medium tracking-tight text-[#EFD077] md:text-4xl">
+        <h2 className="heading-font mt-6 text-4xl font-medium tracking-tight text-[#EFD077] md:text-5xl lg:text-6xl">
           {heading}
         </h2>
         <div className="h-0.5 w-12 bg-[#EFD077] mx-auto mt-6" />
@@ -47,19 +47,19 @@ export function BlogSection({
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
               </div>
-              <div className="flex flex-1 flex-col px-6 pb-6 pt-5">
-                <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#D4AF37]">
+              <div className="flex flex-1 flex-col px-6 pb-8 pt-6">
+                <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
                   {post.category}
                 </p>
-                <h3 className="mt-3 text-lg font-medium tracking-tight text-white line-clamp-2">
+                <h3 className="mt-4 text-xl font-medium tracking-tight text-white line-clamp-2">
                   {post.title}
                 </h3>
-                <p className="mt-3 text-[13px] leading-relaxed text-zinc-400 line-clamp-3">
+                <p className="mt-4 text-[15px] leading-relaxed text-zinc-400 line-clamp-3 font-light lg:text-base">
                   {post.excerpt}
                 </p>
                 <a
                   href="#"
-                  className="mt-6 text-[10px] font-bold uppercase tracking-[0.2em] text-[#FDE68A] hover:underline"
+                  className="mt-8 text-[11px] font-bold uppercase tracking-[0.3em] text-[#FDE68A] hover:underline"
                 >
                   READ MORE
                 </a>

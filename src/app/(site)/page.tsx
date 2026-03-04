@@ -41,7 +41,7 @@ async function EventsSection() {
           <h2 className="heading-font text-5xl font-medium tracking-tight text-[#EFD077] md:text-6xl">
             Upcoming Party Events
           </h2>
-          <p className="mt-4 text-[10px] uppercase tracking-[0.4em] text-zinc-500">
+          <p className="mt-4 text-[12px] uppercase tracking-[0.4em] text-zinc-500">
             Experience only the best night life story at La Creola
           </p>
           <div className="h-0.5 w-12 bg-[#EFD077] mx-auto mt-8" />
@@ -60,17 +60,17 @@ async function EventsSection() {
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                 </div>
-                <div className="flex flex-1 flex-col px-6 pb-8 pt-6">
-                  <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
+                <div className="flex flex-1 flex-col px-6 pb-10 pt-8">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
                     {event.eyebrow}
                   </p>
-                  <h3 className="mt-3 text-xl font-medium tracking-tight text-white group-hover:text-[#EFD077] transition-colors">
+                  <h3 className="mt-4 text-2xl font-medium tracking-tight text-white group-hover:text-[#EFD077] transition-colors">
                     {event.title}
                   </h3>
-                  <p className="mt-3 text-[13px] leading-relaxed text-zinc-400 font-light">{event.description}</p>
+                  <p className="mt-4 text-sm leading-relaxed text-zinc-400 font-light lg:text-base">{event.description}</p>
                   <Link
                     href="/book"
-                    className="mt-8 inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-[#EFD077] to-[#D4AF37] px-8 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-black shadow-xl shadow-yellow-500/10 hover:brightness-110 active:scale-95 transition-all"
+                    className="mt-10 inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-[#EFD077] to-[#D4AF37] px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] text-black shadow-xl shadow-yellow-500/10 hover:brightness-110 active:scale-95 transition-all"
                   >
                     View More
                   </Link>
@@ -138,7 +138,7 @@ export default async function Home() {
           </FadeIn>
 
           <FadeIn delay={120}>
-            <p className="max-w-2xl text-[13px] font-light uppercase tracking-[0.4em] text-zinc-400 sm:text-sm md:text-base">
+            <p className="max-w-3xl text-sm font-light uppercase tracking-[0.4em] text-zinc-400 md:text-base lg:text-lg">
               An Equisite Culinary Saga - African and Asian Tapas and cocktails
             </p>
           </FadeIn>
@@ -147,13 +147,13 @@ export default async function Home() {
             <div className="mt-14 flex flex-col gap-8 sm:flex-row">
               <a
                 href="/book"
-                className="inline-flex items-center justify-center rounded-lg bg-[#FDE68A] px-14 py-4 text-[11px] font-bold uppercase tracking-[0.4em] text-black transition-all hover:brightness-110 active:scale-95 shadow-2xl shadow-yellow-500/10"
+                className="inline-flex items-center justify-center rounded-lg bg-[#FDE68A] px-14 py-4 text-xs font-bold uppercase tracking-[0.3em] text-black transition-all hover:brightness-110 active:scale-95 shadow-2xl shadow-yellow-500/10"
               >
                 BOOK A TABLE
               </a>
               <Link
                 href="/menu"
-                className="inline-flex items-center justify-center rounded-lg border border-white/30 px-14 py-4 text-[11px] font-bold uppercase tracking-[0.4em] text-white transition-all hover:bg-white/5 active:scale-95"
+                className="inline-flex items-center justify-center rounded-lg border border-white/30 px-14 py-4 text-xs font-bold uppercase tracking-[0.4em] text-white transition-all hover:bg-white/5 active:scale-95"
               >
                 VIEW MENU
               </Link>
@@ -178,20 +178,17 @@ export default async function Home() {
           <FadeIn delay={120} className="w-full lg:w-1/2">
             <div className="space-y-12">
               <div className="space-y-4">
-                <h2 className="heading-font text-5xl font-medium tracking-tight text-[#EFD077] md:text-7xl lg:text-8xl">
-                  About La Creola
-                </h2>
                 <div className="h-0.5 w-16 bg-[#EFD077]" />
               </div>
 
               <div className="space-y-10">
-                <p className="text-xl leading-relaxed text-zinc-300 font-light">
+                <p className="text-xl leading-relaxed text-zinc-300 font-light lg:text-2xl">
                   La Creola is a vibrant dining destination in Kigali, offering a refined fusion of African and Asian flavors. Our menu is built around sharing plates, bold tastes, and creative cocktails — designed for discovery, connection, and enjoyment.
                 </p>
-                <p className="text-[15px] leading-relaxed text-zinc-400 font-light">
+                <p className="text-base leading-relaxed text-zinc-400 font-light lg:text-lg">
                   Whether you’re joining us for a relaxed meal or an energetic evening, every visit is crafted to feel memorable.
                 </p>
-                <p className="text-[15px] leading-relaxed text-zinc-400 font-light italic">
+                <p className="text-base leading-relaxed text-zinc-400 font-light italic lg:text-lg">
                   Experience the full La Creola dining experience, and try our menu – meaning “I leave it up to you” in Kigali.
                 </p>
               </div>
@@ -199,11 +196,11 @@ export default async function Home() {
               <div className="flex gap-16 pt-10 border-t border-white/10">
                 <div>
                   <p className="heading-font text-5xl font-semibold text-[#EFD077]">25+</p>
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 mt-2 font-bold">Years of Excellence</p>
+                  <p className="text-[11px] uppercase tracking-[0.3em] text-zinc-500 mt-2 font-bold">Years of Excellence</p>
                 </div>
                 <div>
                   <p className="heading-font text-5xl font-semibold text-[#EFD077]">100+</p>
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 mt-2 font-bold">Signature Dishes</p>
+                  <p className="text-[11px] uppercase tracking-[0.3em] text-zinc-500 mt-2 font-bold">Signature Dishes</p>
                 </div>
               </div>
             </div>
@@ -233,11 +230,11 @@ export default async function Home() {
                 <div className="h-0.5 w-16 bg-[#EFD077]" />
               </div>
 
-              <div className="space-y-8 text-[15px] leading-relaxed text-zinc-400 font-light">
+              <div className="space-y-8 text-base leading-relaxed text-zinc-400 font-light lg:text-lg">
                 <p>
                   Our chefs compose each plate as a story of provenance and precision. Seasonal ingredients, curated wines, and bespoke pairings converge in a dining experience where every detail—from glassware to garnish—is intentionally designed.
                 </p>
-                <p className="italic text-zinc-500 text-[14px]">
+                <p className="italic text-zinc-500 text-sm lg:text-base">
                   Sharing the essence of Rwanda with a world-class twist.
                 </p>
               </div>
@@ -245,11 +242,11 @@ export default async function Home() {
               <div className="flex gap-16 pt-8">
                 <div className="border-l-2 border-[#EFD077] pl-8 py-1">
                   <p className="heading-font text-5xl font-semibold text-[#EFD077]">20+</p>
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 mt-2 font-bold">Awards</p>
+                  <p className="text-[11px] uppercase tracking-[0.3em] text-zinc-500 mt-2 font-bold">Awards</p>
                 </div>
                 <div className="border-l-2 border-[#EFD077] pl-8 py-1">
                   <p className="heading-font text-5xl font-semibold text-[#EFD077]">5k+</p>
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-500 mt-2 font-bold">Happy Guests</p>
+                  <p className="text-[11px] uppercase tracking-[0.3em] text-zinc-500 mt-2 font-bold">Happy Guests</p>
                 </div>
               </div>
             </div>
@@ -313,23 +310,23 @@ export default async function Home() {
 
               <div className="space-y-10">
                 <div className="space-y-2">
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#D4AF37]">Address</p>
+                  <p className="text-[12px] uppercase tracking-[0.3em] text-[#D4AF37] font-bold">Address</p>
                   <div className="text-zinc-300 space-y-1">
-                    <p className="text-lg">Kigali, Rwanda</p>
-                    <p className="text-sm font-light">KG 674 St, Kimihurura</p>
+                    <p className="text-xl">Kigali, Rwanda</p>
+                    <p className="text-base font-light">KG 674 St, Kimihurura</p>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#D4AF37]">Opening Hours</p>
-                  <p className="text-zinc-300 text-lg">Mon - Sun: 10:00 AM - 12:00 PM</p>
+                  <p className="text-[12px] uppercase tracking-[0.3em] text-[#D4AF37] font-bold">Opening Hours</p>
+                  <p className="text-zinc-300 text-xl font-light">Mon - Sun: 10:00 AM - 12:00 PM</p>
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#D4AF37]">Contact</p>
-                  <div className="text-zinc-300 space-y-1 text-lg">
+                  <p className="text-[12px] uppercase tracking-[0.3em] text-[#D4AF37] font-bold">Contact</p>
+                  <div className="text-zinc-300 space-y-1 text-xl">
                     <p>+250 788 300 000</p>
-                    <p className="text-sm font-light">info@lacreola.rw</p>
+                    <p className="text-base font-light">info@lacreola.rw</p>
                   </div>
                 </div>
               </div>
@@ -338,7 +335,7 @@ export default async function Home() {
                 href="https://maps.google.com"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center rounded-lg bg-[#FDE68A] px-12 py-4 text-[10px] font-bold uppercase tracking-[0.25em] text-black transition-all hover:scale-105 active:scale-95"
+                className="inline-flex items-center justify-center rounded-lg bg-[#FDE68A] px-14 py-4 text-xs font-bold uppercase tracking-[0.3em] text-black transition-all hover:scale-105 active:scale-95"
               >
                 GET DIRECTION
               </a>

@@ -60,7 +60,7 @@ export function Navbar() {
           )}
         </Link>
 
-        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-10 text-[10px] font-medium uppercase tracking-[0.4em] text-zinc-400 lg:flex xl:gap-14">
+        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-10 text-[13px] font-medium uppercase tracking-[0.3em] text-zinc-400 lg:flex xl:gap-14">
           {NAV_ITEMS.slice(0, 2).map((item) => (
             <Link
               key={item.href}
@@ -89,7 +89,7 @@ export function Navbar() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="block px-4 py-2 text-left text-sm capitalize text-white hover:bg-zinc-800 hover:text-[#D4AF37]"
+                    className="block px-4 py-2 text-left text-sm capitalize text-white hover:bg-zinc-800 hover:text-[#EFD077]"
                     onClick={() => setRestaurantOpen(false)}
                   >
                     {item.label}
@@ -112,7 +112,7 @@ export function Navbar() {
         <div className="flex items-center gap-3">
           <a
             href="/book"
-            className="hidden border border-[#EFD077]/50 bg-transparent px-6 py-2.5 text-[10px] font-bold uppercase tracking-[0.3em] text-white transition-all hover:bg-[#EFD077] hover:text-black lg:inline-flex"
+            className="hidden border border-[#EFD077]/50 bg-transparent px-8 py-3 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-[#EFD077] hover:text-black lg:inline-flex"
           >
             BOOK A TABLE
           </a>

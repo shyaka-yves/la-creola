@@ -37,12 +37,12 @@ export function Testimonials() {
               <span className="text-4xl text-[#EFD077] opacity-60 italic font-serif">“</span>
             </div>
 
-            <p className="mx-auto max-w-2xl text-[16px] leading-[1.8] text-zinc-300 font-light italic tracking-wide">
+            <p className="mx-auto max-w-2xl text-[18px] leading-[1.8] text-zinc-300 font-light italic tracking-wide md:text-xl">
               {active.quote}
             </p>
 
             <div className="mt-12 flex flex-col items-center gap-4">
-              <div className="flex items-center gap-1.5 text-[#EFD077] text-xs mb-1">
+              <div className="flex items-center gap-2 text-[#EFD077] text-sm mb-1">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <span key={i} className={i < active.rating ? "text-[#EFD077]" : "text-zinc-800"}>
                     ★
@@ -50,8 +50,8 @@ export function Testimonials() {
                 ))}
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-semibold tracking-[0.1em] text-white uppercase">{active.name}</p>
-                <p className="text-[9px] uppercase tracking-[0.5em] text-zinc-500 font-bold">Visited la Creola</p>
+                <p className="text-base font-semibold tracking-[0.15em] text-white uppercase">{active.name}</p>
+                <p className="text-[11px] uppercase tracking-[0.5em] text-zinc-500 font-bold">Visited la Creola</p>
               </div>
             </div>
           </div>
