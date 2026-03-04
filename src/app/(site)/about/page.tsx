@@ -14,38 +14,56 @@ export default async function AboutPage() {
 
   return (
     <div className="relative overflow-hidden">
-      <section className="section-padding bg-black/95">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-8 px-4 sm:gap-10 md:flex-row md:items-stretch">
-          <FadeIn className="w-full md:w-1/2">
-            <div className="relative h-64 overflow-hidden rounded-2xl border border-white/20 bg-zinc-900 shadow-2xl sm:h-72 md:h-[420px] md:rounded-3xl">
+      <section className="section-padding bg-black/95 min-h-[calc(100vh-80px)] flex items-center">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-12 px-6 lg:flex-row lg:gap-16">
+          <FadeIn className="w-full lg:w-1/2">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-white/10 bg-zinc-900 shadow-2xl lg:rounded-2xl">
               <img
                 src={content.about.imageSrc || "/uploads/FRIDAYYY.png"}
-                alt={content.about.title || "About La Creola"}
-                className="absolute inset-0 h-full w-full object-cover opacity-80"
+                alt="La Creola Interior"
+                className="absolute inset-0 h-full w-full object-cover"
               />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-black/60 via-transparent to-black/50" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
             </div>
           </FadeIn>
 
-          <FadeIn delay={120} className="w-full md:w-1/2">
-            <div className="space-y-5">
-              <h1 className="heading-font border-b-2 border-[#D4AF37] pb-1 text-2xl font-semibold text-[#D4AF37] sm:text-3xl md:text-4xl">
-                About La Creola
-              </h1>
-              <p className="text-sm leading-relaxed text-zinc-300 sm:text-base">
-                We curate a sensory experience that celebrates the rhythm of Kigali nights. Our menu
-                is an intimate dialogue between bold African flavors and delicate Asian
-                craftsmanship, plated with meticulous artistry and served in a space designed for
-                lingering.
-              </p>
-              <p className="text-sm leading-relaxed text-zinc-400 sm:text-base">
-                From candlelit dinners to private celebrations, La Creola is where refined
-                hospitality, crafted cocktails, and a soulful soundtrack meet under a softly lit
-                ceiling.
-              </p>
+          <FadeIn delay={120} className="w-full lg:w-1/2">
+            <div className="space-y-8">
+              <div className="space-y-4">
+                <h1 className="heading-font text-4xl font-medium tracking-tight text-[#EFD077] md:text-5xl lg:text-6xl">
+                  About La Creola
+                </h1>
+                <div className="h-0.5 w-16 bg-[#EFD077]" />
+              </div>
+
+              <div className="space-y-6 text-zinc-300">
+                <p className="text-lg leading-relaxed">
+                  At La Creola, we believe dining is more than just food — it&apos;s a story, a
+                  feeling, and a journey. Located in the heart of Kigali, La Creola brings together
+                  bold African spirit and refined Asian influence in a way that feels both familiar
+                  and refreshingly new.
+                </p>
+                <p className="text-sm leading-relaxed text-zinc-400 sm:text-base">
+                  Our culinary philosophy is rooted in fusion without compromise: blending vibrant
+                  spices, fresh local ingredients, and innovative techniques to create dishes that
+                  surprise and delight. From shareable tapas inspired by the rhythms of Africa to
+                  signature creations with an Asian twist, each plate is crafted to ignite
+                  conversation and curiosity. We pair our food with creative cocktails and drinks,
+                  designed to complement the menu and elevate your experience — whether you’re here
+                  for an evening dinner, a relaxed lunch, or a vibrant night with friends.
+                </p>
+                <p className="text-sm leading-relaxed text-zinc-400 sm:text-base">
+                  But La Creola is more than a restaurant — it&apos;s a place to gather, celebrate,
+                  and create memories. Our warm, inviting space and attentive service reflect
+                  Rwandan hospitality at its best, welcoming locals and travelers alike. We’re proud
+                  to be part of Kigali’s thriving culinary scene, offering a unique dining story
+                  that is rooted in culture, creativity, and connection.
+                </p>
+              </div>
+
               <a
                 href="/book"
-                className="gold-gradient inline-flex items-center justify-center rounded px-6 py-2.5 text-sm font-semibold text-black"
+                className="inline-flex items-center justify-center rounded-lg bg-[#FDE68A] px-8 py-3 text-sm font-bold uppercase tracking-widest text-black transition-transform hover:scale-105 active:scale-95"
               >
                 Book a Table
               </a>

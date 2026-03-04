@@ -112,9 +112,9 @@ export function Navbar() {
         <div className="flex items-center gap-3">
           <a
             href="/book"
-            className="hidden border border-[#D4AF37] bg-transparent px-4 py-2 text-xs font-medium uppercase tracking-wide text-white transition-colors hover:bg-[#D4AF37] hover:text-black lg:inline-flex lg:px-5 lg:py-2.5 lg:text-sm"
+            className="hidden border border-[#D4AF37] bg-transparent px-4 py-2 text-xs font-medium uppercase tracking-widest text-white transition-colors hover:bg-[#D4AF37] hover:text-black lg:inline-flex lg:px-5 lg:py-2.5 lg:text-sm"
           >
-            Book a Table
+            BOOK A TABLE
           </a>
 
           <button
@@ -145,15 +145,15 @@ export function Navbar() {
           <Link href="/" onClick={() => setMobileOpen(false)} className="border-b border-zinc-800 py-4 text-sm font-medium uppercase tracking-wide text-white transition-colors hover:text-[#D4AF37]">HOME</Link>
           <Link href="/about" onClick={() => setMobileOpen(false)} className="border-b border-zinc-800 py-4 text-sm font-medium uppercase tracking-wide text-white transition-colors hover:text-[#D4AF37]">ABOUT US</Link>
           <div className="border-b border-zinc-800 py-2">
-            <p className="py-2 text-xs uppercase tracking-wider text-zinc-500">Restaurant</p>
+            <p className="py-2 text-xs uppercase tracking-wider text-zinc-500">RESTAURANT</p>
             {RESTAURANT_DROPDOWN.map((item) => (
               <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)} className="block py-2 pl-4 text-sm font-medium capitalize text-white transition-colors hover:text-[#D4AF37]">{item.label}</Link>
             ))}
           </div>
           <Link href="/gallery" onClick={() => setMobileOpen(false)} className="border-b border-zinc-800 py-4 text-sm font-medium uppercase tracking-wide text-white transition-colors hover:text-[#D4AF37]">GALLERY</Link>
           <Link href="/contact" onClick={() => setMobileOpen(false)} className="border-b border-zinc-800 py-4 text-sm font-medium uppercase tracking-wide text-white transition-colors hover:text-[#D4AF37]">CONTACT</Link>
-          <a href="/book" onClick={() => setMobileOpen(false)} className="mt-4 flex items-center justify-center border border-[#D4AF37] bg-transparent py-3 text-sm font-medium uppercase tracking-wide text-white">
-            Book a Table
+          <a href="/book" onClick={() => setMobileOpen(false)} className="mt-4 flex items-center justify-center border border-[#D4AF37] bg-transparent py-3 text-sm font-medium uppercase tracking-widest text-white">
+            BOOK A TABLE
           </a>
         </nav>
       </div>
