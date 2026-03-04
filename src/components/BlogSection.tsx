@@ -23,16 +23,17 @@ export function BlogSection({
 
   return (
     <div>
-      <FadeIn className="mb-8 text-center">
-        <p className="text-xs uppercase tracking-[0.25em] text-gold">
+      <FadeIn className="mb-12 text-center">
+        <p className="text-[10px] uppercase tracking-[0.3em] text-[#D4AF37]">
           {smallCasing}
         </p>
-        <h2 className="heading-font mt-3 text-2xl font-semibold text-white sm:text-3xl">
+        <h2 className="heading-font mt-4 text-3xl font-medium tracking-tight text-[#EFD077] md:text-4xl">
           {heading}
         </h2>
+        <div className="h-0.5 w-12 bg-[#EFD077] mx-auto mt-6" />
       </FadeIn>
 
-      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5">
+      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {posts.map((post, index) => (
           <FadeIn key={`${post.title}-${index}`} delay={80 * index}>
             <article className="card-glass flex h-full flex-col overflow-hidden rounded-3xl transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50">
@@ -46,21 +47,21 @@ export function BlogSection({
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
               </div>
-              <div className="flex flex-1 flex-col px-5 pb-5 pt-4">
-                <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-gold">
+              <div className="flex flex-1 flex-col px-6 pb-6 pt-5">
+                <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#D4AF37]">
                   {post.category}
                 </p>
-                <h3 className="mt-2 text-base font-semibold text-white">
+                <h3 className="mt-3 text-lg font-medium tracking-tight text-white line-clamp-2">
                   {post.title}
                 </h3>
-                <p className="mt-2 text-sm text-zinc-300 line-clamp-3">
+                <p className="mt-3 text-[13px] leading-relaxed text-zinc-400 line-clamp-3">
                   {post.excerpt}
                 </p>
                 <a
                   href="#"
-                  className="mt-4 text-xs font-semibold uppercase tracking-[0.18em] text-zinc-200 hover:text-gold"
+                  className="mt-6 text-[10px] font-bold uppercase tracking-[0.2em] text-[#FDE68A] hover:underline"
                 >
-                  Read More
+                  READ MORE
                 </a>
               </div>
             </article>

@@ -63,9 +63,9 @@ export default async function AboutPage() {
 
               <a
                 href="/book"
-                className="inline-flex items-center justify-center rounded-lg bg-[#FDE68A] px-8 py-3 text-sm font-bold uppercase tracking-widest text-black transition-transform hover:scale-105 active:scale-95"
+                className="inline-flex items-center justify-center rounded-lg bg-[#FDE68A] px-12 py-4 text-[10px] font-bold uppercase tracking-[0.3em] text-black transition-all hover:scale-105 active:scale-95 shadow-xl shadow-yellow-500/10"
               >
-                Book a Table
+                BOOK A TABLE
               </a>
             </div>
           </FadeIn>
