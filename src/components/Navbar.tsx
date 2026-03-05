@@ -54,7 +54,7 @@ export function Navbar() {
               alt="La Creola"
               width={140}
               height={44}
-              className="h-9 w-auto object-contain sm:h-11"
+              className="h-9 w-auto object-contain py-1 sm:h-11"
               onError={() => setLogoError(true)}
             />
           )}
@@ -65,7 +65,7 @@ export function Navbar() {
             <Link
               key={item.href}
               href={item.href}
-              className="transition-colors hover:text-[#EFD077]"
+              className="whitespace-nowrap transition-colors hover:text-[#EFD077]"
             >
               {item.label}
             </Link>
@@ -99,7 +99,7 @@ export function Navbar() {
             <Link
               key={item.href}
               href={item.href}
-              className="transition-colors hover:text-[#EFD077]"
+              className="whitespace-nowrap transition-colors hover:text-[#EFD077]"
             >
               {item.label}
             </Link>
