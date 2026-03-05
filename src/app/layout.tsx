@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
-import { Jost } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
 import "./globals.css";
-
-const jost = Jost({
-  variable: "--font-sans",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
 
 export const metadata: Metadata = {
   title: "La Creola | Kigali Restaurant",
@@ -36,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body
-        className={`${jost.variable} antialiased bg-black text-zinc-100`}
+        className={`${GeistSans.variable} antialiased bg-black text-zinc-100`}
       >
         {children}
       </body>

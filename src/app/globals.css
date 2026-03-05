@@ -10,7 +10,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-gold: var(--accent-gold);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-geist-sans);
 }
 
 html {
@@ -65,4 +65,3 @@ body {
     padding-bottom: 4rem;
   }
 }
-
