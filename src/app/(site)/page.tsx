@@ -68,7 +68,7 @@ export default async function Home() {
                 alt={content.hero.brand}
                 width={450}
                 height={150}
-                className="h-auto w-64 md:w-80 lg:w-[480px]"
+                className="h-auto w-48 md:w-64 lg:w-[350px]"
                 priority
               />
             </div>
