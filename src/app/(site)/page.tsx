@@ -8,29 +8,7 @@ import { getSiteContent } from "@/lib/siteContent";
 
 export const dynamic = "force-dynamic";
 
-const MOCK_EVENTS = [
-  {
-    id: "1",
-    eyebrow: "MUSIC / NIGHT PARTY",
-    title: "Neon Night Party",
-    description: "The ultimate night of dance and electronic music on the decks",
-    imageUrl: "/uploads/FRIDAYYY.png",
-  },
-  {
-    id: "2",
-    eyebrow: "SUNSET / COCKTAILS",
-    title: "Beats Sunset Vibe",
-    description: "Relaxing rhythms with a selection of premium cocktails",
-    imageUrl: "/uploads/FRIDAYYY.png",
-  },
-  {
-    id: "3",
-    eyebrow: "ANNUAL EVENT",
-    title: "Halloween Costume Bash",
-    description: "Creepy vibes and unforgettable memories in the heart of Kigali",
-    imageUrl: "/uploads/FRIDAYYY.png",
-  },
-];
+
 
 export default async function Home() {
   const [content, events] = await Promise.all([
@@ -39,6 +17,23 @@ export default async function Home() {
   ]);
 
   const upcomingEvent = events.length > 0 ? events[0] : null;
+
+  // Combine and standardize events for display
+  const displayEvents = (events.length > 0
+    ? events.map(e => ({
+      title: e.title,
+      description: e.description,
+      date: e.date,
+      imageSrc: e.imageUrl,
+      href: "/events"
+    }))
+    : content.events.items.map(e => ({
+      title: e.title,
+      description: e.description,
+      date: e.date,
+      imageSrc: e.imageSrc,
+      href: "/events"
+    }))).slice(0, 3);
 
   return (
     <div className="relative overflow-hidden bg-black">
@@ -65,21 +60,6 @@ export default async function Home() {
         </div>
 
         <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-4 text-center">
-          {upcomingEvent && (
-            <FadeIn>
-              <Link
-                href="/events"
-                className="mb-8 inline-flex items-center gap-2 rounded-full border border-[#EFD077]/30 bg-black/40 px-5 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[#EFD077] backdrop-blur-md transition-all hover:bg-[#EFD077]/10"
-              >
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#EFD077] opacity-75"></span>
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[#EFD077]"></span>
-                </span>
-                Upcoming Event: {upcomingEvent.title}
-              </Link>
-            </FadeIn>
-          )}
-
           <FadeIn>
             <div className="mb-10 lg:mb-14">
               <Image
@@ -205,6 +185,17 @@ export default async function Home() {
       <section className="bg-black py-24">
         <div className="mx-auto max-w-6xl px-4">
           <FadeIn className="text-center mb-16">
+            {upcomingEvent && (
+              <div className="mb-6 flex justify-center">
+                <span className="inline-flex items-center gap-2 rounded-full border border-[#EFD077]/30 bg-[#EFD077]/5 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#EFD077]">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#EFD077] opacity-75"></span>
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#EFD077]"></span>
+                  </span>
+                  Upcoming Highlight
+                </span>
+              </div>
+            )}
             <h2 className="heading-font text-5xl font-medium tracking-tight text-[#EFD077] md:text-6xl">
               {content.events.title}
             </h2>
@@ -215,7 +206,7 @@ export default async function Home() {
           </FadeIn>
 
           <div className="mt-10 grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
-            {content.events.items.map((event, index) => (
+            {displayEvents.map((event, index) => (
               <FadeIn key={index} delay={80 * index}>
                 <article className="card-glass flex h-full flex-col overflow-hidden rounded-2xl border-white/5 transition hover:-translate-y-1">
                   <div className="relative aspect-[4/3] overflow-hidden">
@@ -236,10 +227,10 @@ export default async function Home() {
                     </h3>
                     <p className="mt-4 text-sm leading-relaxed text-zinc-400 font-light lg:text-base">{event.description}</p>
                     <Link
-                      href="/book"
+                      href={event.href}
                       className="mt-10 inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-[#EFD077] to-[#D4AF37] px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] text-black shadow-xl shadow-yellow-500/10 hover:brightness-110 active:scale-95 transition-all"
                     >
-                      View More
+                      Learn More
                     </Link>
                   </div>
                 </article>
