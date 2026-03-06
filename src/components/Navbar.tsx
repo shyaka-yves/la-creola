@@ -60,7 +60,7 @@ export function Navbar() {
           )}
         </Link>
 
-        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-12 text-[12px] font-medium uppercase tracking-[0.5em] text-zinc-100 lg:flex xl:gap-16 heading-font">
+        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 text-[12px] font-bold uppercase tracking-widest text-zinc-100 lg:flex xl:gap-10 heading-font">
           {NAV_ITEMS.slice(0, 2).map((item) => (
             <Link
               key={item.href}

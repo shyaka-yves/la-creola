@@ -41,7 +41,7 @@ export default async function Home() {
       {/* Hero */}
       <section className="relative flex min-h-[85vh] items-center justify-center overflow-hidden lg:min-h-[90vh]">
         <div className="absolute inset-0 z-0">
-          {content.hero.mediaType === "video" ? (
+          {content.hero.mediaType === "video" && content.hero.mediaSrc && !content.hero.mediaSrc.includes("instagram.com") ? (
             <video
               src={content.hero.mediaSrc || "/uploads/bg.mp4"}
               autoPlay
@@ -52,7 +52,7 @@ export default async function Home() {
             />
           ) : (
             <img
-              src={content.hero.mediaSrc || "/uploads/FRIDAYYY.png"}
+              src={content.hero.mediaSrc && !content.hero.mediaSrc.includes("instagram.com") ? content.hero.mediaSrc : "/uploads/FRIDAYYY.png"}
               alt="Hero"
               className="h-full w-full object-cover opacity-30"
             />
@@ -68,7 +68,7 @@ export default async function Home() {
                 alt={content.hero.brand}
                 width={450}
                 height={150}
-                className="h-auto w-48 md:w-64 lg:w-[350px]"
+                className="h-auto w-40 md:w-56 lg:w-[280px]"
                 priority
               />
             </div>
@@ -97,10 +97,10 @@ export default async function Home() {
             </div>
           </FadeIn>
         </div>
-      </section>
+      </section >
 
       {/* About Section */}
-      <section className="section-padding py-24 lg:py-32">
+      < section className="section-padding py-24 lg:py-32" >
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-16 px-6 lg:flex-row lg:gap-24">
           <FadeIn className="w-full lg:w-1/2">
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-zinc-900 shadow-2xl border border-white/5">
@@ -139,10 +139,10 @@ export default async function Home() {
             </div>
           </FadeIn>
         </div>
-      </section>
+      </section >
 
       {/* Excellence Section */}
-      <section className="section-padding py-24 lg:py-32 bg-black">
+      < section className="section-padding py-24 lg:py-32 bg-black" >
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-16 px-6 lg:flex-row-reverse lg:gap-24">
           <FadeIn className="w-full lg:w-1/2">
             <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-zinc-900 shadow-2xl border border-white/5 max-w-md mx-auto lg:mx-0 lg:ml-auto">
@@ -183,10 +183,10 @@ export default async function Home() {
             </div>
           </FadeIn>
         </div>
-      </section>
+      </section >
 
       {/* Upcoming Events */}
-      <section className="section-padding bg-black">
+      < section className="section-padding bg-black" >
         <div className="mx-auto max-w-6xl px-4">
           <FadeIn className="text-center mb-16">
             <h2 className="heading-font text-5xl font-medium tracking-tight text-[#EFD077] md:text-6xl">
@@ -231,10 +231,10 @@ export default async function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section >
 
       {/* Description Content */}
-      <section className="section-padding py-20 lg:py-28">
+      < section className="section-padding py-20 lg:py-28" >
         <div className="mx-auto max-w-4xl px-6 text-center">
           <FadeIn>
             <h2 className="heading-font text-[10px] uppercase tracking-[0.4em] text-[#D4AF37]">
@@ -250,10 +250,10 @@ export default async function Home() {
             </div>
           </FadeIn>
         </div>
-      </section>
+      </section >
 
       {/* Testimonials */}
-      <section className="section-padding pt-0 pb-24">
+      < section className="section-padding pt-0 pb-24" >
         <div className="mx-auto max-w-6xl px-4">
           <FadeIn className="mb-14 text-center">
             <h2 className="heading-font text-4xl font-medium tracking-tight text-[#EFD077]">
@@ -265,17 +265,17 @@ export default async function Home() {
           </FadeIn>
           <Testimonials items={content.testimonials.items} />
         </div>
-      </section>
+      </section >
 
       {/* Blog */}
-      <section className="section-padding bg-[#030712] py-24">
+      < section className="section-padding bg-[#030712] py-24" >
         <div className="mx-auto max-w-7xl px-6">
           <BlogSection eyebrow={content.blog.eyebrow} title={content.blog.title} items={content.blog.items} />
         </div>
-      </section>
+      </section >
 
       {/* Visit Us Section */}
-      <section className="section-padding py-24 lg:py-32">
+      < section className="section-padding py-24 lg:py-32" >
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid gap-20 lg:grid-cols-2 lg:items-start">
             <FadeIn className="space-y-12">
@@ -338,8 +338,8 @@ export default async function Home() {
             </FadeIn>
           </div>
         </div>
-      </section>
-    </div>
+      </section >
+    </div >
   );
 }
 

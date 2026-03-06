@@ -99,11 +99,19 @@ export async function POST(req: Request) {
   });
 
   try {
-    await sendReservationEmail(record);
+    console.log("[Reservations] Attempting to send email to:", RESERVATIONS_EMAIL);
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      console.warn("[Reservations] Skipping email: RESEND_API_KEY is missing");
+    } else {
+      await sendReservationEmail(record);
+      console.log("[Reservations] Email sent successfully");
+    }
   } catch (err) {
-    // Log so you can see in Vercel logs; reservation still succeeds
     console.error("[Reservations] Email failed:", err instanceof Error ? err.message : err);
-    // If using a custom domain in Resend, set RESEND_FROM_EMAIL to that verified sender (e.g. La Creola <reservations@yourdomain.com>)
+    if (err && typeof err === 'object' && 'body' in err) {
+      console.error("[Reservations] Error body:", err.body);
+    }
   }
 
   return NextResponse.json({ ok: true, id: record.id });
