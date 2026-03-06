@@ -54,7 +54,7 @@ export function Navbar() {
               alt="La Creola"
               width={140}
               height={44}
-              className="h-9 w-auto object-contain py-2 sm:h-11"
+              className="h-9 w-auto object-contain sm:h-11"
               onError={() => setLogoError(true)}
             />
           )}

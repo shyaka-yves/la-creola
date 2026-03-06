@@ -31,7 +31,7 @@ export default async function GalleryPage() {
 
   return (
     <div className="relative overflow-hidden">
-      <section className="bg-black/95 pt-24 pb-6 sm:pt-32 sm:pb-8 md:pt-40 md:pb-10">
+      <section className="bg-black/95 pt-20 pb-8 sm:pt-24 sm:pb-12">
         <div className="mx-auto max-w-4xl px-4 text-center">
           <FadeIn>
             <h1 className="heading-font text-3xl font-semibold text-[#D4AF37] sm:text-4xl">

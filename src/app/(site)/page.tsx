@@ -57,7 +57,7 @@ export default async function Home() {
               className="h-full w-full object-cover opacity-60"
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black" />
         </div>
 
         <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-4 text-center">
