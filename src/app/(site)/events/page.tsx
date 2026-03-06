@@ -16,7 +16,7 @@ export default async function EventsPage() {
 
   return (
     <div className="relative overflow-hidden">
-      <section className="section-padding bg-black/95">
+      <section className="py-16 sm:py-24 bg-black/95">
         <div className="mx-auto max-w-4xl px-4 text-center">
           <FadeIn>
             <p className="text-xs uppercase tracking-[0.3em] text-gold">
@@ -33,7 +33,7 @@ export default async function EventsPage() {
         </div>
       </section>
 
-      <section className="section-padding bg-gradient-to-b from-black via-slate-950 to-black">
+      <section className="py-20 sm:py-28 bg-gradient-to-b from-black via-slate-950 to-black">
         <div className="mx-auto max-w-6xl px-4">
           {events.length === 0 ? (
             <div className="text-center py-12">

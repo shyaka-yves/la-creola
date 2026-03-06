@@ -14,7 +14,7 @@ export default async function MenuPage() {
 
   return (
     <div className="relative overflow-hidden">
-      <section className="relative flex py-20 sm:py-28 items-center justify-center bg-black/95">
+      <section className="relative flex py-16 sm:py-20 items-center justify-center bg-black/95">
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-900 via-zinc-950 to-black opacity-90" />
         <FadeIn className="relative z-10 px-4 text-center">
           <h1 className="heading-font text-4xl font-bold uppercase text-[#D4AF37] sm:text-5xl md:text-6xl">
@@ -26,15 +26,15 @@ export default async function MenuPage() {
         </FadeIn>
       </section>
 
-      <section className="section-padding bg-black/90">
+      <section className="pb-20 sm:pb-28 bg-black/90">
         <div className="mx-auto max-w-4xl px-4">
           {content.menu.pdfUrl ? (
             <FadeIn>
               <div className="rounded-2xl border border-zinc-700/70 bg-zinc-800/80 p-4 md:p-6">
                 <div className="relative mx-auto w-full overflow-hidden rounded-lg border border-zinc-600/50 bg-white shadow-xl">
                   <iframe
-                    src={`${content.menu.pdfUrl}#view=FitH`}
-                    className="h-[55vh] min-h-[380px] w-full rounded-lg md:h-[60vh] md:min-h-[450px]"
+                    src={`${content.menu.pdfUrl}#view=FitW`}
+                    className="h-[50vh] min-h-[500px] w-full rounded-lg md:h-[80vh] md:min-h-[600px]"
                     title="Menu PDF"
                   />
                 </div>

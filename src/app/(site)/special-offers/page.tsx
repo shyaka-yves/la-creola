@@ -23,7 +23,7 @@ export default async function SpecialOffersPage() {
         </FadeIn>
       </section>
 
-      <section className="section-padding bg-black/90">
+      <section className="py-20 sm:py-28 bg-black/90">
         <div className="mx-auto max-w-4xl px-4">
           <FadeIn>
             {content.specialOffers.content ? (
