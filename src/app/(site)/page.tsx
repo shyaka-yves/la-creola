@@ -4,7 +4,6 @@ import { FadeIn } from "@/components/FadeIn";
 import { Testimonials } from "@/components/Testimonials";
 import { BlogSection } from "@/components/BlogSection";
 import { listEvents } from "@/lib/eventsDb";
-import { listGalleryImages } from "@/lib/galleryDb";
 import { getSiteContent } from "@/lib/siteContent";
 
 export const dynamic = "force-dynamic";
@@ -34,7 +33,12 @@ const MOCK_EVENTS = [
 ];
 
 export default async function Home() {
-  const content = await getSiteContent();
+  const [content, events] = await Promise.all([
+    getSiteContent(),
+    listEvents()
+  ]);
+
+  const upcomingEvent = events.length > 0 ? events[0] : null;
 
   return (
     <div className="relative overflow-hidden bg-black">
@@ -57,10 +61,25 @@ export default async function Home() {
               className="h-full w-full object-cover opacity-60"
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/80" />
         </div>
 
         <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-4 text-center">
+          {upcomingEvent && (
+            <FadeIn>
+              <Link
+                href="/events"
+                className="mb-8 inline-flex items-center gap-2 rounded-full border border-[#EFD077]/30 bg-black/40 px-5 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[#EFD077] backdrop-blur-md transition-all hover:bg-[#EFD077]/10"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#EFD077] opacity-75"></span>
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[#EFD077]"></span>
+                </span>
+                Upcoming Event: {upcomingEvent.title}
+              </Link>
+            </FadeIn>
+          )}
+
           <FadeIn>
             <div className="mb-10 lg:mb-14">
               <Image

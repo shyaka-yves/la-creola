@@ -33,7 +33,7 @@ export default async function MenuPage() {
               <div className="rounded-2xl border border-zinc-700/70 bg-zinc-800/80 p-2 sm:p-4 md:p-6">
                 <div className="relative mx-auto w-full overflow-hidden rounded-lg border border-zinc-600/50 bg-white shadow-xl">
                   <iframe
-                    src={content.menu.pdfUrl}
+                    src={`${content.menu.pdfUrl}#view=Fit`}
                     className="h-[50vh] min-h-[500px] w-full rounded-lg md:h-[80vh] md:min-h-[600px]"
                     title="Menu PDF"
                   />
