@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { BrevoClient } from "@getbrevo/brevo";
+import { Resend } from "resend";
 import { addReservation, type ReservationRecord } from "@/lib/reservationsDb";
 
 export const runtime = "nodejs";
@@ -7,13 +7,14 @@ export const runtime = "nodejs";
 const RESERVATIONS_EMAIL = "it@azzurrirwanda.com";
 
 async function sendReservationEmail(record: ReservationRecord) {
-  const apiKey = process.env.BREVO_API_KEY;
+  const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
-    console.warn("[Reservations] BREVO_API_KEY is missing");
+    console.warn("[Reservations] RESEND_API_KEY is missing");
     return;
   }
 
-  const client = new BrevoClient({ apiKey });
+  const from = process.env.RESEND_FROM_EMAIL || "La Creola <onboarding@resend.dev>";
+  const resend = new Resend(apiKey);
 
   const lines = [
     `Name: ${record.name}`,
@@ -24,11 +25,11 @@ async function sendReservationEmail(record: ReservationRecord) {
     record.notes ? `Notes:\n${record.notes}` : null,
   ].filter(Boolean);
 
-  await client.transactionalEmails.sendTransacEmail({
+  await resend.emails.send({
+    from,
+    to: [RESERVATIONS_EMAIL],
     subject: `[La Creola] New reservation from ${record.name}`,
-    htmlContent: `<html><body><h3>New table reservation request:</h3><ul>${lines.map(l => `<li>${l}</li>`).join("")}</ul><p>Submitted at: ${new Date(record.createdAt).toLocaleString()}</p></body></html>`,
-    sender: { name: "La Creola Website", email: "shyakayvany@gmail.com" },
-    to: [{ email: RESERVATIONS_EMAIL }],
+    text: `New table reservation request:\n\n${lines.join("\n")}\n\nSubmitted at: ${new Date(record.createdAt).toLocaleString()}`,
   });
 }
 

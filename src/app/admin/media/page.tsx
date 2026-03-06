@@ -44,18 +44,45 @@ export default function AdminMediaPage() {
     setUploading(true);
     setError(null);
     try {
-      const form = new FormData();
-      form.append("file", file);
-      const res = await fetch("/api/admin/media", { method: "POST", body: form });
-      const data = (await res.json()) as { ok: boolean; error?: string };
-      if (!data.ok) {
-        setError(data.error ?? "Upload failed");
+      // 1. Get signed upload URL
+      const urlRes = await fetch("/api/admin/media/upload-url", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename: file.name, contentType: file.type }),
+      });
+      const urlData = (await urlRes.json()) as {
+        ok: boolean;
+        signedUrl: string;
+        path: string;
+        error?: string;
+      };
+
+      if (!urlData.ok) {
+        setError(urlData.error ?? "Failed to get upload URL");
         setUploading(false);
         return;
       }
+
+      // 2. Upload directly to Supabase
+      const uploadRes = await fetch(urlData.signedUrl, {
+        method: "PUT",
+        body: file,
+        headers: {
+          "Content-Type": file.type,
+        },
+      });
+
+      if (!uploadRes.ok) {
+        setError("Upload to storage failed");
+        setUploading(false);
+        return;
+      }
+
+      // 3. Refresh list
       await refresh();
       setUploading(false);
-    } catch {
+    } catch (err) {
+      console.error(err);
       setError("Upload failed");
       setUploading(false);
     }
@@ -90,10 +117,10 @@ export default function AdminMediaPage() {
             Media Library
           </p>
           <h1 className="mt-2 text-xl font-semibold text-white">
-            Upload images & videos
+            Upload images, videos & PDFs
           </h1>
           <p className="mt-1 text-sm text-zinc-400">
-            Files are stored in <span className="text-zinc-200">/public/uploads</span>{" "}
+            Files are stored in <span className="text-zinc-200">Supabase Storage</span>{" "}
             and can be selected in the Content editor.
           </p>
           <div className="mt-3 rounded-lg border border-zinc-800 bg-black/40 px-4 py-3 text-xs text-zinc-400">
