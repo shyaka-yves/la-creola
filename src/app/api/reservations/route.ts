@@ -13,7 +13,7 @@ async function sendReservationEmail(record: ReservationRecord) {
     return;
   }
 
-  const from = process.env.RESEND_FROM_EMAIL || "La Creola <no-reply@lacreola.com>";
+  const from = process.env.RESEND_FROM_EMAIL || "La Creola Website <no-reply@lacreola.com>";
   const resend = new Resend(apiKey);
 
   const lines = [
