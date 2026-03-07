@@ -16,7 +16,7 @@ export default async function EventsPage() {
 
   return (
     <div className="relative overflow-hidden">
-      <section className="py-16 sm:py-24 bg-black/95">
+      <section className="py-8 sm:py-12 bg-black/95">
         <div className="mx-auto max-w-4xl px-4 text-center">
           <FadeIn>
             <p className="text-xs uppercase tracking-[0.3em] text-gold">
@@ -33,7 +33,7 @@ export default async function EventsPage() {
         </div>
       </section>
 
-      <section className="py-20 sm:py-28 bg-gradient-to-b from-black via-slate-950 to-black">
+      <section className="py-12 sm:py-16 bg-gradient-to-b from-black via-slate-950 to-black">
         <div className="mx-auto max-w-6xl px-4">
           {events.length === 0 ? (
             <div className="text-center py-12">
@@ -49,7 +49,7 @@ export default async function EventsPage() {
                         src={event.imageUrl}
                         alt={event.title}
                         fill
-                        className="object-cover transition-transform duration-700 hover:scale-105"
+                        className="object-contain transition-transform duration-700 hover:scale-105 bg-black/20"
                       />
                       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                     </div>
@@ -60,7 +60,7 @@ export default async function EventsPage() {
                       <h2 className="mt-1.5 text-sm font-semibold text-white">{event.title}</h2>
                       <p className="mt-1.5 text-xs text-zinc-300 line-clamp-2">{event.description}</p>
                       <button
-                        className="gold-gradient mt-5 inline-flex items-center justify-center rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-black shadow-md shadow-yellow-500/25 transition hover:shadow-yellow-400/40"
+                        className="gold-gradient mt-3 inline-flex items-center justify-center rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-black shadow-md shadow-yellow-500/25 transition hover:shadow-yellow-400/40"
                         aria-label={`Learn more about ${event.title}`}
                       >
                         Learn More
