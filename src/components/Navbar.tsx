@@ -60,7 +60,7 @@ export function Navbar() {
           )}
         </Link>
 
-        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 text-[13px] font-bold uppercase tracking-widest text-zinc-400 lg:flex xl:gap-10 heading-font">
+        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 text-[13px] uppercase tracking-widest text-zinc-400 lg:flex xl:gap-10">
           {NAV_ITEMS.slice(0, 2).map((item) => (
             <Link
               key={item.href}
@@ -109,7 +109,7 @@ export function Navbar() {
         <div className="flex items-center gap-3">
           <a
             href="/book"
-            className="hidden border border-[#EFD077] bg-transparent px-8 py-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#EFD077] transition-all hover:bg-[#EFD077] hover:text-black lg:inline-flex"
+            className="hidden border border-[#EFD077] bg-transparent px-8 py-3 text-[11px] uppercase tracking-[0.2em] text-[#EFD077] transition-all hover:bg-[#EFD077] hover:text-black lg:inline-flex"
           >
             BOOK A TABLE
           </a>
@@ -138,17 +138,17 @@ export function Navbar() {
         style={{ height: mobileOpen ? "calc(100vh - 52px)" : 0 }}
       >
         <nav className="flex flex-col px-4 py-6">
-          <Link href="/" onClick={() => setMobileOpen(false)} className="border-b border-zinc-800 py-4 text-sm font-medium uppercase tracking-wide text-white transition-colors hover:text-[#D4AF37]">HOME</Link>
-          <Link href="/about" onClick={() => setMobileOpen(false)} className="border-b border-zinc-800 py-4 text-sm font-medium uppercase tracking-wide text-white transition-colors hover:text-[#D4AF37]">ABOUT US</Link>
+          <Link href="/" onClick={() => setMobileOpen(false)} className="border-b border-zinc-800 py-4 text-sm uppercase tracking-wide text-white transition-colors hover:text-[#D4AF37]">HOME</Link>
+          <Link href="/about" onClick={() => setMobileOpen(false)} className="border-b border-zinc-800 py-4 text-sm uppercase tracking-wide text-white transition-colors hover:text-[#D4AF37]">ABOUT US</Link>
           <div className="border-b border-zinc-800 py-2">
             <p className="py-2 text-xs uppercase tracking-wider text-zinc-400">RESTAURANT</p>
             {RESTAURANT_DROPDOWN.map((item) => (
-              <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)} className="block py-2 pl-4 text-sm font-medium capitalize text-white transition-colors hover:text-[#D4AF37]">{item.label}</Link>
+              <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)} className="block py-2 pl-4 text-sm capitalize text-white transition-colors hover:text-[#D4AF37]">{item.label}</Link>
             ))}
           </div>
-          <Link href="/gallery" onClick={() => setMobileOpen(false)} className="border-b border-zinc-800 py-4 text-sm font-medium uppercase tracking-wide text-white transition-colors hover:text-[#D4AF37]">GALLERY</Link>
-          <Link href="/contact" onClick={() => setMobileOpen(false)} className="border-b border-zinc-800 py-4 text-sm font-medium uppercase tracking-wide text-white transition-colors hover:text-[#D4AF37]">CONTACT</Link>
-          <a href="/book" onClick={() => setMobileOpen(false)} className="mt-4 flex items-center justify-center border border-[#D4AF37] bg-transparent py-3 text-sm font-medium uppercase tracking-widest text-white">
+          <Link href="/gallery" onClick={() => setMobileOpen(false)} className="border-b border-zinc-800 py-4 text-sm uppercase tracking-wide text-white transition-colors hover:text-[#D4AF37]">GALLERY</Link>
+          <Link href="/contact" onClick={() => setMobileOpen(false)} className="border-b border-zinc-800 py-4 text-sm uppercase tracking-wide text-white transition-colors hover:text-[#D4AF37]">CONTACT</Link>
+          <a href="/book" onClick={() => setMobileOpen(false)} className="mt-4 flex items-center justify-center border border-[#D4AF37] bg-transparent py-3 text-sm uppercase tracking-widest text-white">
             BOOK A TABLE
           </a>
         </nav>

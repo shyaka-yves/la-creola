@@ -43,7 +43,7 @@ export function BlogSection({
                   alt={post.title}
                   fill
                   unoptimized={post.imageSrc.startsWith("http")}
-                  className="object-cover transition-transform duration-700 hover:scale-105"
+                  className="object-contain transition-transform duration-700 hover:scale-105 bg-black/40"
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
               </div>
