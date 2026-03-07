@@ -47,7 +47,8 @@ export function SiteFooter() {
                 href="https://www.instagram.com/lacreola_kigali?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
                 target="_blank"
                 rel="noreferrer"
-                className="hover:text-[#D4AF37]"
+                className="inline-flex py-2 hover:text-[#D4AF37] transition-colors"
+                aria-label="Follow us on Instagram"
               >
                 Instagram
               </a>
@@ -56,7 +57,8 @@ export function SiteFooter() {
                 href="https://web.facebook.com/p/La-Creola-Restaurant-and-Lounge-61550407251686/?_rdc=1&_rdr#"
                 target="_blank"
                 rel="noreferrer"
-                className="hover:text-[#D4AF37]"
+                className="inline-flex py-2 hover:text-[#D4AF37] transition-colors"
+                aria-label="Follow us on Facebook"
               >
                 Facebook
               </a>
@@ -65,7 +67,8 @@ export function SiteFooter() {
                 href="https://www.tiktok.com/@lacreola"
                 target="_blank"
                 rel="noreferrer"
-                className="hover:text-[#D4AF37]"
+                className="inline-flex py-2 hover:text-[#D4AF37] transition-colors"
+                aria-label="Follow us on TikTok"
               >
                 TikTok
               </a>

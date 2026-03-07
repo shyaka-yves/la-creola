@@ -55,12 +55,14 @@ export default async function Home() {
               playsInline
               className="h-full w-full object-cover opacity-60"
             />
-          ) : (
-            <img
-              src={content.hero.mediaSrc || "/uploads/FRIDAYYY.png"}
-              alt="La Creola Restaurant Ambiance"
-              className="h-full w-full object-cover opacity-60"
-            />
+          ) : (<Image
+            src={content.hero.mediaSrc || "/uploads/FRIDAYYY.png"}
+            alt="La Creola Restaurant Ambiance"
+            fill
+            priority
+            className="h-full w-full object-cover opacity-60"
+            sizes="100vw"
+          />
           )}
           <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/80" />
         </div>

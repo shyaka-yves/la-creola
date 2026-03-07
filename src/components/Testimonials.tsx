@@ -56,7 +56,7 @@ export function Testimonials({
               </div>
               <div className="space-y-1">
                 <p className="text-base font-semibold tracking-[0.15em] text-white uppercase">{active.name}</p>
-                <p className="text-[11px] uppercase tracking-[0.5em] text-zinc-500 font-bold">Visited la Creola</p>
+                <p className="text-[11px] uppercase tracking-[0.5em] text-zinc-400 font-bold">Visited la Creola</p>
               </div>
             </div>
           </div>
@@ -67,14 +67,16 @@ export function Testimonials({
           <button
             type="button"
             onClick={() => setActiveIndex((prev) => (prev - 1 + data.length) % data.length)}
-            className="pointer-events-auto inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/5 bg-black/40 text-zinc-500 hover:border-[#EFD077] hover:text-[#EFD077] hover:bg-black/60 transition-all duration-300 backdrop-blur-sm"
+            className="pointer-events-auto inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/5 bg-black/40 text-zinc-400 hover:border-[#EFD077] hover:text-[#EFD077] hover:bg-black/60 transition-all duration-300 backdrop-blur-sm"
+            aria-label="Previous testimonial"
           >
             ‹
           </button>
           <button
             type="button"
             onClick={() => setActiveIndex((prev) => (prev + 1) % data.length)}
-            className="pointer-events-auto inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/5 bg-black/40 text-zinc-500 hover:border-[#EFD077] hover:text-[#EFD077] hover:bg-black/60 transition-all duration-300 backdrop-blur-sm"
+            className="pointer-events-auto inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/5 bg-black/40 text-zinc-400 hover:border-[#EFD077] hover:text-[#EFD077] hover:bg-black/60 transition-all duration-300 backdrop-blur-sm"
+            aria-label="Next testimonial"
           >
             ›
           </button>
@@ -88,6 +90,7 @@ export function Testimonials({
               onClick={() => setActiveIndex(index)}
               className={`h-0.5 transition-all duration-500 ${index === activeIndex ? "w-10 bg-[#EFD077]" : "w-4 bg-zinc-800"
                 }`}
+              aria-label={`Go to testimonial ${index + 1}`}
             />
           ))}
         </div>
