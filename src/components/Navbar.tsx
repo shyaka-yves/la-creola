@@ -141,7 +141,7 @@ export function Navbar() {
           <Link href="/" onClick={() => setMobileOpen(false)} className="border-b border-zinc-800 py-4 text-sm font-medium uppercase tracking-wide text-white transition-colors hover:text-[#D4AF37]">HOME</Link>
           <Link href="/about" onClick={() => setMobileOpen(false)} className="border-b border-zinc-800 py-4 text-sm font-medium uppercase tracking-wide text-white transition-colors hover:text-[#D4AF37]">ABOUT US</Link>
           <div className="border-b border-zinc-800 py-2">
-            <p className="py-2 text-xs uppercase tracking-wider text-zinc-500">RESTAURANT</p>
+            <p className="py-2 text-xs uppercase tracking-wider text-zinc-400">RESTAURANT</p>
             {RESTAURANT_DROPDOWN.map((item) => (
               <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)} className="block py-2 pl-4 text-sm font-medium capitalize text-white transition-colors hover:text-[#D4AF37]">{item.label}</Link>
             ))}

@@ -1,10 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Metadata } from "next";
 import { FadeIn } from "@/components/FadeIn";
 import { Testimonials } from "@/components/Testimonials";
 import { BlogSection } from "@/components/BlogSection";
 import { listEvents } from "@/lib/eventsDb";
 import { getSiteContent } from "@/lib/siteContent";
+
+export const metadata: Metadata = {
+  title: "La Creola | Kigali Restaurant & Lounge",
+  description: "Experience the ultimate fusion of African and Asian flavors at La Creola, Kigali's premier dining and nightlife destination.",
+};
 
 export const dynamic = "force-dynamic";
 
@@ -52,7 +58,7 @@ export default async function Home() {
           ) : (
             <img
               src={content.hero.mediaSrc || "/uploads/FRIDAYYY.png"}
-              alt="Hero"
+              alt="La Creola Restaurant Ambiance"
               className="h-full w-full object-cover opacity-60"
             />
           )}
@@ -127,7 +133,7 @@ export default async function Home() {
               <div className="flex gap-16 pt-10 border-t border-white/10">
                 <div>
                   <p className="heading-font text-5xl font-semibold text-[#EFD077]">25+</p>
-                  <p className="text-[11px] uppercase tracking-[0.3em] text-zinc-500 mt-2 font-bold">Years of Excellence</p>
+                  <p className="text-[11px] uppercase tracking-[0.3em] text-zinc-400 mt-2 font-bold">Years of Excellence</p>
                 </div>
                 <div>
                   <p className="heading-font text-5xl font-semibold text-[#EFD077]">100+</p>
@@ -173,7 +179,7 @@ export default async function Home() {
                 {content.excellence.stats.map((stat, i) => (
                   <div key={i} className="border-l-2 border-[#EFD077] pl-8 py-1">
                     <p className="heading-font text-5xl font-semibold text-[#EFD077]">{stat.value}</p>
-                    <p className="text-[11px] uppercase tracking-[0.3em] text-zinc-500 mt-2 font-bold">{stat.label}</p>
+                    <p className="text-[11px] uppercase tracking-[0.3em] text-zinc-400 mt-2 font-bold">{stat.label}</p>
                   </div>
                 ))}
               </div>
@@ -199,7 +205,7 @@ export default async function Home() {
             <h2 className="heading-font text-5xl font-medium tracking-tight text-[#EFD077] md:text-6xl">
               {content.events.title}
             </h2>
-            <p className="mt-4 text-[12px] uppercase tracking-[0.4em] text-zinc-500">
+            <p className="mt-4 text-[12px] uppercase tracking-[0.4em] text-zinc-400">
               {content.events.description}
             </p>
             <div className="h-0.5 w-12 bg-[#EFD077] mx-auto mt-8" />
@@ -229,6 +235,7 @@ export default async function Home() {
                     <Link
                       href={event.href}
                       className="mt-10 inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-[#EFD077] to-[#D4AF37] px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] text-black shadow-xl shadow-yellow-500/10 hover:brightness-110 active:scale-95 transition-all"
+                      aria-label={`Learn more about ${event.title}`}
                     >
                       Learn More
                     </Link>
@@ -264,7 +271,7 @@ export default async function Home() {
             <h2 className="heading-font text-4xl font-medium tracking-tight text-[#EFD077]">
               {content.testimonials.title}
             </h2>
-            <p className="mt-4 text-[10px] uppercase tracking-[0.3em] text-zinc-500">
+            <p className="mt-4 text-[10px] uppercase tracking-[0.3em] text-zinc-400">
               {content.testimonials.eyebrow}
             </p>
           </FadeIn>

@@ -59,7 +59,10 @@ export default async function EventsPage() {
                       </p>
                       <h2 className="mt-1.5 text-sm font-semibold text-white">{event.title}</h2>
                       <p className="mt-1.5 text-xs text-zinc-300 line-clamp-2">{event.description}</p>
-                      <button className="gold-gradient mt-5 inline-flex items-center justify-center rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-black shadow-md shadow-yellow-500/25 transition hover:shadow-yellow-400/40">
+                      <button
+                        className="gold-gradient mt-5 inline-flex items-center justify-center rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-black shadow-md shadow-yellow-500/25 transition hover:shadow-yellow-400/40"
+                        aria-label={`Learn more about ${event.title}`}
+                      >
                         Learn More
                       </button>
                     </div>

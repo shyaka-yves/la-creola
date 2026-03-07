@@ -73,7 +73,7 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-8 border-t border-zinc-800 pt-4 text-center text-xs text-zinc-500">
+        <div className="mt-8 border-t border-zinc-800 pt-4 text-center text-xs text-zinc-400">
           © 2023 La Creola Restaurant.
         </div>
       </div>
