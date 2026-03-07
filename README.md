@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# La Creola - Kigali Restaurant & Lounge
 
-## Getting Started
+A premium, dynamic web application for La Creola, featuring a modern design, dynamic content management, and high-performance optimization.
 
-First, run the development server:
+## 🚀 Built With
 
+- **Framework**: [Next.js 15+](https://nextjs.org/) (App Router)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Database & Auth**: [Supabase](https://supabase.com/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **State Management**: React Hooks & Server Components
+
+## 📂 Project Structure
+
+- `src/app/(site)` - Contains all public-facing pages (Home, About, Menu, Events, etc.).
+- `src/components` - Reusable UI components (Navbar, Footer, Blog, etc.).
+- `src/lib` - Utility functions and data fetching logic (Supabase integration).
+- `public/` - Static assets like the logo and uploaded images.
+
+## 🛠️ Customization Guide
+
+### Changing Global Colors
+Main colors are defined as variables in:
+`src/app/globals.css`
+Modify `--accent-gold` to change the primary brand color throughout the site.
+
+### Updating Text & Sections
+- **Home Page**: `src/app/(site)/page.tsx`
+- **Other Pages**: Check the folder named after the page in `src/app/(site)/`.
+- **Global Parts**: Edit `src/components/Navbar.tsx` or `src/components/SiteFooter.tsx`.
+
+### Managing Dynamic Content (Events, Blog, Menu)
+The site is connected to a Supabase backend. All menu items, blog posts, and upcoming events should be managed through the **Admin Dashboard**.
+
+## ⚡ Performance Optimizations
+- **LCP Optimization**: The hero image uses `next/image` with `priority` for instant loading.
+- **Accessibility**: All interactive elements have descriptive `aria-labels` and high-contrast color schemes (`zinc-400` on black).
+- **SEO**: Dynamic metadata is exported for every route to ensure high search engine visibility.
+
+## 👨– Getting Started
+
+First, install the dependencies:
+```bash
+npm install
+```
+
+Then, run the development server:
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
