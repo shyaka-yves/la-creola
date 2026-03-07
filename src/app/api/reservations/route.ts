@@ -4,7 +4,7 @@ import { addReservation, type ReservationRecord } from "@/lib/reservationsDb";
 
 export const runtime = "nodejs";
 
-const RESERVATIONS_EMAIL = "it@azzurrirwanda.com";
+const RESERVATIONS_EMAIL = "reservation@lacreola.com";
 
 async function sendReservationEmail(record: ReservationRecord) {
   const apiKey = process.env.RESEND_API_KEY;
