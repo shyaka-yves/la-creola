@@ -64,7 +64,7 @@ export function SiteFooter() {
               </a>
               <span className="h-1 w-1 rounded-full bg-zinc-600" />
               <a
-                href="https://www.tiktok.com/@lacreola"
+                href="https://www.tiktok.com/@lacreolakigali"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex py-2 hover:text-[#D4AF37] transition-colors"

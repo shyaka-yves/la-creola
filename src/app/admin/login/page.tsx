@@ -29,8 +29,7 @@ function AdminLoginForm() {
         setLoading(false);
         return;
       }
-      router.push(nextPath);
-      router.refresh();
+      window.location.assign(nextPath);
     } catch {
       setError("Login failed");
       setLoading(false);

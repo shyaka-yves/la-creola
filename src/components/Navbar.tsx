@@ -4,16 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 
-const RESTAURANT_DROPDOWN = [
-  { href: "/menu", label: "Menu" },
-  { href: "/special-offers", label: "Special offers" },
-  { href: "/speciality", label: "Speciality" },
-  { href: "/events", label: "Events" },
-];
-
 const NAV_ITEMS = [
   { href: "/", label: "HOME" },
   { href: "/about", label: "ABOUT US" },
+  { href: "/events", label: "EVENTS" },
   { href: "/gallery", label: "GALLERY" },
   { href: "/contact", label: "CONTACT" },
 ];
@@ -21,24 +15,12 @@ const NAV_ITEMS = [
 export function Navbar() {
   const [logoError, setLogoError] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [restaurantOpen, setRestaurantOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (mobileOpen) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "";
     return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
-
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setRestaurantOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 bg-black">
@@ -61,41 +43,7 @@ export function Navbar() {
         </Link>
 
         <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 text-[13px] uppercase tracking-widest text-zinc-400 lg:flex xl:gap-10">
-          {NAV_ITEMS.slice(0, 2).map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="whitespace-nowrap transition-colors hover:text-[#EFD077]"
-            >
-              {item.label}
-            </Link>
-          ))}
-          <div className="relative" ref={dropdownRef}>
-            <button
-              type="button"
-              onClick={() => setRestaurantOpen((o) => !o)}
-              className="flex items-center gap-1 transition-colors hover:text-[#EFD077]"
-              aria-expanded={restaurantOpen}
-              aria-haspopup="true"
-            >
-              RESTAURANT
-            </button>
-            {restaurantOpen && (
-              <div className="absolute left-1/2 top-full z-50 mt-1 min-w-[180px] -translate-x-1/2 rounded border border-zinc-700 bg-black py-2 shadow-xl">
-                {RESTAURANT_DROPDOWN.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="block px-4 py-2 text-left text-sm capitalize text-white hover:bg-zinc-800 hover:text-[#EFD077]"
-                    onClick={() => setRestaurantOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-          {NAV_ITEMS.slice(2).map((item) => (
+          {NAV_ITEMS.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -138,16 +86,16 @@ export function Navbar() {
         style={{ height: mobileOpen ? "calc(100vh - 52px)" : 0 }}
       >
         <nav className="flex flex-col px-4 py-6">
-          <Link href="/" onClick={() => setMobileOpen(false)} className="border-b border-zinc-800 py-4 text-sm uppercase tracking-wide text-white transition-colors hover:text-[#D4AF37]">HOME</Link>
-          <Link href="/about" onClick={() => setMobileOpen(false)} className="border-b border-zinc-800 py-4 text-sm uppercase tracking-wide text-white transition-colors hover:text-[#D4AF37]">ABOUT US</Link>
-          <div className="border-b border-zinc-800 py-2">
-            <p className="py-2 text-xs uppercase tracking-wider text-zinc-400">RESTAURANT</p>
-            {RESTAURANT_DROPDOWN.map((item) => (
-              <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)} className="block py-2 pl-4 text-sm capitalize text-white transition-colors hover:text-[#D4AF37]">{item.label}</Link>
-            ))}
-          </div>
-          <Link href="/gallery" onClick={() => setMobileOpen(false)} className="border-b border-zinc-800 py-4 text-sm uppercase tracking-wide text-white transition-colors hover:text-[#D4AF37]">GALLERY</Link>
-          <Link href="/contact" onClick={() => setMobileOpen(false)} className="border-b border-zinc-800 py-4 text-sm uppercase tracking-wide text-white transition-colors hover:text-[#D4AF37]">CONTACT</Link>
+          {NAV_ITEMS.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setMobileOpen(false)}
+              className="border-b border-zinc-800 py-4 text-sm uppercase tracking-wide text-white transition-colors hover:text-[#D4AF37]"
+            >
+              {item.label}
+            </Link>
+          ))}
           <a href="/book" onClick={() => setMobileOpen(false)} className="mt-4 flex items-center justify-center border border-[#D4AF37] bg-transparent py-3 text-sm uppercase tracking-widest text-white">
             BOOK A TABLE
           </a>
