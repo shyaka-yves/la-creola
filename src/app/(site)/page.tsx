@@ -106,6 +106,65 @@ export default async function Home() {
         </div>
       </section >
 
+      <section className="bg-black py-16">
+        <div className="mx-auto max-w-6xl px-4">
+          <FadeIn className="text-center mb-16">
+            {upcomingEvent && (
+              <div className="mb-6 flex justify-center">
+                <span className="inline-flex items-center gap-2 rounded-full border border-[#EFD077]/30 bg-[#EFD077]/5 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#EFD077]">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#EFD077] opacity-75"></span>
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#EFD077]"></span>
+                  </span>
+                  Upcoming Highlight
+                </span>
+              </div>
+            )}
+            <h2 className="heading-font text-5xl font-medium tracking-tight text-[#EFD077] md:text-6xl">
+              {content.events.title}
+            </h2>
+            <p className="mt-4 text-[12px] uppercase tracking-[0.4em] text-zinc-400">
+              {content.events.description}
+            </p>
+            <div className="h-0.5 w-12 bg-[#EFD077] mx-auto mt-8" />
+          </FadeIn>
+
+          <div className="mt-10 grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
+            {displayEvents.map((event, index) => (
+              <FadeIn key={index} delay={80 * index}>
+                <article className="card-glass flex h-full flex-col overflow-hidden rounded-2xl border-white/5 transition hover:-translate-y-1">
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <Image
+                      src={event.imageSrc}
+                      alt={event.title}
+                      fill
+                      className="object-contain transition-transform duration-700 hover:scale-105 bg-black/40"
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                  </div>
+                  <div className="flex flex-1 flex-col px-6 pb-10 pt-8">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
+                      {event.date}
+                    </p>
+                    <h3 className="mt-4 text-2xl font-medium tracking-tight text-white group-hover:text-[#EFD077] transition-colors">
+                      {event.title}
+                    </h3>
+                    <p className="mt-4 text-sm leading-relaxed text-zinc-400 font-light lg:text-base">{event.description}</p>
+                    <Link
+                      href={event.href}
+                      className="mt-10 inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-[#EFD077] to-[#D4AF37] px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] text-black shadow-xl shadow-yellow-500/10 hover:brightness-110 active:scale-95 transition-all"
+                      aria-label={`Learn more about ${event.title}`}
+                    >
+                      Learn More
+                    </Link>
+                  </div>
+                </article>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="section-padding py-12 lg:py-16">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-16 px-6 lg:flex-row lg:gap-24">
           <FadeIn className="w-full lg:w-1/2">
@@ -190,65 +249,6 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="bg-black py-16">
-        <div className="mx-auto max-w-6xl px-4">
-          <FadeIn className="text-center mb-16">
-            {upcomingEvent && (
-              <div className="mb-6 flex justify-center">
-                <span className="inline-flex items-center gap-2 rounded-full border border-[#EFD077]/30 bg-[#EFD077]/5 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#EFD077]">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#EFD077] opacity-75"></span>
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#EFD077]"></span>
-                  </span>
-                  Upcoming Highlight
-                </span>
-              </div>
-            )}
-            <h2 className="heading-font text-5xl font-medium tracking-tight text-[#EFD077] md:text-6xl">
-              {content.events.title}
-            </h2>
-            <p className="mt-4 text-[12px] uppercase tracking-[0.4em] text-zinc-400">
-              {content.events.description}
-            </p>
-            <div className="h-0.5 w-12 bg-[#EFD077] mx-auto mt-8" />
-          </FadeIn>
-
-          <div className="mt-10 grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
-            {displayEvents.map((event, index) => (
-              <FadeIn key={index} delay={80 * index}>
-                <article className="card-glass flex h-full flex-col overflow-hidden rounded-2xl border-white/5 transition hover:-translate-y-1">
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    <Image
-                      src={event.imageSrc}
-                      alt={event.title}
-                      fill
-                      className="object-contain transition-transform duration-700 hover:scale-105 bg-black/40"
-                    />
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                  </div>
-                  <div className="flex flex-1 flex-col px-6 pb-10 pt-8">
-                    <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
-                      {event.date}
-                    </p>
-                    <h3 className="mt-4 text-2xl font-medium tracking-tight text-white group-hover:text-[#EFD077] transition-colors">
-                      {event.title}
-                    </h3>
-                    <p className="mt-4 text-sm leading-relaxed text-zinc-400 font-light lg:text-base">{event.description}</p>
-                    <Link
-                      href={event.href}
-                      className="mt-10 inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-[#EFD077] to-[#D4AF37] px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] text-black shadow-xl shadow-yellow-500/10 hover:brightness-110 active:scale-95 transition-all"
-                      aria-label={`Learn more about ${event.title}`}
-                    >
-                      Learn More
-                    </Link>
-                  </div>
-                </article>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <section className="py-12 lg:py-16">
         <div className="mx-auto max-w-4xl px-6 text-center">
           <FadeIn>
@@ -327,7 +327,7 @@ export default async function Home() {
               </div>
 
               <a
-                href={content.contact.mapEmbedSrc}
+                href="https://maps.google.com/?q=La+Creola+Kigali+Kimihurura"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center justify-center rounded-lg bg-[#FDE68A] px-14 py-4 text-xs font-bold uppercase tracking-[0.3em] text-black transition-all hover:scale-105 active:scale-95"
