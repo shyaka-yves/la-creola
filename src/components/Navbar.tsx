@@ -8,7 +8,7 @@ const RESTAURANT_DROPDOWN = [
   { href: "/menu", label: "Menu" },
   { href: "/special-offers", label: "Special offers" },
   { href: "/speciality", label: "Speciality" },
-  { href: "/events", label: "Events" },
+
 ];
 
 const NAV_ITEMS = [
