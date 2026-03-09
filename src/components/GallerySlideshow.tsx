@@ -19,7 +19,6 @@ type Props = {
 export function GallerySlideshow({ images, isOpen, onClose, startIndex = 0 }: Props) {
     const [currentIndex, setCurrentIndex] = useState(startIndex);
     const [isPaused, setIsPaused] = useState(false);
-    const autoSlideRef = useRef<NodeJS.Timeout | null>(null);
 
     const next = useCallback(() => {
         setCurrentIndex((prev) => (prev + 1) % images.length);
@@ -39,14 +38,12 @@ export function GallerySlideshow({ images, isOpen, onClose, startIndex = 0 }: Pr
     // Auto-slide logic
     useEffect(() => {
         if (isOpen && !isPaused) {
-            autoSlideRef.current = setInterval(next, 4000); // 4 second interval
-        } else {
-            if (autoSlideRef.current) clearInterval(autoSlideRef.current);
+            const timer = setInterval(() => {
+                setCurrentIndex((prev) => (prev + 1) % images.length);
+            }, 4000);
+            return () => clearInterval(timer);
         }
-        return () => {
-            if (autoSlideRef.current) clearInterval(autoSlideRef.current);
-        };
-    }, [isOpen, isPaused, next]);
+    }, [isOpen, isPaused, images.length]);
 
     useEffect(() => {
         if (!isOpen) return;
@@ -78,12 +75,12 @@ export function GallerySlideshow({ images, isOpen, onClose, startIndex = 0 }: Pr
 
             {/* Main Container */}
             <div
-                className="relative flex h-full w-full flex-col items-center justify-center p-4"
+                className="relative flex h-full w-full flex-col items-center justify-center p-2"
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
             >
                 {/* Main Image */}
-                <div className="relative h-[70vh] w-full max-w-6xl overflow-hidden rounded-2xl shadow-2xl">
+                <div className="relative h-[85vh] w-full max-w-7xl overflow-hidden rounded-2xl">
                     <Image
                         key={currentImage.id}
                         src={currentImage.src}
