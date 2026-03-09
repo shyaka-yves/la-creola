@@ -39,7 +39,7 @@ export function GallerySlideshow({ images, isOpen, onClose, startIndex = 0 }: Pr
     // Auto-slide logic
     useEffect(() => {
         if (isOpen && !isPaused) {
-            autoSlideRef.current = setInterval(next, 5000); // 5 second interval
+            autoSlideRef.current = setInterval(next, 4000); // 4 second interval
         } else {
             if (autoSlideRef.current) clearInterval(autoSlideRef.current);
         }

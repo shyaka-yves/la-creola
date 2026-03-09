@@ -25,7 +25,7 @@ export function GalleryView({
 
     return (
         <div className="relative min-h-screen bg-black overflow-x-hidden">
-            <section className="bg-black/95 pt-24 pb-12 sm:pt-32 sm:pb-16">
+            <section className="bg-black/95 pt-16 pb-6 sm:pt-20 sm:pb-10">
                 <div className="mx-auto max-w-4xl px-4 text-center">
                     <FadeIn>
                         <h1 className="heading-font text-4xl font-semibold text-[#D4AF37] sm:text-5xl lg:text-6xl tracking-tight">
