@@ -5,6 +5,7 @@ import { FadeIn } from "@/components/FadeIn";
 import { Testimonials } from "@/components/Testimonials";
 import { BlogSection } from "@/components/BlogSection";
 import { listEvents } from "@/lib/eventsDb";
+import { listGalleryImages } from "@/lib/galleryDb";
 import { getSiteContent } from "@/lib/siteContent";
 
 export const metadata: Metadata = {
@@ -17,12 +18,17 @@ export const dynamic = "force-dynamic";
 
 
 export default async function Home() {
-  const [content, events] = await Promise.all([
+  const [content, events, gallery] = await Promise.all([
     getSiteContent(),
-    listEvents()
+    listEvents(),
+    listGalleryImages()
   ]);
 
   const upcomingEvent = events.length > 0 ? events[0] : null;
+
+  const displayGallery = gallery.length > 0
+    ? gallery.slice(0, 6)
+    : content.gallery.items.slice(0, 6).map((item, idx) => ({ id: idx, imageUrl: item.imageSrc, label: item.alt }));
 
   // Combine and standardize events for display
   const displayEvents = (events.length > 0
@@ -284,6 +290,55 @@ export default async function Home() {
       <section className="bg-[#030712] py-16">
         <div className="mx-auto max-w-7xl px-6">
           <BlogSection eyebrow={content.blog.eyebrow} title={content.blog.title} items={content.blog.items} />
+        </div>
+      </section>
+
+      <section className="bg-black py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <FadeIn className="text-center mb-12">
+            <h2 className="heading-font text-5xl font-medium tracking-tight text-[#EFD077] md:text-6xl">
+              Gallery
+            </h2>
+            <p className="mt-4 text-[12px] uppercase tracking-[0.4em] text-zinc-400">
+              Visualizing the La Creola Experience
+            </p>
+            <div className="h-0.5 w-12 bg-[#EFD077] mx-auto mt-8" />
+          </FadeIn>
+
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+            {displayGallery.map((img, idx) => (
+              <FadeIn key={img.id} delay={idx * 50}>
+                <div className="group relative aspect-square overflow-hidden rounded-2xl border border-white/5 bg-zinc-900/50">
+                  <Image
+                    src={img.imageUrl}
+                    alt={img.label}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    unoptimized={img.imageUrl.startsWith("http")}
+                  />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex items-center justify-center">
+                    <Link
+                      href="/gallery"
+                      className="h-10 w-10 rounded-full bg-[#EFD077] flex items-center justify-center text-black"
+                    >
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </svg>
+                    </Link>
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+
+          <FadeIn className="mt-12 text-center">
+            <Link
+              href="/gallery"
+              className="inline-flex items-center justify-center rounded-lg border border-[#EFD077] px-12 py-4 text-xs font-bold uppercase tracking-[0.2em] text-[#EFD077] transition-all hover:bg-[#EFD077] hover:text-black active:scale-95"
+            >
+              View Full Gallery
+            </Link>
+          </FadeIn>
         </div>
       </section>
 
