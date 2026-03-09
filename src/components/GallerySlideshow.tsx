@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
-import { FadeIn } from "./FadeIn";
 
 type ImageItem = {
     id: string;
@@ -10,9 +9,17 @@ type ImageItem = {
     label: string;
 };
 
-export function GallerySlideshow({ images }: { images: ImageItem[] }) {
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [isFullScreen, setIsFullScreen] = useState(false);
+type Props = {
+    images: ImageItem[];
+    isOpen: boolean;
+    onClose: () => void;
+    startIndex?: number;
+};
+
+export function GallerySlideshow({ images, isOpen, onClose, startIndex = 0 }: Props) {
+    const [currentIndex, setCurrentIndex] = useState(startIndex);
+    const [isPaused, setIsPaused] = useState(false);
+    const autoSlideRef = useRef<NodeJS.Timeout | null>(null);
 
     const next = useCallback(() => {
         setCurrentIndex((prev) => (prev + 1) % images.length);
@@ -22,126 +29,123 @@ export function GallerySlideshow({ images }: { images: ImageItem[] }) {
         setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
     }, [images.length]);
 
+    // Sync index when opening
     useEffect(() => {
+        if (isOpen) {
+            setCurrentIndex(startIndex);
+        }
+    }, [isOpen, startIndex]);
+
+    // Auto-slide logic
+    useEffect(() => {
+        if (isOpen && !isPaused) {
+            autoSlideRef.current = setInterval(next, 5000); // 5 second interval
+        } else {
+            if (autoSlideRef.current) clearInterval(autoSlideRef.current);
+        }
+        return () => {
+            if (autoSlideRef.current) clearInterval(autoSlideRef.current);
+        };
+    }, [isOpen, isPaused, next]);
+
+    useEffect(() => {
+        if (!isOpen) return;
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === "ArrowRight") next();
             if (e.key === "ArrowLeft") prev();
-            if (e.key === "Escape") setIsFullScreen(false);
+            if (e.key === "Escape") onClose();
         };
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [next, prev]);
+    }, [isOpen, next, prev, onClose]);
 
-    if (images.length === 0) return null;
+    if (!isOpen || images.length === 0) return null;
 
     const currentImage = images[currentIndex];
 
     return (
-        <div className="relative w-full max-w-7xl mx-auto px-4">
-            {/* Main Slideshow View */}
-            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/50 shadow-2xl">
-                <div className="absolute inset-0 flex items-center justify-center">
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/95 backdrop-blur-sm transition-all duration-300">
+            {/* Close Button */}
+            <button
+                onClick={onClose}
+                className="absolute right-6 top-6 z-[110] flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition-all hover:bg-white/20 active:scale-90"
+                aria-label="Close"
+            >
+                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            {/* Main Container */}
+            <div
+                className="relative flex h-full w-full flex-col items-center justify-center p-4"
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+            >
+                {/* Main Image */}
+                <div className="relative h-[70vh] w-full max-w-6xl overflow-hidden rounded-2xl shadow-2xl">
                     <Image
                         key={currentImage.id}
                         src={currentImage.src}
                         alt={currentImage.label}
                         fill
-                        className="object-contain p-2 transition-opacity duration-500"
+                        className="object-contain"
                         priority
                         unoptimized={currentImage.src.startsWith("http")}
                     />
                 </div>
 
-                {/* Controls Overlay */}
-                <div className="absolute inset-0 flex items-center justify-between px-4">
+                {/* Controls */}
+                <div className="absolute inset-y-0 left-4 right-4 flex items-center justify-between pointer-events-none">
                     <button
-                        onClick={prev}
-                        className="flex h-12 w-12 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md transition-all hover:bg-black/60 hover:scale-110 active:scale-95"
-                        aria-label="Previous image"
+                        onClick={(e) => { e.stopPropagation(); prev(); }}
+                        className="pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full bg-black/50 text-[#D4AF37] backdrop-blur-md border border-white/5 transition-all hover:bg-black/80 hover:scale-105 active:scale-95"
+                        aria-label="Previous"
                     >
-                        <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                         </svg>
                     </button>
                     <button
-                        onClick={next}
-                        className="flex h-12 w-12 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md transition-all hover:bg-black/60 hover:scale-110 active:scale-95"
-                        aria-label="Next image"
+                        onClick={(e) => { e.stopPropagation(); next(); }}
+                        className="pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full bg-black/50 text-[#D4AF37] backdrop-blur-md border border-white/5 transition-all hover:bg-black/80 hover:scale-105 active:scale-95"
+                        aria-label="Next"
                     >
-                        <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
                     </button>
                 </div>
 
-                {/* Info Label */}
-                <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between">
-                    <div className="rounded-xl bg-black/50 px-4 py-2 backdrop-blur-md border border-white/5">
-                        <p className="text-sm font-medium text-white">{currentImage.label}</p>
-                        <p className="text-[10px] uppercase tracking-widest text-[#D4AF37] mt-1">
-                            Image {currentIndex + 1} of {images.length}
-                        </p>
-                    </div>
-
-                    <button
-                        onClick={() => setIsFullScreen(true)}
-                        className="flex h-10 w-10 items-center justify-center rounded-xl bg-black/50 text-white backdrop-blur-md border border-white/5 transition-colors hover:bg-white/10"
-                    >
-                        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            {/* Thumbnails */}
-            <div className="mt-8 flex justify-center gap-3 overflow-x-auto pb-4 no-scrollbar">
-                {images.map((img, idx) => (
-                    <button
-                        key={img.id}
-                        onClick={() => setCurrentIndex(idx)}
-                        className={`relative h-20 w-32 shrink-0 overflow-hidden rounded-xl border-2 transition-all ${currentIndex === idx ? "border-[#D4AF37] scale-105 shadow-lg shadow-yellow-500/10" : "border-transparent opacity-50 hover:opacity-100"
-                            }`}
-                    >
-                        <Image
-                            src={img.src}
-                            alt={img.label}
-                            fill
-                            className="object-cover"
-                            unoptimized={img.src.startsWith("http")}
-                        />
-                    </button>
-                ))}
-            </div>
-
-            {/* Full Screen Portal Mockup (Optional logic expansion) */}
-            {isFullScreen && (
-                <div className="fixed inset-0 z-[100] flex flex-col bg-black p-4">
-                    <button
-                        onClick={() => setIsFullScreen(false)}
-                        className="absolute right-6 top-6 z-[110] flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20"
-                    >
-                        <span className="text-2xl">×</span>
-                    </button>
-                    <div className="relative flex-1">
-                        <Image
-                            src={currentImage.src}
-                            alt={currentImage.label}
-                            fill
-                            className="object-contain"
-                            unoptimized={currentImage.src.startsWith("http")}
-                        />
-                    </div>
-                    <div className="py-6 text-center">
-                        <p className="text-lg font-medium text-white">{currentImage.label}</p>
-                        <div className="mt-4 flex justify-center gap-8">
-                            <button onClick={prev} className="text-[#D4AF37] uppercase tracking-widest text-sm font-bold">Prev</button>
-                            <span className="text-zinc-500">{currentIndex + 1} / {images.length}</span>
-                            <button onClick={next} className="text-[#D4AF37] uppercase tracking-widest text-sm font-bold">Next</button>
-                        </div>
+                {/* Info & Counter */}
+                <div className="mt-8 flex flex-col items-center text-center space-y-2">
+                    <p className="text-lg font-semibold tracking-wide text-white">{currentImage.label}</p>
+                    <div className="flex items-center gap-4">
+                        <span className="text-sm font-medium uppercase tracking-[0.2em] text-[#D4AF37]">
+                            {currentIndex + 1} / {images.length}
+                        </span>
+                        {isPaused && (
+                            <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] uppercase tracking-widest text-zinc-400">
+                                Paused
+                            </span>
+                        )}
                     </div>
                 </div>
-            )}
+
+                {/* Thumbnails (optional toggle - keeping for now but visible) */}
+                <div className="mt-8 hidden space-x-3 overflow-x-auto pb-4 no-scrollbar lg:flex px-4 max-w-4xl">
+                    {images.map((img, idx) => (
+                        <button
+                            key={img.id}
+                            onClick={() => setCurrentIndex(idx)}
+                            className={`relative h-16 w-24 shrink-0 overflow-hidden rounded-lg border-2 transition-all ${currentIndex === idx ? "border-[#D4AF37] opacity-100" : "border-transparent opacity-40 hover:opacity-80"
+                                }`}
+                        >
+                            <Image src={img.src} alt={img.label} fill className="object-cover" unoptimized={img.src.startsWith("http")} />
+                        </button>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 }
