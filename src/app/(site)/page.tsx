@@ -7,6 +7,7 @@ import { BlogSection } from "@/components/BlogSection";
 import { listEvents } from "@/lib/eventsDb";
 import { listGalleryImages } from "@/lib/galleryDb";
 import { getSiteContent } from "@/lib/siteContent";
+import { EventCarousel } from "@/components/EventCarousel";
 
 export const metadata: Metadata = {
   title: "La Creola | Kigali Restaurant & Lounge",
@@ -45,7 +46,7 @@ export default async function Home() {
       date: e.date,
       imageSrc: e.imageSrc,
       href: "/events"
-    }))).slice(0, 3);
+    })));
 
   return (
     <div className="relative overflow-hidden bg-black">
@@ -135,38 +136,8 @@ export default async function Home() {
             <div className="h-0.5 w-12 bg-[#EFD077] mx-auto mt-8" />
           </FadeIn>
 
-          <div className="mt-10 grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
-            {displayEvents.map((event, index) => (
-              <FadeIn key={index} delay={80 * index}>
-                <article className="card-glass flex h-full flex-col overflow-hidden rounded-2xl border-white/5 transition hover:-translate-y-1">
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    <Image
-                      src={event.imageSrc}
-                      alt={event.title}
-                      fill
-                      className="object-contain transition-transform duration-700 hover:scale-105 bg-black/40"
-                    />
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                  </div>
-                  <div className="flex flex-1 flex-col px-6 pb-10 pt-8">
-                    <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
-                      {event.date}
-                    </p>
-                    <h3 className="mt-4 text-2xl font-medium tracking-tight text-white group-hover:text-[#EFD077] transition-colors">
-                      {event.title}
-                    </h3>
-                    <p className="mt-4 text-sm leading-relaxed text-zinc-400 font-light lg:text-base">{event.description}</p>
-                    <Link
-                      href={event.href}
-                      className="mt-10 inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-[#EFD077] to-[#D4AF37] px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] text-black shadow-xl shadow-yellow-500/10 hover:brightness-110 active:scale-95 transition-all"
-                      aria-label={`Learn more about ${event.title}`}
-                    >
-                      Learn More
-                    </Link>
-                  </div>
-                </article>
-              </FadeIn>
-            ))}
+          <div className="mt-10">
+            <EventCarousel events={displayEvents} />
           </div>
         </div>
       </section>
@@ -391,17 +362,19 @@ export default async function Home() {
               </a>
             </FadeIn>
 
-            <FadeIn delay={120} className="relative aspect-square overflow-hidden rounded-2xl border border-white/5 shadow-2xl">
-              <iframe
-                src={content.contact.mapEmbedSrc}
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen={true}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className=""
-              />
+            <FadeIn delay={120} className="w-full lg:w-1/2 md:flex md:justify-end">
+              <div className="h-[350px] w-full overflow-hidden rounded-3xl border border-zinc-700/70 bg-black/40 shadow-[0_25px_80px_rgba(0,0,0,0.85)] sm:h-[450px] md:h-[480px] lg:h-[500px] md:w-[95%] lg:w-full max-w-none">
+                <iframe
+                  title="La Creola Kigali"
+                  src={content.contact.mapEmbedSrc}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen={true}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
             </FadeIn>
           </div>
         </div>
