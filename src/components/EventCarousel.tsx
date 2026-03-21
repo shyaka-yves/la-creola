@@ -59,40 +59,34 @@ export function EventCarousel({ events }: Props) {
                 >
                     {/* Render in groups of 3 */}
                     {Array.from({ length: totalPages }).map((_, pageIdx) => (
-                        <div key={pageIdx} className="flex min-w-full shrink-0 gap-6 lg:gap-10">
+                        <div key={pageIdx} className="flex min-w-full shrink-0 gap-6 justify-center">
                             {events
                                 .slice(pageIdx * itemsPerPage, (pageIdx + 1) * itemsPerPage)
                                 .map((event, eventIdx) => (
-                                    <div key={eventIdx} className="w-full md:w-[calc(33.333%-1rem)] lg:w-[calc(33.333%-1.66rem)]">
-                                        <article className="card-glass group flex h-full flex-col overflow-hidden rounded-[2.5rem] border-white/5 transition-all duration-500 hover:-translate-y-2 hover:border-[#EFD077]/20">
-                                            <div className="relative aspect-[4/5] w-full overflow-hidden">
+                                    <div key={eventIdx} className="w-full sm:w-auto sm:max-w-[260px]">
+                                        <article className="card-glass mx-auto flex h-full w-full flex-col overflow-hidden rounded-3xl transition hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-black/60">
+                                            <div className="relative w-full aspect-[4/5] overflow-hidden">
                                                 <Image
                                                     src={event.imageSrc}
                                                     alt={event.title}
                                                     fill
-                                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                                    className="object-contain transition-transform duration-700 hover:scale-105 bg-black/20"
                                                     unoptimized={event.imageSrc.startsWith("http")}
                                                 />
-                                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent opacity-60" />
+                                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                                             </div>
-                                            <div className="flex flex-1 flex-col p-8 lg:p-10 bg-[#020617]/50">
-                                                <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
+                                            <div className="flex flex-1 flex-col px-4 pb-4 pt-3">
+                                                <p className="text-xs font-medium uppercase tracking-[0.2em] text-gold">
                                                     {event.date}
                                                 </p>
-                                                <h3 className="mt-4 text-xl font-semibold tracking-tight text-white line-clamp-1 lg:text-2xl">
-                                                    {event.title}
-                                                </h3>
-                                                <p className="mt-4 text-sm leading-relaxed text-zinc-400 font-light line-clamp-3">
-                                                    {event.description}
-                                                </p>
-                                                <div className="mt-auto pt-8">
-                                                    <Link
-                                                        href={event.href}
-                                                        className="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-[#EFD077] to-[#D4AF37] px-8 py-4 text-[11px] font-bold uppercase tracking-[0.2em] text-black shadow-lg shadow-yellow-500/10 hover:brightness-110 active:scale-95 transition-all w-full"
-                                                    >
-                                                        LEARN MORE
-                                                    </Link>
-                                                </div>
+                                                <h2 className="mt-1.5 text-sm font-semibold text-white">{event.title}</h2>
+                                                <p className="mt-1.5 text-xs text-zinc-300 line-clamp-2">{event.description}</p>
+                                                <Link
+                                                    href={event.href}
+                                                    className="gold-gradient mt-3 inline-flex items-center justify-center rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-black shadow-md shadow-yellow-500/25 transition hover:shadow-yellow-400/40"
+                                                >
+                                                    Learn More
+                                                </Link>
                                             </div>
                                         </article>
                                     </div>
@@ -100,7 +94,7 @@ export function EventCarousel({ events }: Props) {
                             {/* Fill empty spots */}
                             {events.slice(pageIdx * itemsPerPage, (pageIdx + 1) * itemsPerPage).length < itemsPerPage && 
                                 Array.from({ length: itemsPerPage - events.slice(pageIdx * itemsPerPage, (pageIdx + 1) * itemsPerPage).length }).map((_, i) => (
-                                    <div key={`empty-${i}`} className="w-full md:w-[calc(33.333%-1rem)] lg:w-[calc(33.333%-1.66rem)] hidden md:block" />
+                                    <div key={`empty-${i}`} className="hidden sm:block w-[260px]" />
                                 ))
                             }
                         </div>
