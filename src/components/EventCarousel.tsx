@@ -19,27 +19,44 @@ type Props = {
 export function EventCarousel({ events }: Props) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+    const [itemsPerPage, setItemsPerPage] = useState(3);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // Number of items to show at once
-    const itemsPerPage = 3;
-    
-    // Total pages
-    const totalPages = Math.ceil(events.length / itemsPerPage);
+    // Update items per page based on window width
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 640) {
+                setItemsPerPage(1);
+            } else if (window.innerWidth < 1024) {
+                setItemsPerPage(2);
+            } else {
+                setItemsPerPage(3);
+            }
+        };
+
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    // Total possible indices
+    const maxIndex = events.length - itemsPerPage;
 
     const next = useCallback(() => {
-        setCurrentIndex((prev) => (prev + 1) % Math.max(1, totalPages));
-    }, [totalPages]);
+        if (events.length <= itemsPerPage) return;
+        setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+    }, [maxIndex, events.length, itemsPerPage]);
 
     const prev = useCallback(() => {
-        setCurrentIndex((prev) => (prev - 1 + totalPages) % Math.max(1, totalPages));
-    }, [totalPages]);
+        if (events.length <= itemsPerPage) return;
+        setCurrentIndex((prev) => (prev <= 0 ? Math.max(0, maxIndex) : prev - 1));
+    }, [maxIndex, events.length, itemsPerPage]);
 
     useEffect(() => {
         if (!isAutoPlaying || events.length <= itemsPerPage) return;
         const interval = setInterval(next, 5000);
         return () => clearInterval(interval);
-    }, [isAutoPlaying, next, events.length]);
+    }, [isAutoPlaying, next, events.length, itemsPerPage]);
 
     if (events.length === 0) return null;
 
@@ -52,70 +69,61 @@ export function EventCarousel({ events }: Props) {
             <div className="overflow-hidden">
                 <div 
                     ref={containerRef}
-                    className="flex transition-transform duration-700 ease-in-out"
+                    className="flex transition-transform duration-700 ease-in-out gap-6"
                     style={{ 
-                        transform: `translateX(-${currentIndex * 100}%)`,
+                        transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)`,
                     }}
                 >
-                    {/* Render in groups of 3 */}
-                    {Array.from({ length: totalPages }).map((_, pageIdx) => (
-                        <div key={pageIdx} className="flex min-w-full shrink-0 gap-6 justify-center">
-                            {events
-                                .slice(pageIdx * itemsPerPage, (pageIdx + 1) * itemsPerPage)
-                                .map((event, eventIdx) => (
-                                    <div key={eventIdx} className="w-full sm:w-auto sm:max-w-[260px]">
-                                        <article className="card-glass mx-auto flex h-full w-full flex-col overflow-hidden rounded-3xl transition hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-black/60">
-                                            <div className="relative w-full aspect-[4/5] overflow-hidden">
-                                                <Image
-                                                    src={event.imageSrc}
-                                                    alt={event.title}
-                                                    fill
-                                                    className="object-contain transition-transform duration-700 hover:scale-105 bg-black/20"
-                                                    unoptimized={event.imageSrc.startsWith("http")}
-                                                />
-                                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                                            </div>
-                                            <div className="flex flex-1 flex-col px-4 pb-4 pt-3">
-                                                <p className="text-xs font-medium uppercase tracking-[0.2em] text-gold">
-                                                    {event.date}
-                                                </p>
-                                                <h2 className="mt-1.5 text-sm font-semibold text-white">{event.title}</h2>
-                                                <p className="mt-1.5 text-xs text-zinc-300 line-clamp-2">{event.description}</p>
-                                                <Link
-                                                    href={event.href}
-                                                    className="gold-gradient mt-3 inline-flex items-center justify-center rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-black shadow-md shadow-yellow-500/25 transition hover:shadow-yellow-400/40"
-                                                >
-                                                    Learn More
-                                                </Link>
-                                            </div>
-                                        </article>
-                                    </div>
-                                ))}
-                            {/* Fill empty spots */}
-                            {events.slice(pageIdx * itemsPerPage, (pageIdx + 1) * itemsPerPage).length < itemsPerPage && 
-                                Array.from({ length: itemsPerPage - events.slice(pageIdx * itemsPerPage, (pageIdx + 1) * itemsPerPage).length }).map((_, i) => (
-                                    <div key={`empty-${i}`} className="hidden sm:block w-[260px]" />
-                                ))
-                            }
+                    {events.map((event, eventIdx) => (
+                        <div 
+                            key={eventIdx} 
+                            className="w-full shrink-0 px-2 sm:px-0"
+                            style={{ width: `calc(${100 / itemsPerPage}% - ${(gapSize[itemsPerPage] || 0)}px)` }}
+                        >
+                            <article className="card-glass mx-auto flex h-full w-full flex-col overflow-hidden rounded-3xl transition hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-black/60">
+                                <div className="relative w-full aspect-[4/5] overflow-hidden">
+                                    <Image
+                                        src={event.imageSrc}
+                                        alt={event.title}
+                                        fill
+                                        className="object-contain transition-transform duration-700 hover:scale-105 bg-black/20"
+                                        unoptimized={event.imageSrc.startsWith("http")}
+                                    />
+                                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                                </div>
+                                <div className="flex flex-1 flex-col px-4 pb-4 pt-3">
+                                    <p className="text-xs font-medium uppercase tracking-[0.2em] text-gold">
+                                        {event.date}
+                                    </p>
+                                    <h2 className="mt-1.5 text-sm font-semibold text-white">{event.title}</h2>
+                                    <p className="mt-1.5 text-xs text-zinc-300 line-clamp-2">{event.description}</p>
+                                    <Link
+                                        href={event.href}
+                                        className="gold-gradient mt-3 inline-flex items-center justify-center rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-black shadow-md shadow-yellow-500/25 transition hover:shadow-yellow-400/40"
+                                    >
+                                        Learn More
+                                    </Link>
+                                </div>
+                            </article>
                         </div>
                     ))}
                 </div>
             </div>
 
             {/* Navigation Arrows */}
-            {totalPages > 1 && (
+            {events.length > itemsPerPage && (
                 <>
                     <button
                         onClick={prev}
-                        className="absolute -left-2 top-[40%] -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm border border-white/10 hover:border-[#EFD077] hover:text-[#EFD077] transition-all md:-left-12"
-                        aria-label="Previous page"
+                        className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm border border-white/10 hover:border-gold hover:text-gold transition-all lg:-left-12"
+                        aria-label="Previous event"
                     >
                         ‹
                     </button>
                     <button
                         onClick={next}
-                        className="absolute -right-2 top-[40%] -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm border border-white/10 hover:border-[#EFD077] hover:text-[#EFD077] transition-all md:-right-12"
-                        aria-label="Next page"
+                        className="absolute -right-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm border border-white/10 hover:border-gold hover:text-gold transition-all lg:-right-12"
+                        aria-label="Next event"
                     >
                         ›
                     </button>
@@ -123,16 +131,16 @@ export function EventCarousel({ events }: Props) {
             )}
 
             {/* Pagination Dots */}
-            {totalPages > 1 && (
+            {events.length > itemsPerPage && (
                 <div className="mt-8 flex justify-center gap-2">
-                    {Array.from({ length: totalPages }).map((_, index) => (
+                    {Array.from({ length: events.length - itemsPerPage + 1 }).map((_, index) => (
                         <button
                             key={index}
                             onClick={() => setCurrentIndex(index)}
                             className={`h-1 transition-all duration-500 ${
-                                index === currentIndex ? "w-8 bg-[#EFD077]" : "w-2 bg-zinc-800"
+                                index === currentIndex ? "w-8 bg-gold" : "w-2 bg-zinc-800"
                             }`}
-                            aria-label={`Go to page ${index + 1}`}
+                            aria-label={`Go to event ${index + 1}`}
                         />
                     ))}
                 </div>
@@ -140,3 +148,9 @@ export function EventCarousel({ events }: Props) {
         </div>
     );
 }
+
+const gapSize: Record<number, number> = {
+    1: 0,
+    2: 12, // (gap-6 is 24px, so 12px adjustment per item?)
+    3: 16  // (gap-6 / 3 * 2? Actually it's simpler)
+};
