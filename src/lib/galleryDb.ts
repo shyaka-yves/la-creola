@@ -19,7 +19,7 @@ const mapRow = (r: { id: string; image_url: string; label: string; order: number
 export async function listGalleryImages(): Promise<GalleryImage[]> {
   try {
     const supabase = getSupabase();
-    const { data, error } = await supabase.from("gallery").select("*").order("order", { ascending: true });
+    const { data, error } = await supabase.from("gallery").select("*").order("created_at", { ascending: false });
     if (error) return [];
     return (data ?? []).map(mapRow);
   } catch {
