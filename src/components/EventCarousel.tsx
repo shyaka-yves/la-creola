@@ -70,8 +70,9 @@ export function EventCarousel({ events }: Props) {
                 <div 
                     className="flex transition-transform duration-700 ease-out"
                     style={{ 
-                        transform: `translateX(calc(-${currentIndex * (100 / itemsToShow)}% + ${itemsToShow < 3 ? (itemsToShow === 1.1 ? '4.5%' : (itemsToShow === 1.5 ? '25%' : '8%')) : '0%'}))`,
-                        paddingLeft: itemsToShow < 3 ? (itemsToShow === 1.1 ? '5%' : (itemsToShow === 1.5 ? '0%' : '10%')) : '0'
+                        transform: itemsToShow < 3 
+                            ? `translateX(calc(50% - ${(currentIndex + 0.5) * (100 / itemsToShow)}%))`
+                            : `translateX(-${currentIndex * (100 / itemsToShow)}%)`,
                     }}
                 >
                     {events.map((event, index) => (
