@@ -19,18 +19,19 @@ type Props = {
 export function EventCarousel({ events }: Props) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-    const [itemsPerPage, setItemsPerPage] = useState(3);
-    const containerRef = useRef<HTMLDivElement>(null);
+    
+    // Dynamic items to show based on window width
+    // On mobile we show ~1.2 items (peek), on tablet ~2.2, on desktop 3
+    const [itemsToShow, setItemsToShow] = useState(3);
 
-    // Update items per page based on window width
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth < 640) {
-                setItemsPerPage(1);
+                setItemsToShow(1.2);
             } else if (window.innerWidth < 1024) {
-                setItemsPerPage(2);
+                setItemsToShow(2.2);
             } else {
-                setItemsPerPage(3);
+                setItemsToShow(3);
             }
         };
 
@@ -39,67 +40,67 @@ export function EventCarousel({ events }: Props) {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    // Total possible indices
-    const maxIndex = events.length - itemsPerPage;
+    const maxIndex = events.length - (itemsToShow > 1 ? Math.floor(itemsToShow) : 1);
 
     const next = useCallback(() => {
-        if (events.length <= itemsPerPage) return;
-        setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
-    }, [maxIndex, events.length, itemsPerPage]);
+        setCurrentIndex((prev) => (prev >= events.length - 1 ? 0 : prev + 1));
+    }, [events.length]);
 
     const prev = useCallback(() => {
-        if (events.length <= itemsPerPage) return;
-        setCurrentIndex((prev) => (prev <= 0 ? Math.max(0, maxIndex) : prev - 1));
-    }, [maxIndex, events.length, itemsPerPage]);
+        setCurrentIndex((prev) => (prev <= 0 ? events.length - 1 : prev - 1));
+    }, [events.length]);
 
     useEffect(() => {
-        if (!isAutoPlaying || events.length <= itemsPerPage) return;
+        if (!isAutoPlaying || events.length <= 1) return;
         const interval = setInterval(next, 5000);
         return () => clearInterval(interval);
-    }, [isAutoPlaying, next, events.length, itemsPerPage]);
+    }, [isAutoPlaying, next, events.length]);
 
     if (events.length === 0) return null;
 
     return (
         <div 
-            className="relative w-full py-4"
+            className="relative w-full py-4 overflow-x-hidden"
             onMouseEnter={() => setIsAutoPlaying(false)}
             onMouseLeave={() => setIsAutoPlaying(true)}
         >
-            <div className="overflow-hidden">
+            <div className="mx-auto max-w-[1400px]">
                 <div 
-                    ref={containerRef}
-                    className="flex transition-transform duration-700 ease-in-out gap-6"
+                    className="flex transition-transform duration-700 ease-out"
                     style={{ 
-                        transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)`,
+                        transform: `translateX(calc(-${currentIndex * (100 / itemsToShow)}% + ${itemsToShow > 1 && itemsToShow < 3 ? '8%' : '0%'}))`,
+                        paddingLeft: itemsToShow < 3 ? '10%' : '0'
                     }}
                 >
-                    {events.map((event, eventIdx) => (
+                    {events.map((event, index) => (
                         <div 
-                            key={eventIdx} 
-                            className="w-full shrink-0 px-2 sm:px-0"
-                            style={{ width: `calc(${100 / itemsPerPage}% - ${(gapSize[itemsPerPage] || 0)}px)` }}
+                            key={index} 
+                            className="shrink-0 px-3 transition-opacity duration-500"
+                            style={{ 
+                                width: `${100 / itemsToShow}%`,
+                                opacity: itemsToShow < 3 && Math.abs(index - currentIndex) > 1 ? 0.3 : 1
+                            }}
                         >
-                            <article className="card-glass mx-auto flex h-full w-full flex-col overflow-hidden rounded-3xl transition hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-black/60">
-                                <div className="relative w-full aspect-[4/5] overflow-hidden">
+                            <article className="card-glass flex h-full w-full flex-col overflow-hidden rounded-3xl transition-all duration-300 hover:shadow-2xl hover:shadow-black/60">
+                                <div className="relative w-full aspect-[4/5] overflow-hidden bg-black/20">
                                     <Image
                                         src={event.imageSrc}
                                         alt={event.title}
                                         fill
-                                        className="object-contain transition-transform duration-700 hover:scale-105 bg-black/20"
+                                        className="object-contain transition-transform duration-700 hover:scale-105"
                                         unoptimized={event.imageSrc.startsWith("http")}
                                     />
-                                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                                 </div>
-                                <div className="flex flex-1 flex-col px-4 pb-4 pt-3">
-                                    <p className="text-xs font-medium uppercase tracking-[0.2em] text-gold">
+                                <div className="flex flex-1 flex-col px-4 pb-4 pt-4">
+                                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gold">
                                         {event.date}
                                     </p>
-                                    <h2 className="mt-1.5 text-sm font-semibold text-white">{event.title}</h2>
-                                    <p className="mt-1.5 text-xs text-zinc-300 line-clamp-2">{event.description}</p>
+                                    <h2 className="mt-2 text-sm font-semibold text-white leading-tight">{event.title}</h2>
+                                    <p className="mt-2 text-xs text-zinc-400 font-light line-clamp-2">{event.description}</p>
                                     <Link
                                         href={event.href}
-                                        className="gold-gradient mt-3 inline-flex items-center justify-center rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-black shadow-md shadow-yellow-500/25 transition hover:shadow-yellow-400/40"
+                                        className="gold-gradient mt-4 inline-flex items-center justify-center rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.1em] text-black shadow-lg shadow-yellow-500/10 hover:brightness-110 active:scale-95 transition-all w-full"
                                     >
                                         Learn More
                                     </Link>
@@ -110,41 +111,35 @@ export function EventCarousel({ events }: Props) {
                 </div>
             </div>
 
-            {/* Navigation Arrows */}
-            {events.length > itemsPerPage && (
-                <>
-                    <button
-                        onClick={prev}
-                        className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm border border-white/10 hover:border-gold hover:text-gold transition-all lg:-left-12"
-                        aria-label="Previous event"
-                    >
-                        ‹
-                    </button>
-                    <button
-                        onClick={next}
-                        className="absolute -right-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm border border-white/10 hover:border-gold hover:text-gold transition-all lg:-right-12"
-                        aria-label="Next event"
-                    >
-                        ›
-                    </button>
-                </>
-            )}
+            {/* Navigation Arrows - Hidden on small mobile if peek is enough */}
+            <button
+                onClick={prev}
+                className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-md border border-white/10 hover:border-gold hover:text-gold transition-all sm:left-4"
+                aria-label="Previous"
+            >
+                ‹
+            </button>
+            <button
+                onClick={next}
+                className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-md border border-white/10 hover:border-gold hover:text-gold transition-all sm:right-4"
+                aria-label="Next"
+            >
+                ›
+            </button>
 
             {/* Pagination Dots */}
-            {events.length > itemsPerPage && (
-                <div className="mt-8 flex justify-center gap-2">
-                    {Array.from({ length: events.length - itemsPerPage + 1 }).map((_, index) => (
-                        <button
-                            key={index}
-                            onClick={() => setCurrentIndex(index)}
-                            className={`h-1 transition-all duration-500 ${
-                                index === currentIndex ? "w-8 bg-gold" : "w-2 bg-zinc-800"
-                            }`}
-                            aria-label={`Go to event ${index + 1}`}
-                        />
-                    ))}
-                </div>
-            )}
+            <div className="mt-8 flex justify-center gap-1.5">
+                {events.map((_, index) => (
+                    <button
+                        key={index}
+                        onClick={() => setCurrentIndex(index)}
+                        className={`h-1 rounded-full transition-all duration-500 ${
+                            index === currentIndex ? "w-8 bg-gold" : "w-1.5 bg-zinc-800"
+                        }`}
+                        aria-label={`Go to ${index + 1}`}
+                    />
+                ))}
+            </div>
         </div>
     );
 }
