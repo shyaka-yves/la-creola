@@ -45,11 +45,11 @@ export function EventCarousel({ events }: Props) {
 
     return (
         <div 
-            className="relative w-full py-8"
+            className="relative w-full py-4"
             onMouseEnter={() => setIsAutoPlaying(false)}
             onMouseLeave={() => setIsAutoPlaying(true)}
         >
-            <div className="overflow-hidden px-4 md:px-0">
+            <div className="overflow-hidden">
                 <div 
                     ref={containerRef}
                     className="flex transition-transform duration-700 ease-in-out"
@@ -59,13 +59,13 @@ export function EventCarousel({ events }: Props) {
                 >
                     {/* Render in groups of 3 */}
                     {Array.from({ length: totalPages }).map((_, pageIdx) => (
-                        <div key={pageIdx} className="flex min-w-full shrink-0 gap-6">
+                        <div key={pageIdx} className="flex min-w-full shrink-0 gap-6 px-4 md:px-0">
                             {events
                                 .slice(pageIdx * itemsPerPage, (pageIdx + 1) * itemsPerPage)
                                 .map((event, eventIdx) => (
-                                    <div key={eventIdx} className="w-full md:w-1/3">
-                                        <article className="card-glass flex h-full flex-col overflow-hidden rounded-3xl border-white/5 transition hover:-translate-y-1">
-                                            <div className="relative aspect-[4/3] w-full overflow-hidden">
+                                    <div key={eventIdx} className="w-full md:w-[calc(33.333%-1rem)]">
+                                        <article className="card-glass flex h-full flex-col overflow-hidden rounded-2xl border-white/5 transition hover:-translate-y-1">
+                                            <div className="relative aspect-[16/9] w-full overflow-hidden">
                                                 <Image
                                                     src={event.imageSrc}
                                                     alt={event.title}
@@ -75,30 +75,32 @@ export function EventCarousel({ events }: Props) {
                                                 />
                                                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                                             </div>
-                                            <div className="flex flex-1 flex-col px-6 pb-10 pt-8">
-                                                <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
+                                            <div className="flex flex-1 flex-col px-6 pb-8 pt-6 text-center md:text-left">
+                                                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
                                                     {event.date}
                                                 </p>
-                                                <h3 className="mt-4 text-2xl font-medium tracking-tight text-white line-clamp-1">
+                                                <h3 className="mt-3 text-xl font-medium tracking-tight text-white line-clamp-1">
                                                     {event.title}
                                                 </h3>
-                                                <p className="mt-4 text-base leading-relaxed text-zinc-400 font-light line-clamp-2">
+                                                <p className="mt-3 text-sm leading-relaxed text-zinc-400 font-light line-clamp-2">
                                                     {event.description}
                                                 </p>
-                                                <Link
-                                                    href={event.href}
-                                                    className="mt-10 inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-[#EFD077] to-[#D4AF37] px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] text-black shadow-xl shadow-yellow-500/10 hover:brightness-110 active:scale-95 transition-all"
-                                                >
-                                                    Learn More
-                                                </Link>
+                                                <div className="mt-auto pt-6">
+                                                    <Link
+                                                        href={event.href}
+                                                        className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-[#EFD077] to-[#D4AF37] px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-black shadow-xl shadow-yellow-500/10 hover:brightness-110 active:scale-95 transition-all w-full"
+                                                    >
+                                                        Learn More
+                                                    </Link>
+                                                </div>
                                             </div>
                                         </article>
                                     </div>
                                 ))}
-                            {/* Fill empty spots if less than 3 items on the last page */}
+                            {/* Fill empty spots if less than 3 items on the last page to maintain layout */}
                             {events.slice(pageIdx * itemsPerPage, (pageIdx + 1) * itemsPerPage).length < itemsPerPage && 
                                 Array.from({ length: itemsPerPage - events.slice(pageIdx * itemsPerPage, (pageIdx + 1) * itemsPerPage).length }).map((_, i) => (
-                                    <div key={`empty-${i}`} className="w-full md:w-1/3 hidden md:block" />
+                                    <div key={`empty-${i}`} className="w-full md:w-[calc(33.333%-1rem)] hidden md:block" />
                                 ))
                             }
                         </div>
@@ -111,14 +113,14 @@ export function EventCarousel({ events }: Props) {
                 <>
                     <button
                         onClick={prev}
-                        className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm border border-white/10 hover:border-[#EFD077] hover:text-[#EFD077] transition-all lg:-left-16"
+                        className="absolute -left-2 top-[40%] -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm border border-white/10 hover:border-[#EFD077] hover:text-[#EFD077] transition-all md:-left-12"
                         aria-label="Previous page"
                     >
                         ‹
                     </button>
                     <button
                         onClick={next}
-                        className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm border border-white/10 hover:border-[#EFD077] hover:text-[#EFD077] transition-all lg:-right-16"
+                        className="absolute -right-2 top-[40%] -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm border border-white/10 hover:border-[#EFD077] hover:text-[#EFD077] transition-all md:-right-12"
                         aria-label="Next page"
                     >
                         ›
@@ -128,13 +130,13 @@ export function EventCarousel({ events }: Props) {
 
             {/* Pagination Dots */}
             {totalPages > 1 && (
-                <div className="mt-12 flex justify-center gap-4">
+                <div className="mt-8 flex justify-center gap-2">
                     {Array.from({ length: totalPages }).map((_, index) => (
                         <button
                             key={index}
                             onClick={() => setCurrentIndex(index)}
                             className={`h-1 transition-all duration-500 ${
-                                index === currentIndex ? "w-12 bg-[#EFD077]" : "w-4 bg-zinc-800"
+                                index === currentIndex ? "w-8 bg-[#EFD077]" : "w-2 bg-zinc-800"
                             }`}
                             aria-label={`Go to page ${index + 1}`}
                         />
