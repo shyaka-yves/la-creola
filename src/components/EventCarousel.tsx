@@ -26,8 +26,10 @@ export function EventCarousel({ events }: Props) {
 
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerWidth < 640) {
-                setItemsToShow(1.2);
+            if (window.innerWidth < 480) {
+                setItemsToShow(1.1);
+            } else if (window.innerWidth < 768) {
+                setItemsToShow(1.5);
             } else if (window.innerWidth < 1024) {
                 setItemsToShow(2.2);
             } else {
@@ -68,8 +70,8 @@ export function EventCarousel({ events }: Props) {
                 <div 
                     className="flex transition-transform duration-700 ease-out"
                     style={{ 
-                        transform: `translateX(calc(-${currentIndex * (100 / itemsToShow)}% + ${itemsToShow > 1 && itemsToShow < 3 ? '8%' : '0%'}))`,
-                        paddingLeft: itemsToShow < 3 ? '10%' : '0'
+                        transform: `translateX(calc(-${currentIndex * (100 / itemsToShow)}% + ${itemsToShow < 3 ? (itemsToShow === 1.1 ? '4.5%' : (itemsToShow === 1.5 ? '25%' : '8%')) : '0%'}))`,
+                        paddingLeft: itemsToShow < 3 ? (itemsToShow === 1.1 ? '5%' : (itemsToShow === 1.5 ? '0%' : '10%')) : '0'
                     }}
                 >
                     {events.map((event, index) => (
@@ -100,7 +102,7 @@ export function EventCarousel({ events }: Props) {
                                     <p className="mt-2 text-xs text-zinc-400 font-light line-clamp-2">{event.description}</p>
                                     <Link
                                         href={event.href}
-                                        className="gold-gradient mt-4 inline-flex items-center justify-center rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.1em] text-black shadow-lg shadow-yellow-500/10 hover:brightness-110 active:scale-95 transition-all w-full"
+                                        className="gold-gradient mt-4 inline-flex items-center justify-center rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.1em] text-black shadow-lg shadow-yellow-500/10 hover:brightness-110 active:scale-95 transition-all w-full whitespace-nowrap overflow-hidden"
                                     >
                                         Learn More
                                     </Link>
