@@ -59,38 +59,41 @@ export function EventCarousel({ events }: Props) {
                 >
                     {/* Render in groups of 3 */}
                     {Array.from({ length: totalPages }).map((_, pageIdx) => (
-                        <div key={pageIdx} className="flex min-w-full shrink-0 gap-6 px-4 md:px-0">
+                        <div key={pageIdx} className="flex min-w-full shrink-0 gap-8 lg:gap-12">
                             {events
                                 .slice(pageIdx * itemsPerPage, (pageIdx + 1) * itemsPerPage)
                                 .map((event, eventIdx) => (
-                                    <div key={eventIdx} className="w-full md:w-[calc(33.333%-1rem)]">
-                                        <article className="card-glass flex h-full flex-col overflow-hidden rounded-2xl border-white/5 transition hover:-translate-y-1">
-                                            <div className="relative aspect-[16/9] w-full overflow-hidden">
+                                    <div key={eventIdx} className="w-full md:w-[calc(33.333%-2rem)] lg:w-[calc(33.333%-2.66rem)]">
+                                        <article className="card-glass group flex h-full flex-col overflow-hidden rounded-2xl border-white/5 transition-all duration-300 hover:-translate-y-2 hover:border-[#EFD077]/30 hover:shadow-2xl hover:shadow-yellow-500/5">
+                                            <div className="relative aspect-[4/3] w-full overflow-hidden">
                                                 <Image
                                                     src={event.imageSrc}
                                                     alt={event.title}
                                                     fill
-                                                    className="object-contain transition-transform duration-700 hover:scale-105 bg-black/40"
+                                                    className="object-cover transition-transform duration-700 group-hover:scale-110"
                                                     unoptimized={event.imageSrc.startsWith("http")}
                                                 />
-                                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
                                             </div>
-                                            <div className="flex flex-1 flex-col px-6 pb-8 pt-6 text-center md:text-left">
-                                                <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
-                                                    {event.date}
-                                                </p>
-                                                <h3 className="mt-3 text-xl font-medium tracking-tight text-white line-clamp-1">
+                                            <div className="flex flex-1 flex-col p-6 lg:p-8">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="h-px w-8 bg-[#EFD077]" />
+                                                    <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
+                                                        {event.date}
+                                                    </p>
+                                                </div>
+                                                <h3 className="mt-4 text-xl font-medium tracking-tight text-white group-hover:text-[#EFD077] transition-colors line-clamp-1 lg:text-2xl">
                                                     {event.title}
                                                 </h3>
-                                                <p className="mt-3 text-sm leading-relaxed text-zinc-400 font-light line-clamp-2">
+                                                <p className="mt-4 text-sm leading-relaxed text-zinc-400 font-light line-clamp-3">
                                                     {event.description}
                                                 </p>
-                                                <div className="mt-auto pt-6">
+                                                <div className="mt-auto pt-8">
                                                     <Link
                                                         href={event.href}
-                                                        className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-[#EFD077] to-[#D4AF37] px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-black shadow-xl shadow-yellow-500/10 hover:brightness-110 active:scale-95 transition-all w-full"
+                                                        className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-[#EFD077] to-[#D4AF37] px-8 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-black shadow-xl shadow-yellow-500/10 hover:brightness-110 active:scale-95 transition-all w-full"
                                                     >
-                                                        Learn More
+                                                        Details
                                                     </Link>
                                                 </div>
                                             </div>
@@ -100,7 +103,7 @@ export function EventCarousel({ events }: Props) {
                             {/* Fill empty spots if less than 3 items on the last page to maintain layout */}
                             {events.slice(pageIdx * itemsPerPage, (pageIdx + 1) * itemsPerPage).length < itemsPerPage && 
                                 Array.from({ length: itemsPerPage - events.slice(pageIdx * itemsPerPage, (pageIdx + 1) * itemsPerPage).length }).map((_, i) => (
-                                    <div key={`empty-${i}`} className="w-full md:w-[calc(33.333%-1rem)] hidden md:block" />
+                                    <div key={`empty-${i}`} className="w-full md:w-[calc(33.333%-2rem)] lg:w-[calc(33.333%-2.66rem)] hidden md:block" />
                                 ))
                             }
                         </div>

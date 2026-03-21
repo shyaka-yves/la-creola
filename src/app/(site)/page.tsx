@@ -136,7 +136,7 @@ export default async function Home() {
             <div className="h-0.5 w-12 bg-[#EFD077] mx-auto mt-8" />
           </FadeIn>
 
-          <div className="mt-10 px-8 md:px-0">
+          <div className="mt-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <EventCarousel events={displayEvents} />
           </div>
         </div>
