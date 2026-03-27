@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { getOptimizedStorageUrl } from "@/lib/image-utils";
 
 type MediaFile = { name: string; url: string; type: "image" | "video" };
 type Event = { id: string; date: string; title: string; description: string; imageUrl: string; order: number; createdAt: string };
@@ -202,7 +203,14 @@ function EventCard({
   return (
     <div className="card-glass overflow-hidden rounded-3xl">
       <div className="relative w-full aspect-[4/5] overflow-hidden">
-        <Image src={event.imageUrl} alt={event.title} fill className="object-cover" />
+        <Image 
+          src={getOptimizedStorageUrl(event.imageUrl, { width: 400 })} 
+          alt={event.title} 
+          fill 
+          className="object-cover" 
+          unoptimized={true}
+          sizes="(max-width: 768px) 100vw, 33vw"
+        />
       </div>
       <div className="space-y-2 px-4 py-3">
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#D4AF37]">{event.date}</p>
@@ -316,7 +324,14 @@ function EventModal({
                         : "border-zinc-700/50 hover:border-zinc-600"
                     }`}
                   >
-                    <Image src={img.url} alt={img.name} fill className="object-cover" />
+                    <Image 
+                      src={getOptimizedStorageUrl(img.url, { width: 200 })} 
+                      alt={img.name} 
+                      fill 
+                      className="object-cover" 
+                      unoptimized={true}
+                      sizes="200px"
+                    />
                   </button>
                 ))
               )}

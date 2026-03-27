@@ -3,6 +3,7 @@ import { FadeIn } from "@/components/FadeIn";
 import { getSiteContent } from "@/lib/siteContent";
 import { listEvents } from "@/lib/eventsDb";
 import { Metadata } from "next";
+import { getOptimizedStorageUrl } from "@/lib/image-utils";
 
 export const metadata: Metadata = {
   title: "Upcoming Events | La Creola",
@@ -46,10 +47,12 @@ export default async function EventsPage() {
                   <article className="card-glass mx-auto flex h-full w-full sm:w-auto sm:max-w-[260px] flex-col overflow-hidden rounded-3xl transition hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-black/60">
                     <div className="relative w-full aspect-[4/5] overflow-hidden">
                       <Image
-                        src={event.imageUrl}
+                        src={getOptimizedStorageUrl(event.imageUrl, { width: 600 })}
                         alt={event.title}
                         fill
                         className="object-contain transition-transform duration-700 hover:scale-105 bg-black/20"
+                        unoptimized={true}
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                     </div>

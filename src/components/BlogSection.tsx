@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { FadeIn } from "./FadeIn";
+import { getOptimizedStorageUrl } from "@/lib/image-utils";
 
 type BlogItem = {
   category: string;
@@ -39,10 +40,11 @@ export function BlogSection({
             <article className="card-glass flex h-full flex-col overflow-hidden rounded-3xl transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50">
               <div className="relative h-40 w-full overflow-hidden">
                 <Image
-                  src={post.imageSrc}
+                  src={getOptimizedStorageUrl(post.imageSrc, { width: 600 })}
                   alt={post.title}
                   fill
-                  unoptimized={post.imageSrc.startsWith("http")}
+                  unoptimized={true}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="object-contain transition-transform duration-700 hover:scale-105 bg-black/40"
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />

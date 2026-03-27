@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { getOptimizedStorageUrl } from "@/lib/image-utils";
 
 type MediaFile = { name: string; url: string; type: "image" | "video" };
 type GalleryImage = { id: string; imageUrl: string; label: string; order: number; createdAt: string };
@@ -206,7 +207,14 @@ function GalleryImageCard({
   return (
     <div className="card-glass overflow-hidden rounded-3xl">
       <div className="relative h-48">
-        <Image src={image.imageUrl} alt={image.label} fill className="object-cover" />
+        <Image 
+          src={getOptimizedStorageUrl(image.imageUrl, { width: 400 })} 
+          alt={image.label} 
+          fill 
+          className="object-cover" 
+          unoptimized={true}
+          sizes="(max-width: 768px) 100vw, 33vw"
+        />
       </div>
       <div className="space-y-2 px-4 py-3">
         {editingLabel ? (
@@ -316,7 +324,14 @@ function AddImageModal({
                         : "border-zinc-700/50 hover:border-zinc-600"
                     }`}
                   >
-                    <Image src={img.url} alt={img.name} fill className="object-cover" />
+                    <Image 
+                      src={getOptimizedStorageUrl(img.url, { width: 200 })} 
+                      alt={img.name} 
+                      fill 
+                      className="object-cover" 
+                      unoptimized={true}
+                      sizes="200px"
+                    />
                   </button>
                 ))
               )}

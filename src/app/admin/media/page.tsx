@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
+import { getOptimizedStorageUrl } from "@/lib/image-utils";
 
 type MediaFile = { name: string; url: string; type: "image" | "video" | "pdf" };
 
@@ -207,7 +208,14 @@ function MediaCard({
   return (
     <div className="card-glass overflow-hidden rounded-3xl">
       <div className="relative h-40">
-        <Image src={file.url} alt={file.name} fill className="object-cover" />
+        <Image 
+          src={getOptimizedStorageUrl(file.url, { width: 400 })} 
+          alt={file.name} 
+          fill 
+          className="object-cover" 
+          unoptimized={true}
+          sizes="(max-width: 768px) 100vw, 33vw"
+        />
       </div>
       <div className="flex items-center justify-between gap-3 px-4 py-3">
         <div className="min-w-0">
