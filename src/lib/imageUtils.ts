@@ -14,23 +14,23 @@ export interface ImageOptions {
  * Standard URL: https://[id].supabase.co/storage/v1/object/public/[bucket]/[path]
  * Transformed: https://[id].supabase.co/storage/v1/render/image/public/[bucket]/[path]?width=...
  */
-export function getOptimizedImageUrl(src: string, options: ImageOptions = {}): string {
+export function getOptimizedImageUrl(src: string | undefined | null, options: ImageOptions = {}): string {
+  if (!src || typeof src !== 'string') {
+    return src || "";
+  }
+
+  // NOTE: Supabase Image Transformation is a paid feature (Pro Plan).
+  // Since the current project is on the Free Plan, we revert to standard public URLs.
+  // Next.js will still optimize these images on the server side if unoptimized: true is removed from next.config.ts.
+  
   if (!src.includes('supabase.co/storage/v1/object/public/')) {
     return src;
   }
 
-  // Convert object/public to render/image/public
-  let optimizedUrl = src.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/');
-
-  const params = new URLSearchParams();
-  if (options.width) params.set('width', options.width.toString());
-  if (options.height) params.set('height', options.height.toString());
-  if (options.quality) params.set('quality', options.quality.toString());
-  if (options.format) params.set('format', options.format);
-  if (options.resize) params.set('resize', options.resize);
-
-  const queryString = params.toString();
-  return queryString ? `${optimizedUrl}?${queryString}` : optimizedUrl;
+  // We keep the original URL but we could theoretically add Next.js-compatible params 
+  // if we were using a custom loader. For now, we'll just return the src and let 
+  // Next.js Image component handle the optimization via proxying.
+  return src;
 }
 
 /**
