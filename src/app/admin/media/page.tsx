@@ -3,7 +3,15 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 
-type MediaFile = { name: string; url: string; type: "image" | "video" | "pdf" };
+type MediaFile = { name: string; url: string; type: "image" | "video" | "pdf"; size?: number };
+
+function formatFileSize(bytes?: number) {
+  if (!bytes) return "0 KB";
+  const kb = bytes / 1024;
+  if (kb < 1024) return `${kb.toFixed(1)} KB`;
+  const mb = kb / 1024;
+  return `${mb.toFixed(1)} MB`;
+}
 
 export default function AdminMediaPage() {
   const [files, setFiles] = useState<MediaFile[]>([]);
@@ -189,104 +197,133 @@ export default function AdminMediaPage() {
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="space-y-3">
-      <p className="text-sm font-semibold text-white">{title}</p>
-      {children}
-    </div>
-  );
+    return (
+        <div className="space-y-3">
+            <p className="text-sm font-semibold text-white">{title}</p>
+            {children}
+        </div>
+    );
 }
 
 function MediaCard({
-  file,
-  onDelete,
+    file,
+    onDelete,
 }: {
-  file: MediaFile;
-  onDelete: (name: string) => void;
+    file: MediaFile;
+    onDelete: (name: string) => void;
 }) {
-  return (
-    <div className="card-glass overflow-hidden rounded-3xl">
-      <div className="relative h-40">
-        <Image src={file.url} alt={file.name} fill className="object-cover" />
-      </div>
-      <div className="flex items-center justify-between gap-3 px-4 py-3">
-        <div className="min-w-0">
-          <p className="truncate text-xs text-zinc-300">{file.name}</p>
-          <p className="mt-0.5 text-[11px] uppercase tracking-[0.18em] text-zinc-500">
-            {file.type}
-          </p>
+    const isLarge = (file.size || 0) > 1024 * 1024; // > 1MB
+
+    return (
+        <div className="card-glass overflow-hidden rounded-3xl">
+            <div className="relative h-40 bg-zinc-900/50">
+                <Image
+                    src={file.url}
+                    alt={file.name}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    unoptimized
+                />
+            </div>
+            <div className="flex items-center justify-between gap-3 px-4 py-3">
+                <div className="min-w-0">
+                    <p className="truncate text-xs font-medium text-zinc-100">{file.name}</p>
+                    <div className="mt-1 flex items-center gap-2">
+                        <p className="text-[10px] uppercase tracking-[0.18em] text-zinc-500">
+                            {file.type}
+                        </p>
+                        <span className="h-0.5 w-0.5 rounded-full bg-zinc-600" />
+                        <p className={`text-[10px] font-bold ${isLarge ? "text-red-400" : "text-zinc-400"}`}>
+                            {formatFileSize(file.size)}
+                        </p>
+                    </div>
+                </div>
+                <button
+                    type="button"
+                    onClick={() => onDelete(file.name)}
+                    className="rounded-full border border-zinc-700/80 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400 transition-colors hover:border-red-500/50 hover:text-red-400"
+                >
+                    Delete
+                </button>
+            </div>
         </div>
-        <button
-          type="button"
-          onClick={() => onDelete(file.name)}
-          className="rounded-full border border-zinc-700/80 px-3 py-1 text-xs text-zinc-200 hover:border-red-400/50 hover:text-red-200"
-        >
-          Delete
-        </button>
-      </div>
-    </div>
-  );
+    );
 }
 
 function VideoCard({
-  file,
-  onDelete,
+    file,
+    onDelete,
 }: {
-  file: MediaFile;
-  onDelete: (name: string) => void;
+    file: MediaFile;
+    onDelete: (name: string) => void;
 }) {
-  return (
-    <div className="card-glass overflow-hidden rounded-3xl">
-      <div className="relative">
-        <video src={file.url} controls className="h-56 w-full bg-black" />
-      </div>
-      <div className="flex items-center justify-between gap-3 px-4 py-3">
-        <div className="min-w-0">
-          <p className="truncate text-xs text-zinc-300">{file.name}</p>
-          <p className="mt-0.5 text-[11px] uppercase tracking-[0.18em] text-zinc-500">
-            {file.type}
-          </p>
+    const isLarge = (file.size || 0) > 5 * 1024 * 1024; // > 5MB for video
+
+    return (
+        <div className="card-glass overflow-hidden rounded-3xl">
+            <div className="relative">
+                <video src={file.url} controls className="h-56 w-full bg-black" />
+            </div>
+            <div className="flex items-center justify-between gap-3 px-4 py-3">
+                <div className="min-w-0">
+                    <p className="truncate text-xs font-medium text-zinc-100">{file.name}</p>
+                    <div className="mt-1 flex items-center gap-2">
+                        <p className="text-[10px] uppercase tracking-[0.18em] text-zinc-500">
+                            {file.type}
+                        </p>
+                        <span className="h-0.5 w-0.5 rounded-full bg-zinc-600" />
+                        <p className={`text-[10px] font-bold ${isLarge ? "text-red-400" : "text-zinc-400"}`}>
+                            {formatFileSize(file.size)}
+                        </p>
+                    </div>
+                </div>
+                <button
+                    type="button"
+                    onClick={() => onDelete(file.name)}
+                    className="rounded-full border border-zinc-700/80 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400 transition-colors hover:border-red-500/50 hover:text-red-400"
+                >
+                    Delete
+                </button>
+            </div>
         </div>
-        <button
-          type="button"
-          onClick={() => onDelete(file.name)}
-          className="rounded-full border border-zinc-700/80 px-3 py-1 text-xs text-zinc-200 hover:border-red-400/50 hover:text-red-200"
-        >
-          Delete
-        </button>
-      </div>
-    </div>
-  );
+    );
 }
 
 function PdfCard({
-  file,
-  onDelete,
+    file,
+    onDelete,
 }: {
-  file: MediaFile;
-  onDelete: (name: string) => void;
+    file: MediaFile;
+    onDelete: (name: string) => void;
 }) {
-  return (
-    <div className="card-glass overflow-hidden rounded-3xl">
-      <div className="flex h-32 items-center justify-center bg-zinc-900/80">
-        <span className="text-4xl text-zinc-500">PDF</span>
-      </div>
-      <div className="flex items-center justify-between gap-3 px-4 py-3">
-        <div className="min-w-0">
-          <p className="truncate text-xs text-zinc-300">{file.name}</p>
-          <p className="mt-0.5 text-[11px] uppercase tracking-[0.18em] text-zinc-500">
-            {file.type}
-          </p>
+    return (
+        <div className="card-glass overflow-hidden rounded-3xl">
+            <div className="flex h-32 items-center justify-center bg-zinc-900/80">
+                <span className="text-4xl text-zinc-500">PDF</span>
+            </div>
+            <div className="flex items-center justify-between gap-3 px-4 py-3">
+                <div className="min-w-0">
+                    <p className="truncate text-xs font-medium text-zinc-100">{file.name}</p>
+                    <div className="mt-1 flex items-center gap-2">
+                        <p className="text-[10px] uppercase tracking-[0.18em] text-zinc-500">
+                            {file.type}
+                        </p>
+                        <span className="h-0.5 w-0.5 rounded-full bg-zinc-600" />
+                        <p className="text-[10px] font-bold text-zinc-400">
+                            {formatFileSize(file.size)}
+                        </p>
+                    </div>
+                </div>
+                <button
+                    type="button"
+                    onClick={() => onDelete(file.name)}
+                    className="rounded-full border border-zinc-700/80 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400 transition-colors hover:border-red-500/50 hover:text-red-400"
+                >
+                    Delete
+                </button>
+            </div>
         </div>
-        <button
-          type="button"
-          onClick={() => onDelete(file.name)}
-          className="rounded-full border border-zinc-700/80 px-3 py-1 text-xs text-zinc-200 hover:border-red-400/50 hover:text-red-200"
-        >
-          Delete
-        </button>
-      </div>
-    </div>
-  );
+    );
 }
 

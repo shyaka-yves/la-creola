@@ -52,6 +52,7 @@ export async function GET() {
       name: f.name,
       url: publicUrl(f.name),
       type: fileType(f.name),
+      size: (f as any).metadata?.size || 0,
     }));
 
   return NextResponse.json({ ok: true, files });
