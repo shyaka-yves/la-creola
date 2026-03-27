@@ -200,7 +200,7 @@ export default async function Home() {
                 rel="noopener noreferrer"
                 className="group block transition-transform duration-500 hover:scale-105"
               >
-                <div className="relative aspect-[3/1] w-full filter brightness-90 contrast-125 grayscale hover:grayscale-0 transition-all duration-500">
+                <div className="relative aspect-[3/1] w-full transition-all duration-500">
                   <Image
                     src="/azzurri-rooftop.png"
                     alt="Azzurri Rooftop Restaurant"
@@ -221,7 +221,7 @@ export default async function Home() {
                 rel="noopener noreferrer"
                 className="group block transition-transform duration-500 hover:scale-105"
               >
-                <div className="relative aspect-[3/1] w-full filter brightness-90 contrast-125 grayscale hover:grayscale-0 transition-all duration-500">
+                <div className="relative aspect-[3/1] w-full transition-all duration-500">
                   <Image
                     src="/azzurri-club.png"
                     alt="Azzurri Club & Lounge"

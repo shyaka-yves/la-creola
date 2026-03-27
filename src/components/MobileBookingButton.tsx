@@ -12,13 +12,12 @@ export function MobileBookingButton() {
   }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[60] p-4 lg:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-[60] p-6 lg:hidden bg-gradient-to-t from-black via-black/80 to-transparent pt-12">
       <Link
         href="/book"
-        className="flex w-full items-center justify-center rounded-xl bg-[#FDE68A] py-4 text-xs font-bold uppercase tracking-[0.3em] text-black shadow-2xl transition-all active:scale-95 sm:text-sm"
+        className="flex w-full items-center justify-center border border-[#EFD077] bg-black py-4 text-[13px] font-medium uppercase tracking-[0.4em] text-[#EFD077] transition-all active:scale-95"
       >
-        <span className="mr-2 h-2 w-2 animate-pulse rounded-full bg-black"></span>
-        Book a Table Now
+        BOOK A TABLE
       </Link>
     </div>
   );
