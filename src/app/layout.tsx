@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
+import { MobileBookingButton } from "@/components/MobileBookingButton";
 
 export const metadata: Metadata = {
   title: "La Creola | Kigali Restaurant",
@@ -34,6 +35,7 @@ export default function RootLayout({
         className={`${GeistSans.variable} ${GeistMono.variable} antialiased bg-black text-zinc-100`}
       >
         {children}
+        <MobileBookingButton />
       </body>
     </html>
   );

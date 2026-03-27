@@ -183,6 +183,61 @@ export default async function Home() {
         </div>
       </section>
 
+      <section className="py-16 bg-zinc-950/50">
+        <div className="mx-auto max-w-7xl px-6">
+          <FadeIn className="text-center mb-12">
+            <h2 className="heading-font text-[10px] uppercase tracking-[0.4em] text-[#D4AF37]">
+              Explore Our Other Destinations
+            </h2>
+            <div className="h-0.5 w-12 bg-[#EFD077] mx-auto mt-6" />
+          </FadeIn>
+
+          <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
+            <FadeIn delay={100} className="w-full max-w-[280px]">
+              <a
+                href="https://azzurrirwanda.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block transition-transform duration-500 hover:scale-105"
+              >
+                <div className="relative aspect-[3/1] w-full filter brightness-90 contrast-125 grayscale hover:grayscale-0 transition-all duration-500">
+                  <Image
+                    src="/azzurri-rooftop.png"
+                    alt="Azzurri Rooftop Restaurant"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+                <p className="mt-4 text-center text-[11px] uppercase tracking-[0.3em] text-zinc-500 group-hover:text-[#EFD077] transition-colors">
+                  Rooftop Restaurant
+                </p>
+              </a>
+            </FadeIn>
+
+            <FadeIn delay={200} className="w-full max-w-[280px]">
+              <a
+                href="https://azzurrirwanda.com/club"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block transition-transform duration-500 hover:scale-105"
+              >
+                <div className="relative aspect-[3/1] w-full filter brightness-90 contrast-125 grayscale hover:grayscale-0 transition-all duration-500">
+                  <Image
+                    src="/azzurri-club.png"
+                    alt="Azzurri Club & Lounge"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+                <p className="mt-4 text-center text-[11px] uppercase tracking-[0.3em] text-zinc-500 group-hover:text-[#EFD077] transition-colors">
+                  Club & Lounge
+                </p>
+              </a>
+            </FadeIn>
+          </div>
+        </div>
+      </section>
+
       <section className="py-12 lg:py-16 bg-black">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-16 px-6 lg:flex-row-reverse lg:gap-24">
           <FadeIn className="w-full lg:w-1/2">
