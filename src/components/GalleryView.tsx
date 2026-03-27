@@ -4,7 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 import { FadeIn } from "@/components/FadeIn";
 import { GallerySlideshow } from "@/components/GallerySlideshow";
-import { getOptimizedStorageUrl } from "@/lib/image-utils";
 
 type ImageItem = { id: string; src: string; label: string };
 
@@ -47,12 +46,11 @@ export function GalleryView({
                                     className="group relative aspect-square w-full overflow-hidden rounded-2xl border border-white/5 bg-zinc-900/50 transition-all hover:border-[#D4AF37]/30 hover:shadow-2xl hover:shadow-yellow-900/10"
                                 >
                                     <Image
-                                        src={getOptimizedStorageUrl(img.src, { width: 600 })}
+                                        src={img.src}
                                         alt={img.label}
                                         fill
                                         className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                        unoptimized={true}
-                                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                        unoptimized={img.src.startsWith("http")}
                                     />
                                     <div className="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex items-center justify-center">
                                         <svg className="h-8 w-8 text-[#D4AF37] transform scale-75 group-hover:scale-100 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { getOptimizedStorageUrl } from "@/lib/image-utils";
 
 type EventItem = {
     title: string;
@@ -88,12 +87,11 @@ export function EventCarousel({ events }: Props) {
                             <article className="card-glass flex h-full w-full flex-col overflow-hidden rounded-3xl transition-all duration-300 hover:shadow-2xl hover:shadow-black/60">
                                 <div className="relative w-full aspect-[4/5] overflow-hidden bg-black/20">
                                     <Image
-                                        src={getOptimizedStorageUrl(event.imageSrc, { width: 600 })}
+                                        src={event.imageSrc}
                                         alt={event.title}
                                         fill
                                         className="object-contain transition-transform duration-700 hover:scale-105"
-                                        unoptimized={true}
-                                        sizes="(max-width: 768px) 80vw, (max-width: 1024px) 40vw, 30vw"
+                                        unoptimized={event.imageSrc.startsWith("http")}
                                     />
                                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                                 </div>

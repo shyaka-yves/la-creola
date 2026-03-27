@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
-import { getOptimizedStorageUrl } from "@/lib/image-utils";
 
 type ImageItem = {
     id: string;
@@ -84,13 +83,12 @@ export function GallerySlideshow({ images, isOpen, onClose, startIndex = 0 }: Pr
                 <div className="relative h-[85vh] w-full max-w-7xl overflow-hidden rounded-2xl">
                     <Image
                         key={currentImage.id}
-                        src={getOptimizedStorageUrl(currentImage.src, { width: 1200, quality: 75 })}
+                        src={currentImage.src}
                         alt={currentImage.label}
                         fill
                         className="object-contain"
                         priority
-                        unoptimized={true}
-                        sizes="100vw"
+                        unoptimized={currentImage.src.startsWith("http")}
                     />
                 </div>
 
@@ -140,7 +138,7 @@ export function GallerySlideshow({ images, isOpen, onClose, startIndex = 0 }: Pr
                             className={`relative h-16 w-24 shrink-0 overflow-hidden rounded-lg border-2 transition-all ${currentIndex === idx ? "border-[#D4AF37] opacity-100" : "border-transparent opacity-40 hover:opacity-80"
                                 }`}
                         >
-                            <Image src={getOptimizedStorageUrl(img.src, { width: 200 })} alt={img.label} fill className="object-cover" unoptimized={true} sizes="100px" />
+                            <Image src={img.src} alt={img.label} fill className="object-cover" unoptimized={img.src.startsWith("http")} />
                         </button>
                     ))}
                 </div>
