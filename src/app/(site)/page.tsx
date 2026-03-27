@@ -153,6 +153,7 @@ export default async function Home() {
                 fill
                 className="absolute inset-0 h-full w-full object-cover opacity-90"
                 sizes="(max-width: 1024px) 100vw, 50vw"
+                loading="lazy"
               />
             </div>
           </FadeIn>
@@ -251,6 +252,7 @@ export default async function Home() {
                 fill
                 className="absolute inset-0 h-full w-full object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
+                loading="lazy"
               />
             </div>
           </FadeIn>
@@ -346,6 +348,7 @@ export default async function Home() {
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
                     sizes="(max-width: 1024px) 50vw, 33vw"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex items-center justify-center">
                     <Link

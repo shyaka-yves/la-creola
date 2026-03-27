@@ -224,6 +224,7 @@ function MediaCard({
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 33vw"
                     unoptimized
+                    loading="lazy"
                 />
             </div>
             <div className="flex items-center justify-between gap-3 px-4 py-3">

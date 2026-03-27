@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { FadeIn } from "@/components/FadeIn";
 import { getSiteContent } from "@/lib/siteContent";
 import { Metadata } from "next";
@@ -18,10 +19,13 @@ export default async function AboutPage() {
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-12 px-6 lg:flex-row lg:gap-16">
           <FadeIn className="w-full lg:w-1/2">
             <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-white/10 bg-zinc-900 shadow-2xl lg:rounded-2xl">
-              <img
+              <Image
                 src={content.about.imageSrc || "/uploads/FRIDAYYY.png"}
                 alt="La Creola Interior"
+                fill
                 className="absolute inset-0 h-full w-full object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                loading="lazy"
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
             </div>

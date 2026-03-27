@@ -96,6 +96,7 @@ export function EventCarousel({ events }: Props) {
                                         fill
                                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                        loading="lazy"
                                     />
                                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                                 </div>

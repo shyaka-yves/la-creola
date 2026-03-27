@@ -52,6 +52,7 @@ export function GalleryView({
                                         fill
                                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                                         sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                                        loading="lazy"
                                     />
                                     <div className="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex items-center justify-center">
                                         <svg className="h-8 w-8 text-[#D4AF37] transform scale-75 group-hover:scale-100 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
