@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
+import { getOptimizedImageUrl, IMAGE_PRESETS } from "@/lib/imageUtils";
 import { FadeIn } from "./FadeIn";
 
 type BlogItem = {
@@ -39,11 +41,11 @@ export function BlogSection({
             <article className="card-glass flex h-full flex-col overflow-hidden rounded-3xl transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50">
               <div className="relative h-40 w-full overflow-hidden">
                 <Image
-                  src={post.imageSrc}
+                  src={getOptimizedImageUrl(post.imageSrc, IMAGE_PRESETS.BLOG_CARD)}
                   alt={post.title}
                   fill
-                  unoptimized={post.imageSrc.startsWith("http")}
-                  className="object-contain transition-transform duration-700 hover:scale-105 bg-black/40"
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
               </div>

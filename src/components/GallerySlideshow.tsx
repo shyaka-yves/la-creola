@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
+import { getOptimizedImageUrl, IMAGE_PRESETS } from "@/lib/imageUtils";
 
 type ImageItem = {
     id: string;
@@ -83,12 +84,11 @@ export function GallerySlideshow({ images, isOpen, onClose, startIndex = 0 }: Pr
                 <div className="relative h-[85vh] w-full max-w-7xl overflow-hidden rounded-2xl">
                     <Image
                         key={currentImage.id}
-                        src={currentImage.src}
+                        src={getOptimizedImageUrl(currentImage.src, IMAGE_PRESETS.HERO)}
                         alt={currentImage.label}
                         fill
                         className="object-contain"
                         priority
-                        unoptimized={currentImage.src.startsWith("http")}
                     />
                 </div>
 

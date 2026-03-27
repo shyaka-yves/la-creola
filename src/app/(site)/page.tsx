@@ -8,6 +8,7 @@ import { listEvents } from "@/lib/eventsDb";
 import { listGalleryImages } from "@/lib/galleryDb";
 import { getSiteContent } from "@/lib/siteContent";
 import { EventCarousel } from "@/components/EventCarousel";
+import { getOptimizedImageUrl, IMAGE_PRESETS } from "@/lib/imageUtils";
 
 export const metadata: Metadata = {
   title: "La Creola | Kigali Restaurant & Lounge",
@@ -63,7 +64,7 @@ export default async function Home() {
               className="h-full w-full object-cover opacity-60"
             />
           ) : (<Image
-            src={content.hero.mediaSrc || "/uploads/FRIDAYYY.png"}
+            src={getOptimizedImageUrl(content.hero.mediaSrc || "/uploads/FRIDAYYY.png", IMAGE_PRESETS.HERO)}
             alt="La Creola Restaurant Ambiance"
             fill
             priority
@@ -146,10 +147,12 @@ export default async function Home() {
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-16 px-6 lg:flex-row lg:gap-24">
           <FadeIn className="w-full lg:w-1/2">
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-zinc-900 shadow-2xl border border-white/5">
-              <img
-                src={content.about.imageSrc}
+              <Image
+                src={getOptimizedImageUrl(content.about.imageSrc, IMAGE_PRESETS.BLOG_CARD)}
                 alt={content.about.title}
+                fill
                 className="absolute inset-0 h-full w-full object-cover opacity-90"
+                sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </div>
           </FadeIn>
@@ -242,10 +245,12 @@ export default async function Home() {
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-16 px-6 lg:flex-row-reverse lg:gap-24">
           <FadeIn className="w-full lg:w-1/2">
             <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-zinc-900 shadow-2xl border border-white/5 max-w-md mx-auto lg:mx-0 lg:ml-auto">
-              <img
-                src={content.excellence.imageSrc}
+              <Image
+                src={getOptimizedImageUrl(content.excellence.imageSrc, IMAGE_PRESETS.BLOG_CARD)}
                 alt={content.excellence.title}
+                fill
                 className="absolute inset-0 h-full w-full object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </div>
           </FadeIn>
@@ -336,11 +341,11 @@ export default async function Home() {
               <FadeIn key={img.id} delay={idx * 50}>
                 <div className="group relative aspect-square overflow-hidden rounded-2xl border border-white/5 bg-zinc-900/50">
                   <Image
-                    src={img.imageUrl}
+                    src={getOptimizedImageUrl(img.imageUrl, IMAGE_PRESETS.GALLERY_GRID)}
                     alt={img.label}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
-                    unoptimized={img.imageUrl.startsWith("http")}
+                    sizes="(max-width: 1024px) 50vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex items-center justify-center">
                     <Link

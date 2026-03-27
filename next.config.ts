@@ -1,7 +1,22 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  images: { unoptimized: true },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'fbgptlgpsleipafdmrwm.supabase.co',
+        port: '',
+        pathname: '/storage/v1/object/public/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'fbgptlgpsleipafdmrwm.supabase.co',
+        port: '',
+        pathname: '/storage/v1/render/image/public/**',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

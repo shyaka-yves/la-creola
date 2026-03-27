@@ -3,6 +3,10 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { getOptimizedImageUrl, IMAGE_PRESETS } from "@/lib/imageUtils";
+// The instruction provided `import { FadeIn } from "./FadeIn";` but FadeIn is not used in the provided code.
+// I will add it as per instruction, but note it's unused in the current context.
+import { FadeIn } from "./FadeIn";
 
 type EventItem = {
     title: string;
@@ -87,11 +91,11 @@ export function EventCarousel({ events }: Props) {
                             <article className="card-glass flex h-full w-full flex-col overflow-hidden rounded-3xl transition-all duration-300 hover:shadow-2xl hover:shadow-black/60">
                                 <div className="relative w-full aspect-[4/5] overflow-hidden bg-black/20">
                                     <Image
-                                        src={event.imageSrc}
+                                        src={getOptimizedImageUrl(event.imageSrc, IMAGE_PRESETS.BLOG_CARD)}
                                         alt={event.title}
                                         fill
-                                        className="object-contain transition-transform duration-700 hover:scale-105"
-                                        unoptimized={event.imageSrc.startsWith("http")}
+                                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     />
                                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                                 </div>
