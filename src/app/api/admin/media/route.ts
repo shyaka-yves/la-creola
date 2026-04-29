@@ -1,104 +1,90 @@
 import { NextResponse } from "next/server";
-import crypto from "node:crypto";
-import { getSupabase } from "@/lib/supabaseServer";
+import { cloudinary } from "@/lib/cloudinary";
 
 export const runtime = "nodejs";
 
-const BUCKET = "uploads";
-
-function fileType(name: string): "image" | "video" | "pdf" {
-  const lower = name.toLowerCase();
-  if (lower.match(/\.(mp4|webm|mov)$/)) return "video";
-  if (lower.match(/\.(pdf)$/)) return "pdf";
+function fileType(res: any): "image" | "video" | "pdf" {
+  if (res.resource_type === "video") return "video";
+  const format = res.format?.toLowerCase() || "";
+  if (format === "pdf") return "pdf";
   return "image";
 }
 
-function publicUrl(filename: string): string {
-  const base = process.env.SUPABASE_URL?.replace(/\/$/, "") ?? "";
-  return `${base}/storage/v1/object/public/${BUCKET}/${filename}`;
-}
-
 export async function GET() {
-  let supabase;
   try {
-    supabase = getSupabase();
-  } catch (err) {
-    const message =
-      err instanceof Error && err.message.includes("SUPABASE_URL")
-        ? 'Server is missing "SUPABASE_URL" or "SUPABASE_SERVICE_ROLE_KEY". Set these environment variables in your Vercel project (see .env.example).'
-        : err instanceof Error
-          ? err.message
-          : "Failed to initialize Supabase client.";
+    // Fetch images and videos from Cloudinary
+    // Note: PDF files are usually classified as 'image' or 'raw' depending on how they were uploaded
+    const [imageRes, videoRes] = await Promise.all([
+      cloudinary.api.resources({ max_results: 500, type: 'upload', resource_type: 'image' }),
+      cloudinary.api.resources({ max_results: 500, type: 'upload', resource_type: 'video' })
+    ]);
 
-    return NextResponse.json({ ok: false, error: message }, { status: 500 });
-  }
+    const allResources = [...imageRes.resources, ...videoRes.resources];
+    
+    // Sort by creation date descending
+    allResources.sort((a: any, b: any) => 
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
 
-  const { data: list, error } = await supabase.storage
-    .from(BUCKET)
-    .list("", { sortBy: { column: "name", order: "asc" } });
-
-  if (error) {
-    const msg =
-      error.message?.toLowerCase().includes("not found") ||
-      error.message?.toLowerCase().includes("bucket")
-        ? `Storage bucket "${BUCKET}" not found. Create a public bucket named "uploads" in Supabase Dashboard → Storage → New bucket.`
-        : error.message;
-    return NextResponse.json({ ok: false, error: msg }, { status: 500 });
-  }
-
-  const files = (list ?? [])
-    .filter((f) => f.name && !f.name.startsWith("."))
-    .map((f) => ({
-      name: f.name,
-      url: publicUrl(f.name),
-      type: fileType(f.name),
-      size: (f as any).metadata?.size || 0,
+    const files = allResources.map((res: any) => ({
+      name: res.public_id,
+      url: res.secure_url,
+      type: fileType(res),
+      size: res.bytes || 0,
     }));
 
-  return NextResponse.json({ ok: true, files });
+    return NextResponse.json({ ok: true, files });
+  } catch (err: any) {
+    console.error("Cloudinary list error:", err);
+    return NextResponse.json({ 
+      ok: false, 
+      error: err.message || "Failed to load media from Cloudinary" 
+    }, { status: 500 });
+  }
 }
 
 export async function POST(req: Request) {
-  const form = await req.formData();
-  const file = form.get("file");
-
-  if (!(file instanceof File)) {
-    return NextResponse.json({ ok: false, error: "Missing file" }, { status: 400 });
-  }
-
-  const ext = file.name.includes(".") ? `.${file.name.split(".").pop()}`.toLowerCase() : "";
-  const safeExt = ext.match(/^\.(png|jpg|jpeg|webp|gif|mp4|webm|mov|pdf)$/) ? ext : "";
-  const filename = `${Date.now()}-${crypto.randomBytes(10).toString("hex")}${safeExt}`;
-
-  const buffer = Buffer.from(await file.arrayBuffer());
-  let supabase;
   try {
-    supabase = getSupabase();
-  } catch (err) {
-    const message =
-      err instanceof Error && err.message.includes("SUPABASE_URL")
-        ? 'Server is missing "SUPABASE_URL" or "SUPABASE_SERVICE_ROLE_KEY". Set these environment variables in your Vercel project (see .env.example).'
-        : err instanceof Error
-          ? err.message
-          : "Failed to initialize Supabase client.";
+    const form = await req.formData();
+    const file = form.get("file");
 
-    return NextResponse.json({ ok: false, error: message }, { status: 500 });
+    if (!(file instanceof File)) {
+      return NextResponse.json({ ok: false, error: "Missing file" }, { status: 400 });
+    }
+
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    // Upload to Cloudinary using a buffer
+    const uploadRes = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          resource_type: "auto",
+          folder: "la-creola", // Optional: put in a folder
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      uploadStream.end(buffer);
+    });
+
+    const result = uploadRes as any;
+
+    return NextResponse.json({
+      ok: true,
+      file: { 
+        name: result.public_id, 
+        url: result.secure_url,
+        type: result.resource_type === "video" ? "video" : (result.format === "pdf" ? "pdf" : "image")
+      },
+    });
+  } catch (err: any) {
+    console.error("Cloudinary upload error:", err);
+    return NextResponse.json({ 
+      ok: false, 
+      error: err.message || "Upload to Cloudinary failed" 
+    }, { status: 500 });
   }
-
-  const { error } = await supabase.storage.from(BUCKET).upload(filename, buffer, {
-    contentType: file.type || undefined,
-    upsert: false,
-  });
-
-  if (error) {
-    const msg = error.message?.toLowerCase().includes("not found") || error.message?.toLowerCase().includes("bucket")
-      ? `Storage bucket "${BUCKET}" not found. Create a public bucket named "uploads" in Supabase Dashboard → Storage → New bucket.`
-      : error.message;
-    return NextResponse.json({ ok: false, error: msg }, { status: 500 });
-  }
-
-  return NextResponse.json({
-    ok: true,
-    file: { name: filename, url: publicUrl(filename) },
-  });
 }

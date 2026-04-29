@@ -10,26 +10,40 @@ export interface ImageOptions {
 }
 
 /**
- * Transforms a Supabase storage URL into an optimized transformation URL.
- * Standard URL: https://[id].supabase.co/storage/v1/object/public/[bucket]/[path]
- * Transformed: https://[id].supabase.co/storage/v1/render/image/public/[bucket]/[path]?width=...
+ * Transforms a media URL (Supabase or Cloudinary) into an optimized transformation URL.
  */
 export function getOptimizedImageUrl(src: string | undefined | null, options: ImageOptions = {}): string {
   if (!src || typeof src !== 'string') {
     return src || "";
   }
 
-  // NOTE: Supabase Image Transformation is a paid feature (Pro Plan).
-  // Since the current project is on the Free Plan, we revert to standard public URLs.
-  // Next.js will still optimize these images on the server side if unoptimized: true is removed from next.config.ts.
-  
-  if (!src.includes('supabase.co/storage/v1/object/public/')) {
+  // Handle Cloudinary URLs
+  if (src.includes('res.cloudinary.com')) {
+    const parts = src.split('/upload/');
+    if (parts.length === 2) {
+      const { width, quality = 80, format = 'auto' } = options;
+      
+      // Cloudinary transformations: f_auto (auto format), q_auto (auto quality)
+      // If width is provided, we use c_limit or c_fill
+      let params = `f_${format === 'webp' ? 'webp' : 'auto'},q_${quality === 100 ? 'auto:best' : 'auto'}`;
+      
+      if (width) {
+        params += `,w_${width},c_limit`;
+      }
+      
+      return `${parts[0]}/upload/${params}/${parts[1]}`;
+    }
     return src;
   }
 
-  // We keep the original URL but we could theoretically add Next.js-compatible params 
-  // if we were using a custom loader. For now, we'll just return the src and let 
-  // Next.js Image component handle the optimization via proxying.
+  // Handle Supabase URLs (Fallback)
+  if (src.includes('supabase.co/storage/v1/object/public/')) {
+    // Supabase Image Transformation is a paid feature (Pro Plan).
+    // For now we return the original URL, but Next.js will optimize it 
+    // because we added it to remotePatterns and removed global unoptimized: true.
+    return src;
+  }
+
   return src;
 }
 

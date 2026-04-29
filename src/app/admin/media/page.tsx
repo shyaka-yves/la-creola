@@ -52,36 +52,37 @@ export default function AdminMediaPage() {
     setUploading(true);
     setError(null);
     try {
-      // 1. Get signed upload URL
-      const urlRes = await fetch("/api/admin/media/upload-url", {
+      // 1. Get signature
+      const signRes = await fetch("/api/admin/media/upload-url", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filename: file.name, contentType: file.type }),
       });
-      const urlData = (await urlRes.json()) as {
-        ok: boolean;
-        signedUrl: string;
-        path: string;
-        error?: string;
-      };
+      const signData = await signRes.json();
 
-      if (!urlData.ok) {
-        setError(urlData.error ?? "Failed to get upload URL");
+      if (!signData.ok) {
+        setError(signData.error ?? "Failed to get upload signature");
         setUploading(false);
         return;
       }
 
-      // 2. Upload directly to Supabase
-      const uploadRes = await fetch(urlData.signedUrl, {
-        method: "PUT",
-        body: file,
-        headers: {
-          "Content-Type": file.type,
-        },
-      });
+      // 2. Upload directly to Cloudinary
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("api_key", signData.apiKey);
+      formData.append("timestamp", signData.timestamp.toString());
+      formData.append("signature", signData.signature);
+      formData.append("folder", signData.folder);
+
+      const uploadRes = await fetch(
+        `https://api.cloudinary.com/v1_1/${signData.cloudName}/${file.type.startsWith('video') ? 'video' : 'image'}/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (!uploadRes.ok) {
-        setError("Upload to storage failed");
+        const errorData = await uploadRes.json();
+        setError(errorData.error?.message ?? "Upload to Cloudinary failed");
         setUploading(false);
         return;
       }
@@ -96,15 +97,15 @@ export default function AdminMediaPage() {
     }
   }
 
-  async function onDelete(name: string) {
-    const yes = window.confirm(`Delete ${name}?`);
+  async function onDelete(name: string, type: string) {
+    const yes = window.confirm(`Delete this resource?`);
     if (!yes) return;
     setError(null);
     try {
       const res = await fetch("/api/admin/media/delete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ name, type }),
       });
       const data = (await res.json()) as { ok: boolean; error?: string };
       if (!data.ok) {
@@ -125,11 +126,11 @@ export default function AdminMediaPage() {
             Media Library
           </p>
           <h1 className="mt-2 text-xl font-semibold text-white">
-            Upload images, videos & PDFs
+            Cloudinary Media
           </h1>
           <p className="mt-1 text-sm text-zinc-400">
-            Files are stored in <span className="text-zinc-200">Supabase Storage</span>{" "}
-            and can be selected in the Content editor.
+            Files are stored in <span className="text-zinc-200">Cloudinary</span>{" "}
+            with automatic optimization and CDN delivery.
           </p>
           <div className="mt-3 rounded-lg border border-zinc-800 bg-black/40 px-4 py-3 text-xs text-zinc-400">
             <p className="font-medium text-zinc-300 mb-2">Recommended image sizes:</p>
@@ -210,7 +211,7 @@ function MediaCard({
     onDelete,
 }: {
     file: MediaFile;
-    onDelete: (name: string) => void;
+    onDelete: (name: string, type: string) => void;
 }) {
     const isLarge = (file.size || 0) > 1024 * 1024; // > 1MB
 
@@ -242,7 +243,7 @@ function MediaCard({
                 </div>
                 <button
                     type="button"
-                    onClick={() => onDelete(file.name)}
+                    onClick={() => onDelete(file.name, file.type)}
                     className="rounded-full border border-zinc-700/80 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400 transition-colors hover:border-red-500/50 hover:text-red-400"
                 >
                     Delete
@@ -257,7 +258,7 @@ function VideoCard({
     onDelete,
 }: {
     file: MediaFile;
-    onDelete: (name: string) => void;
+    onDelete: (name: string, type: string) => void;
 }) {
     const isLarge = (file.size || 0) > 5 * 1024 * 1024; // > 5MB for video
 
@@ -281,7 +282,7 @@ function VideoCard({
                 </div>
                 <button
                     type="button"
-                    onClick={() => onDelete(file.name)}
+                    onClick={() => onDelete(file.name, file.type)}
                     className="rounded-full border border-zinc-700/80 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400 transition-colors hover:border-red-500/50 hover:text-red-400"
                 >
                     Delete
@@ -296,7 +297,7 @@ function PdfCard({
     onDelete,
 }: {
     file: MediaFile;
-    onDelete: (name: string) => void;
+    onDelete: (name: string, type: string) => void;
 }) {
     return (
         <div className="card-glass overflow-hidden rounded-3xl">
@@ -318,7 +319,7 @@ function PdfCard({
                 </div>
                 <button
                     type="button"
-                    onClick={() => onDelete(file.name)}
+                    onClick={() => onDelete(file.name, file.type)}
                     className="rounded-full border border-zinc-700/80 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400 transition-colors hover:border-red-500/50 hover:text-red-400"
                 >
                     Delete

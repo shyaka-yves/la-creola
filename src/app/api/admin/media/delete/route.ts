@@ -1,24 +1,29 @@
 import { NextResponse } from "next/server";
-import { getSupabase } from "@/lib/supabaseServer";
+import { cloudinary } from "@/lib/cloudinary";
 
 export const runtime = "nodejs";
 
-const BUCKET = "uploads";
-
 export async function POST(req: Request) {
-  const body = (await req.json().catch(() => null)) as { name?: string } | null;
-  const name = (body?.name ?? "").trim();
+  try {
+    const body = (await req.json().catch(() => null)) as { name?: string; type?: string } | null;
+    const name = (body?.name ?? "").trim();
+    const type = body?.type || "image";
 
-  if (!name || name.includes("..") || name.includes("/") || name.includes("\\")) {
-    return NextResponse.json({ ok: false, error: "Invalid filename" }, { status: 400 });
+    if (!name) {
+      return NextResponse.json({ ok: false, error: "Invalid filename" }, { status: 400 });
+    }
+
+    const result = await cloudinary.uploader.destroy(name, {
+      resource_type: type === "video" ? "video" : "image",
+    });
+
+    if (result.result !== "ok" && result.result !== "not found") {
+      return NextResponse.json({ ok: false, error: result.result }, { status: 500 });
+    }
+
+    return NextResponse.json({ ok: true });
+  } catch (err: any) {
+    console.error("Cloudinary delete error:", err);
+    return NextResponse.json({ ok: false, error: err.message || "Delete failed" }, { status: 500 });
   }
-
-  const supabase = getSupabase();
-  const { error } = await supabase.storage.from(BUCKET).remove([name]);
-
-  if (error) {
-    return NextResponse.json({ ok: false, error: error.message }, { status: error.message === "Object not found" ? 404 : 500 });
-  }
-
-  return NextResponse.json({ ok: true });
 }
