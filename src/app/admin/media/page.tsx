@@ -219,7 +219,7 @@ function MediaCard({
         <div className="card-glass overflow-hidden rounded-3xl">
             <div className="relative h-40 bg-zinc-900/50">
                 <Image
-                    src={file.url}
+                    src={getOptimizedImageUrl(file.url, IMAGE_PRESETS.THUMBNAIL)}
                     alt={file.name}
                     fill
                     className="object-cover"
@@ -241,13 +241,23 @@ function MediaCard({
                         </p>
                     </div>
                 </div>
-                <button
-                    type="button"
-                    onClick={() => onDelete(file.name, file.type)}
-                    className="rounded-full border border-zinc-700/80 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400 transition-colors hover:border-red-500/50 hover:text-red-400"
-                >
-                    Delete
-                </button>
+                <div className="flex items-center gap-2">
+                    <a
+                        href={getOptimizedImageUrl(file.url)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded-full border border-zinc-700/80 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400 transition-colors hover:border-[#D4AF37]/50 hover:text-[#D4AF37]"
+                    >
+                        View
+                    </a>
+                    <button
+                        type="button"
+                        onClick={() => onDelete(file.name, file.type)}
+                        className="rounded-full border border-zinc-700/80 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400 transition-colors hover:border-red-500/50 hover:text-red-400"
+                    >
+                        Delete
+                    </button>
+                </div>
             </div>
         </div>
     );

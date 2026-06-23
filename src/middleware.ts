@@ -5,8 +5,26 @@ import { getAdminCookieName, verifyAdminToken } from "@/lib/adminAuth";
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  // Maintenance mode check
+  const isMaintenanceMode = process.env.MAINTENANCE_MODE === "true";
+  const isMaintenancePage = pathname === "/maintenance";
   const isAdminPage = pathname.startsWith("/admin");
   const isAdminApi = pathname.startsWith("/api/admin");
+  const isStaticFile = pathname.includes(".") || pathname.startsWith("/_next") || pathname.startsWith("/favicon");
+
+  if (isMaintenanceMode && !isMaintenancePage && !isAdminPage && !isAdminApi && !isStaticFile) {
+    const url = req.nextUrl.clone();
+    url.pathname = "/maintenance";
+    return NextResponse.redirect(url);
+  }
+
+  // Prevent accessing maintenance page if not in maintenance mode
+  if (!isMaintenanceMode && isMaintenancePage) {
+    const url = req.nextUrl.clone();
+    url.pathname = "/";
+    return NextResponse.redirect(url);
+  }
+
   const isLogin = pathname === "/admin/login" || pathname === "/api/admin/login";
 
   if (!isAdminPage && !isAdminApi) return NextResponse.next();
@@ -28,6 +46,6 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*"],
+  matcher: ["/((?!api/public|_next/static|_next/image|favicon.ico).*)"],
 };
 
