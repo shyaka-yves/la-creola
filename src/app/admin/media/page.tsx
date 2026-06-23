@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
+import { getOptimizedImageUrl, IMAGE_PRESETS } from "@/lib/imageUtils";
 
 type MediaFile = { name: string; url: string; type: "image" | "video" | "pdf"; size?: number };
 
