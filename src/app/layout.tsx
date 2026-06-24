@@ -35,7 +35,7 @@ export default function RootLayout({
         className={`${GeistSans.variable} ${GeistMono.variable} antialiased bg-black text-zinc-100`}
       >
         {children}
-        {process.env.MAINTENANCE_MODE !== "true" && <MobileBookingButton />}
+        <MobileBookingButton />
       </body>
     </html>
   );
