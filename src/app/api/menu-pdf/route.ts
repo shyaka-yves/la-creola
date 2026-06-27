@@ -15,15 +15,20 @@ function parseCloudinaryPdfUrl(
   pdfUrl: string
 ): { publicId: string; resourceType: "image" | "raw" } | null {
   const match = pdfUrl.match(
-    /res\.cloudinary\.com\/[^/]+\/(image|raw)\/upload\/(?:v\d+\/)?(.+)\.pdf(?:\?.*)?$/i
+    /res\.cloudinary\.com\/[^/]+\/(image|raw)\/upload\/(?:v\d+\/)?(.+\.pdf)(?:\?.*)?$/i
   );
 
   if (!match) return null;
 
-  return {
-    resourceType: match[1].toLowerCase() as "image" | "raw",
-    publicId: decodeURIComponent(match[2]),
-  };
+  const resourceType = match[1].toLowerCase() as "image" | "raw";
+  let publicId = decodeURIComponent(match[2]);
+
+  // Image PDFs use public_id without ".pdf"; raw uploads keep the extension in public_id.
+  if (resourceType === "image" && publicId.toLowerCase().endsWith(".pdf")) {
+    publicId = publicId.slice(0, -4);
+  }
+
+  return { resourceType, publicId };
 }
 
 function isPdfBuffer(buffer: Buffer): boolean {
@@ -97,7 +102,10 @@ async function fetchCloudinaryPdf(
   const direct = await downloadCloudinaryPdf(publicId, resourceType);
   if (direct) return direct;
 
-  return downloadCloudinaryPdfFromArchive(publicId, resourceType);
+  const archived = await downloadCloudinaryPdfFromArchive(publicId, resourceType);
+  if (archived) return archived;
+
+  return null;
 }
 
 function pdfResponse(body: Buffer): NextResponse {
@@ -138,6 +146,13 @@ export async function GET(req: NextRequest) {
 
       if (!pdfBytes && parsed.resourceType === "image") {
         pdfBytes = await fetchCloudinaryPdf(parsed.publicId, "raw");
+        if (!pdfBytes && !parsed.publicId.endsWith(".pdf")) {
+          pdfBytes = await fetchCloudinaryPdf(`${parsed.publicId}.pdf`, "raw");
+        }
+      }
+
+      if (!pdfBytes && parsed.resourceType === "raw") {
+        pdfBytes = await fetchCloudinaryPdf(parsed.publicId, "image");
       }
 
       if (!pdfBytes) {
