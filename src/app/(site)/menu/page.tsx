@@ -1,6 +1,5 @@
 import { FadeIn } from "@/components/FadeIn";
 import { MenuViewer } from "@/components/MenuViewer";
-import { resolveMenuDisplay } from "@/lib/menuMediaServer";
 import { getSiteContent } from "@/lib/siteContent";
 import { Metadata } from "next";
 
@@ -11,11 +10,14 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
+function getMenuPdfViewerUrl(pdfUrl: string): string {
+  return `/api/menu-pdf?url=${encodeURIComponent(pdfUrl)}`;
+}
+
 export default async function MenuPage() {
   const content = await getSiteContent();
   const menuUrl = content.menu.pdfUrl?.trim() ?? "";
-  const menuDisplay = menuUrl ? await resolveMenuDisplay(menuUrl) : null;
-  const menuOpenUrl = menuDisplay?.mode === "pdf" ? menuDisplay.openUrl : menuUrl;
+  const menuOpenUrl = menuUrl ? getMenuPdfViewerUrl(menuUrl) : "";
 
   return (
     <div className="relative overflow-hidden">
@@ -33,10 +35,10 @@ export default async function MenuPage() {
 
       <section className="pb-16 sm:pb-24 bg-black/90">
         <div className="mx-auto max-w-4xl px-4">
-          {menuDisplay ? (
+          {menuUrl ? (
             <FadeIn>
               <div className="rounded-2xl border border-zinc-700/70 bg-zinc-800/80 p-2 sm:p-4 md:p-6">
-                <MenuViewer display={menuDisplay} />
+                <MenuViewer menuUrl={menuUrl} />
                 <div className="mt-4 flex justify-center">
                   <a
                     href={menuOpenUrl}
