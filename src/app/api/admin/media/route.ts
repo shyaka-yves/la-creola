@@ -60,14 +60,10 @@ export async function POST(req: Request) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    const isPdf =
-      file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
-
-    // PDFs as raw files are easier to deliver inline than image-type PDFs on Cloudinary.
     const uploadRes = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
-          resource_type: isPdf ? "raw" : "auto",
+          resource_type: "auto",
           folder: "la-creola",
         },
         (error, result) => {

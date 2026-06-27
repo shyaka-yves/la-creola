@@ -1,5 +1,5 @@
 import { FadeIn } from "@/components/FadeIn";
-import { MenuViewer } from "@/components/MenuViewer";
+import { getMenuPdfViewerUrl, MenuView } from "@/components/MenuView";
 import { getSiteContent } from "@/lib/siteContent";
 import { Metadata } from "next";
 
@@ -10,14 +10,10 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-function getMenuPdfViewerUrl(pdfUrl: string): string {
-  return `/api/menu-pdf?url=${encodeURIComponent(pdfUrl)}`;
-}
-
 export default async function MenuPage() {
   const content = await getSiteContent();
   const menuUrl = content.menu.pdfUrl?.trim() ?? "";
-  const menuOpenUrl = menuUrl ? getMenuPdfViewerUrl(menuUrl) : "";
+  const viewerUrl = menuUrl ? getMenuPdfViewerUrl(menuUrl) : "";
 
   return (
     <div className="relative overflow-hidden">
@@ -38,10 +34,10 @@ export default async function MenuPage() {
           {menuUrl ? (
             <FadeIn>
               <div className="rounded-2xl border border-zinc-700/70 bg-zinc-800/80 p-2 sm:p-4 md:p-6">
-                <MenuViewer menuUrl={menuUrl} />
+                <MenuView menuUrl={menuUrl} />
                 <div className="mt-4 flex justify-center">
                   <a
-                    href={menuOpenUrl}
+                    href={viewerUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded border border-[#D4AF37] bg-transparent px-6 py-2.5 text-sm font-medium uppercase tracking-wide text-[#D4AF37] transition-colors hover:bg-[#D4AF37] hover:text-black"
