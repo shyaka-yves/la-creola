@@ -23,11 +23,12 @@ export function MenuViewer({ display }: MenuViewerProps) {
     );
   }
 
+  // Same-origin PDF stream — avoids Cloudinary browser embed restrictions.
   return (
     <div className="relative mx-auto w-full overflow-hidden rounded-lg border border-zinc-600/50 bg-white shadow-xl">
-      <embed
-        src={display.openUrl}
-        type="application/pdf"
+      <iframe
+        src={display.viewUrl}
+        title="La Creola menu"
         className="h-[50vh] min-h-[500px] w-full md:h-[80vh] md:min-h-[600px]"
       />
     </div>

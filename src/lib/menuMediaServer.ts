@@ -50,39 +50,66 @@ export function parseCloudinaryUrl(url: string): CloudinaryAsset | null {
   }
 }
 
-function cloudinaryDeliveryResourceType(resourceType: CloudinaryAsset["resourceType"]): "image" | "raw" {
-  return resourceType === "raw" ? "raw" : "image";
-}
+type CloudinaryResource = {
+  publicId: string;
+  resourceType: "image" | "raw";
+  deliveryType: "upload" | "authenticated" | "private";
+  format: string;
+};
 
-export async function getCloudinarySignedUrl(url: string): Promise<string | null> {
+async function resolveCloudinaryResource(url: string): Promise<CloudinaryResource | null> {
   const asset = parseCloudinaryUrl(url);
   if (!asset || !hasCloudinaryCredentials()) return null;
 
-  const deliveryResourceType = cloudinaryDeliveryResourceType(asset.resourceType);
+  const preferred = asset.resourceType === "raw" ? "raw" : "image";
+  const alternate = preferred === "raw" ? "image" : "raw";
 
-  let deliveryType: "upload" | "authenticated" | "private" = "upload";
-  let format: string | undefined;
-
-  try {
-    const resource = await cloudinary.api.resource(asset.publicId, {
-      resource_type: deliveryResourceType,
-    });
-    if (resource.type === "authenticated" || resource.type === "private") {
-      deliveryType = resource.type;
+  for (const resourceType of [preferred, alternate]) {
+    try {
+      const resource = await cloudinary.api.resource(asset.publicId, {
+        resource_type: resourceType,
+      });
+      const deliveryType = resource.type as CloudinaryResource["deliveryType"];
+      return {
+        publicId: asset.publicId,
+        resourceType: resourceType as "image" | "raw",
+        deliveryType:
+          deliveryType === "authenticated" || deliveryType === "private"
+            ? deliveryType
+            : "upload",
+        format: resource.format || "pdf",
+      };
+    } catch {
+      // Try the other resource type.
     }
-    if (resource.format) {
-      format = resource.format;
-    }
-  } catch {
-    // Fall back to defaults from the stored URL.
   }
 
-  return cloudinary.url(asset.publicId, {
+  return null;
+}
+
+export async function getCloudinarySignedUrl(url: string): Promise<string | null> {
+  const resource = await resolveCloudinaryResource(url);
+  if (!resource) return null;
+
+  return cloudinary.url(resource.publicId, {
     secure: true,
-    resource_type: deliveryResourceType,
-    type: deliveryType,
+    resource_type: resource.resourceType,
+    type: resource.deliveryType,
     sign_url: true,
-    format,
+    format: resource.format,
+  });
+}
+
+export async function getCloudinaryDownloadUrl(url: string): Promise<string | null> {
+  const resource = await resolveCloudinaryResource(url);
+  if (!resource || !hasCloudinaryCredentials()) return null;
+
+  const expiresAt = Math.floor(Date.now() / 1000) + 3600;
+  return cloudinary.utils.private_download_url(resource.publicId, resource.format, {
+    resource_type: resource.resourceType,
+    type: resource.deliveryType,
+    expires_at: expiresAt,
+    attachment: false,
   });
 }
 
@@ -90,10 +117,11 @@ export async function fetchMenuBytes(url: string): Promise<{
   buffer: ArrayBuffer;
   contentType: string;
 } | null> {
-  const signed = await getCloudinarySignedUrl(url);
-  const candidates = [signed, url].filter(
-    (candidate, index, arr) => candidate && arr.indexOf(candidate) === index
-  ) as string[];
+  const candidates = [
+    await getCloudinaryDownloadUrl(url),
+    await getCloudinarySignedUrl(url),
+    url,
+  ].filter((candidate, index, arr) => candidate && arr.indexOf(candidate) === index) as string[];
 
   for (const candidate of candidates) {
     const response = await fetch(candidate, { cache: "no-store" });
@@ -101,10 +129,16 @@ export async function fetchMenuBytes(url: string): Promise<{
 
     const contentType = response.headers.get("content-type") ?? "application/pdf";
     const buffer = await response.arrayBuffer();
+    if (buffer.byteLength === 0) continue;
+
     return { buffer, contentType };
   }
 
   return null;
+}
+
+function menuProxyUrl(sourceUrl: string): string {
+  return `/api/menu-pdf?url=${encodeURIComponent(sourceUrl)}`;
 }
 
 export async function resolveMenuDisplay(url: string): Promise<MenuDisplay | null> {
@@ -116,15 +150,12 @@ export async function resolveMenuDisplay(url: string): Promise<MenuDisplay | nul
     return { mode: "image", src: trimmed };
   }
 
-  const signed = await getCloudinarySignedUrl(trimmed);
-  const openUrl = signed ?? trimmed;
-  const viewUrl = parseCloudinaryUrl(trimmed)
-    ? `/api/menu-pdf?url=${encodeURIComponent(trimmed)}`
-    : openUrl;
+  // Always serve PDFs from our domain — Cloudinary often blocks inline embed/download in browsers.
+  const proxyUrl = menuProxyUrl(trimmed);
 
   return {
     mode: "pdf",
-    viewUrl,
-    openUrl,
+    viewUrl: proxyUrl,
+    openUrl: proxyUrl,
   };
 }

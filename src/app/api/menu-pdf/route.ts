@@ -1,9 +1,5 @@
 import { NextResponse } from "next/server";
-import {
-  fetchMenuBytes,
-  getCloudinarySignedUrl,
-  parseCloudinaryUrl,
-} from "@/lib/menuMediaServer";
+import { fetchMenuBytes } from "@/lib/menuMediaServer";
 
 export const runtime = "nodejs";
 
@@ -35,18 +31,15 @@ export async function GET(req: Request) {
     return NextResponse.json({ ok: false, error: "URL not allowed" }, { status: 400 });
   }
 
-  if (parseCloudinaryUrl(url)) {
-    const signed = await getCloudinarySignedUrl(url);
-    if (signed) {
-      return NextResponse.redirect(signed);
-    }
-  }
-
   try {
     const result = await fetchMenuBytes(url);
     if (!result) {
       return NextResponse.json(
-        { ok: false, error: "Failed to fetch menu PDF" },
+        {
+          ok: false,
+          error:
+            "Failed to fetch menu PDF. Check Cloudinary PDF delivery is enabled in Security settings.",
+        },
         { status: 502 }
       );
     }
@@ -60,6 +53,7 @@ export async function GET(req: Request) {
         "Content-Type": contentType,
         "Content-Disposition": "inline",
         "Cache-Control": "public, max-age=300",
+        "X-Content-Type-Options": "nosniff",
       },
     });
   } catch {

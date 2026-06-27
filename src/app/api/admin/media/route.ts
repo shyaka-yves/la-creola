@@ -14,12 +14,17 @@ export async function GET() {
   try {
     // Fetch images and videos from Cloudinary
     // Note: PDF files are usually classified as 'image' or 'raw' depending on how they were uploaded
-    const [imageRes, videoRes] = await Promise.all([
-      cloudinary.api.resources({ max_results: 500, type: 'upload', resource_type: 'image' }),
-      cloudinary.api.resources({ max_results: 500, type: 'upload', resource_type: 'video' })
+    const [imageRes, videoRes, rawRes] = await Promise.all([
+      cloudinary.api.resources({ max_results: 500, type: "upload", resource_type: "image" }),
+      cloudinary.api.resources({ max_results: 500, type: "upload", resource_type: "video" }),
+      cloudinary.api.resources({ max_results: 500, type: "upload", resource_type: "raw" }),
     ]);
 
-    const allResources = [...imageRes.resources, ...videoRes.resources];
+    const allResources = [
+      ...imageRes.resources,
+      ...videoRes.resources,
+      ...rawRes.resources,
+    ];
     
     // Sort by creation date descending
     allResources.sort((a: any, b: any) => 
@@ -55,12 +60,15 @@ export async function POST(req: Request) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // Upload to Cloudinary using a buffer
+    const isPdf =
+      file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+
+    // PDFs as raw files are easier to deliver inline than image-type PDFs on Cloudinary.
     const uploadRes = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
-          resource_type: "auto",
-          folder: "la-creola", // Optional: put in a folder
+          resource_type: isPdf ? "raw" : "auto",
+          folder: "la-creola",
         },
         (error, result) => {
           if (error) reject(error);
@@ -77,7 +85,11 @@ export async function POST(req: Request) {
       file: { 
         name: result.public_id, 
         url: result.secure_url,
-        type: result.resource_type === "video" ? "video" : (result.format === "pdf" ? "pdf" : "image")
+        type: result.resource_type === "video"
+          ? "video"
+          : result.resource_type === "raw" || result.format === "pdf"
+            ? "pdf"
+            : "image",
       },
     });
   } catch (err: any) {
