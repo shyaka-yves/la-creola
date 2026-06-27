@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import type { MenuDisplay } from "@/lib/menuMediaServer";
 
@@ -23,17 +25,11 @@ export function MenuViewer({ display }: MenuViewerProps) {
 
   return (
     <div className="relative mx-auto w-full overflow-hidden rounded-lg border border-zinc-600/50 bg-white shadow-xl">
-      <object
-        data={display.embedUrl}
+      <embed
+        src={display.openUrl}
         type="application/pdf"
         className="h-[50vh] min-h-[500px] w-full md:h-[80vh] md:min-h-[600px]"
-      >
-        <iframe
-          src={display.embedUrl}
-          title="Menu PDF"
-          className="h-[50vh] min-h-[500px] w-full md:h-[80vh] md:min-h-[600px]"
-        />
-      </object>
+      />
     </div>
   );
 }

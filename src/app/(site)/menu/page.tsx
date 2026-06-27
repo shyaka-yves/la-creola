@@ -15,8 +15,7 @@ export default async function MenuPage() {
   const content = await getSiteContent();
   const menuUrl = content.menu.pdfUrl?.trim() ?? "";
   const menuDisplay = menuUrl ? await resolveMenuDisplay(menuUrl) : null;
-  const menuOpenUrl =
-    menuDisplay?.mode === "pdf" ? menuDisplay.openUrl : menuUrl;
+  const menuOpenUrl = menuDisplay?.mode === "pdf" ? menuDisplay.openUrl : menuUrl;
 
   return (
     <div className="relative overflow-hidden">

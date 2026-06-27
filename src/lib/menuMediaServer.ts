@@ -8,7 +8,15 @@ type CloudinaryAsset = {
 
 export type MenuDisplay =
   | { mode: "image"; src: string }
-  | { mode: "pdf"; embedUrl: string; openUrl: string };
+  | { mode: "pdf"; viewUrl: string; openUrl: string };
+
+function hasCloudinaryCredentials(): boolean {
+  return Boolean(
+    process.env.CLOUDINARY_API_SECRET &&
+      process.env.CLOUDINARY_API_KEY &&
+      process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+  );
+}
 
 export function parseCloudinaryUrl(url: string): CloudinaryAsset | null {
   try {
@@ -42,19 +50,39 @@ export function parseCloudinaryUrl(url: string): CloudinaryAsset | null {
   }
 }
 
-function cloudinaryDeliveryType(resourceType: CloudinaryAsset["resourceType"]): "image" | "raw" {
+function cloudinaryDeliveryResourceType(resourceType: CloudinaryAsset["resourceType"]): "image" | "raw" {
   return resourceType === "raw" ? "raw" : "image";
 }
 
-export function getCloudinarySignedUrl(url: string): string | null {
+export async function getCloudinarySignedUrl(url: string): Promise<string | null> {
   const asset = parseCloudinaryUrl(url);
-  if (!asset) return null;
+  if (!asset || !hasCloudinaryCredentials()) return null;
+
+  const deliveryResourceType = cloudinaryDeliveryResourceType(asset.resourceType);
+
+  let deliveryType: "upload" | "authenticated" | "private" = "upload";
+  let format: string | undefined;
+
+  try {
+    const resource = await cloudinary.api.resource(asset.publicId, {
+      resource_type: deliveryResourceType,
+    });
+    if (resource.type === "authenticated" || resource.type === "private") {
+      deliveryType = resource.type;
+    }
+    if (resource.format) {
+      format = resource.format;
+    }
+  } catch {
+    // Fall back to defaults from the stored URL.
+  }
 
   return cloudinary.url(asset.publicId, {
     secure: true,
-    resource_type: cloudinaryDeliveryType(asset.resourceType),
-    type: "upload",
+    resource_type: deliveryResourceType,
+    type: deliveryType,
     sign_url: true,
+    format,
   });
 }
 
@@ -62,7 +90,7 @@ export async function fetchMenuBytes(url: string): Promise<{
   buffer: ArrayBuffer;
   contentType: string;
 } | null> {
-  const signed = getCloudinarySignedUrl(url);
+  const signed = await getCloudinarySignedUrl(url);
   const candidates = [signed, url].filter(
     (candidate, index, arr) => candidate && arr.indexOf(candidate) === index
   ) as string[];
@@ -88,11 +116,15 @@ export async function resolveMenuDisplay(url: string): Promise<MenuDisplay | nul
     return { mode: "image", src: trimmed };
   }
 
-  const openUrl = getCloudinarySignedUrl(trimmed) ?? trimmed;
+  const signed = await getCloudinarySignedUrl(trimmed);
+  const openUrl = signed ?? trimmed;
+  const viewUrl = parseCloudinaryUrl(trimmed)
+    ? `/api/menu-pdf?url=${encodeURIComponent(trimmed)}`
+    : openUrl;
 
   return {
     mode: "pdf",
-    embedUrl: `/api/menu-pdf?url=${encodeURIComponent(trimmed)}`,
+    viewUrl,
     openUrl,
   };
 }
