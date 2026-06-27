@@ -1,15 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import { getMenuEmbedUrl, getMenuMediaKind } from "@/lib/menuMedia";
+import { getMenuMediaKind } from "@/lib/menuMedia";
 
 type MenuViewerProps = {
   url: string;
+  directEmbedUrl?: string;
 };
 
-export function MenuViewer({ url }: MenuViewerProps) {
+export function MenuViewer({ url, directEmbedUrl }: MenuViewerProps) {
   const kind = getMenuMediaKind(url);
-  const embedUrl = getMenuEmbedUrl(url);
+  const embedUrl =
+    directEmbedUrl ||
+    (kind === "image" ? url : `/api/menu-pdf?url=${encodeURIComponent(url)}`);
 
   if (kind === "image") {
     return (
@@ -28,11 +31,7 @@ export function MenuViewer({ url }: MenuViewerProps) {
 
   return (
     <div className="relative mx-auto w-full overflow-hidden rounded-lg border border-zinc-600/50 bg-zinc-950 shadow-xl">
-      <object
-        data={embedUrl}
-        type="application/pdf"
-        className="h-[50vh] min-h-[500px] w-full md:h-[80vh] md:min-h-[600px]"
-      >
+      <object data={embedUrl} type="application/pdf" className="h-[50vh] min-h-[500px] w-full md:h-[80vh] md:min-h-[600px]">
         <iframe
           src={embedUrl}
           title="Menu PDF"

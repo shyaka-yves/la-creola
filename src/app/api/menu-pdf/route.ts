@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { fetchMenuBytes, getCloudinarySignedUrl } from "@/lib/menuMediaServer";
 
 export const runtime = "nodejs";
 
@@ -31,25 +32,34 @@ export async function GET(req: Request) {
   }
 
   try {
-    const upstream = await fetch(url, { cache: "no-store" });
-    if (!upstream.ok) {
+    const result = await fetchMenuBytes(url);
+    if (!result) {
+      const signed = getCloudinarySignedUrl(url);
+      if (signed) {
+        return NextResponse.redirect(signed);
+      }
       return NextResponse.json(
-        { ok: false, error: `Failed to fetch menu (${upstream.status})` },
-        { status: upstream.status }
+        { ok: false, error: "Failed to fetch menu PDF" },
+        { status: 502 }
       );
     }
 
-    const buffer = await upstream.arrayBuffer();
-    const contentType = upstream.headers.get("content-type") ?? "application/pdf";
+    const contentType = result.contentType.includes("pdf")
+      ? "application/pdf"
+      : result.contentType;
 
-    return new NextResponse(buffer, {
+    return new NextResponse(result.buffer, {
       headers: {
-        "Content-Type": contentType.includes("pdf") ? "application/pdf" : contentType,
+        "Content-Type": contentType,
         "Content-Disposition": "inline",
         "Cache-Control": "public, max-age=300",
       },
     });
   } catch {
+    const signed = getCloudinarySignedUrl(url);
+    if (signed) {
+      return NextResponse.redirect(signed);
+    }
     return NextResponse.json({ ok: false, error: "Failed to load menu PDF" }, { status: 500 });
   }
 }
