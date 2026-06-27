@@ -1,8 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import JSZip from "jszip";
-import { cloudinary } from "@/lib/cloudinary";
+import { cloudName, cloudinary } from "@/lib/cloudinary";
 
 export const runtime = "nodejs";
+
+type ParsedCloudinaryPdf = {
+  cloudName: string;
+  publicId: string;
+  resourceType: "image" | "raw";
+};
+
+type CloudinaryDelivery = {
+  publicId: string;
+  resourceType: "image" | "raw";
+  deliveryType: "upload" | "authenticated" | "private";
+  format: string;
+};
 
 function resolvePdfUrl(pdfUrl: string, origin: string): string {
   if (pdfUrl.startsWith("/")) {
@@ -11,93 +24,181 @@ function resolvePdfUrl(pdfUrl: string, origin: string): string {
   return pdfUrl;
 }
 
-function parseCloudinaryPdfUrl(
-  pdfUrl: string
-): { publicId: string; resourceType: "image" | "raw" } | null {
-  const match = pdfUrl.match(
-    /res\.cloudinary\.com\/[^/]+\/(image|raw)\/upload\/(?:v\d+\/)?(.+)\.pdf(?:\?.*)?$/i
-  );
+function parseCloudinaryPdfUrl(pdfUrl: string): ParsedCloudinaryPdf | null {
+  try {
+    const parsed = new URL(pdfUrl);
+    if (!parsed.hostname.includes("cloudinary.com")) return null;
 
-  if (!match) return null;
+    const segments = parsed.pathname.split("/").filter(Boolean);
+    const uploadIndex = segments.indexOf("upload");
+    if (uploadIndex < 2) return null;
 
-  return {
-    resourceType: match[1].toLowerCase() as "image" | "raw",
-    publicId: decodeURIComponent(match[2]),
-  };
+    const resourceType = segments[uploadIndex - 1];
+    if (resourceType !== "image" && resourceType !== "raw") return null;
+
+    const afterUpload = segments.slice(uploadIndex + 1);
+    const withoutVersion =
+      afterUpload[0]?.startsWith("v") && /^\d+$/.test(afterUpload[0].slice(1))
+        ? afterUpload.slice(1)
+        : afterUpload;
+
+    const publicIdWithExt = withoutVersion.join("/");
+    const publicId = publicIdWithExt.replace(/\.pdf$/i, "");
+
+    return {
+      cloudName: segments[0],
+      publicId: decodeURIComponent(publicId),
+      resourceType: resourceType as "image" | "raw",
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function resolveCloudinaryDelivery(
+  publicId: string,
+  preferred: "image" | "raw"
+): Promise<CloudinaryDelivery | null> {
+  const types: Array<"image" | "raw"> =
+    preferred === "raw" ? ["raw", "image"] : ["image", "raw"];
+
+  for (const resourceType of types) {
+    try {
+      const resource = await cloudinary.api.resource(publicId, {
+        resource_type: resourceType,
+      });
+
+      const deliveryType = resource.type as CloudinaryDelivery["deliveryType"];
+      return {
+        publicId,
+        resourceType,
+        deliveryType:
+          deliveryType === "authenticated" || deliveryType === "private"
+            ? deliveryType
+            : "upload",
+        format: resource.format || "pdf",
+      };
+    } catch {
+      // Try the other resource type.
+    }
+  }
+
+  return null;
 }
 
 function isPdfBuffer(buffer: Buffer): boolean {
   return buffer.length >= 5 && buffer.subarray(0, 5).equals(Buffer.from("%PDF-"));
 }
 
-async function downloadCloudinaryPdf(
-  publicId: string,
-  resourceType: "image" | "raw"
-): Promise<Buffer | null> {
-  const downloadUrl = cloudinary.utils.private_download_url(publicId, "pdf", {
-    resource_type: resourceType,
-    type: "upload",
-    expires_at: Math.floor(Date.now() / 1000) + 3600,
-  });
-
-  const res = await fetch(downloadUrl);
-  if (!res.ok) {
-    console.error(
-      "Cloudinary private download failed:",
-      res.status,
-      publicId,
-      resourceType
-    );
-    return null;
-  }
+async function downloadFromUrl(url: string): Promise<Buffer | null> {
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) return null;
 
   const buffer = Buffer.from(await res.arrayBuffer());
   return isPdfBuffer(buffer) ? buffer : null;
 }
 
+async function downloadCloudinaryPdf(
+  delivery: CloudinaryDelivery
+): Promise<Buffer | null> {
+  const downloadUrl = cloudinary.utils.private_download_url(
+    delivery.publicId,
+    delivery.format || "pdf",
+    {
+      resource_type: delivery.resourceType,
+      type: delivery.deliveryType,
+      expires_at: Math.floor(Date.now() / 1000) + 3600,
+    }
+  );
+
+  return downloadFromUrl(downloadUrl);
+}
+
 async function downloadCloudinaryPdfFromArchive(
-  publicId: string,
-  resourceType: "image" | "raw"
+  delivery: CloudinaryDelivery
 ): Promise<Buffer | null> {
   const archiveUrl = cloudinary.utils.download_zip_url({
-    public_ids: [publicId],
-    resource_type: resourceType,
+    public_ids: [delivery.publicId],
+    resource_type: delivery.resourceType,
     flatten_folders: true,
   });
 
-  const archiveRes = await fetch(archiveUrl);
-  if (!archiveRes.ok) {
-    console.error(
-      "Cloudinary archive download failed:",
-      archiveRes.status,
-      publicId,
-      resourceType
-    );
-    return null;
-  }
+  const archiveRes = await fetch(archiveUrl, { cache: "no-store" });
+  if (!archiveRes.ok) return null;
 
   const zip = await JSZip.loadAsync(await archiveRes.arrayBuffer());
   const pdfEntry = Object.values(zip.files).find(
     (file) => !file.dir && file.name.toLowerCase().endsWith(".pdf")
   );
 
-  if (!pdfEntry) {
-    console.error("No PDF entry found in Cloudinary archive:", publicId);
-    return null;
-  }
+  if (!pdfEntry) return null;
 
   const buffer = Buffer.from(await pdfEntry.async("nodebuffer"));
   return isPdfBuffer(buffer) ? buffer : null;
 }
 
-async function fetchCloudinaryPdf(
-  publicId: string,
-  resourceType: "image" | "raw"
+async function downloadCloudinarySignedUrl(
+  delivery: CloudinaryDelivery
 ): Promise<Buffer | null> {
-  const direct = await downloadCloudinaryPdf(publicId, resourceType);
-  if (direct) return direct;
+  const signedUrl = cloudinary.url(delivery.publicId, {
+    secure: true,
+    resource_type: delivery.resourceType,
+    type: delivery.deliveryType,
+    sign_url: true,
+    format: delivery.format || "pdf",
+  });
 
-  return downloadCloudinaryPdfFromArchive(publicId, resourceType);
+  return downloadFromUrl(signedUrl);
+}
+
+async function fetchCloudinaryPdf(
+  parsed: ParsedCloudinaryPdf,
+  sourceUrl: string
+): Promise<Buffer | null> {
+  if (cloudName && parsed.cloudName !== cloudName) {
+    console.error(
+      "Cloudinary cloud name mismatch:",
+      parsed.cloudName,
+      "expected",
+      cloudName
+    );
+  }
+
+  const delivery = await resolveCloudinaryDelivery(
+    parsed.publicId,
+    parsed.resourceType
+  );
+
+  if (delivery) {
+    for (const attempt of [
+      () => downloadCloudinaryPdf(delivery),
+      () => downloadCloudinaryPdfFromArchive(delivery),
+      () => downloadCloudinarySignedUrl(delivery),
+    ]) {
+      const bytes = await attempt();
+      if (bytes) return bytes;
+    }
+  }
+
+  for (const resourceType of ["image", "raw"] as const) {
+    const fallbackDelivery: CloudinaryDelivery = {
+      publicId: parsed.publicId,
+      resourceType,
+      deliveryType: "upload",
+      format: "pdf",
+    };
+
+    for (const attempt of [
+      () => downloadCloudinaryPdf(fallbackDelivery),
+      () => downloadCloudinaryPdfFromArchive(fallbackDelivery),
+      () => downloadCloudinarySignedUrl(fallbackDelivery),
+    ]) {
+      const bytes = await attempt();
+      if (bytes) return bytes;
+    }
+  }
+
+  return downloadFromUrl(sourceUrl);
 }
 
 function pdfResponse(body: Buffer): NextResponse {
@@ -119,6 +220,16 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Missing url param" }, { status: 400 });
   }
 
+  if (!process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET || !cloudName) {
+    return NextResponse.json(
+      {
+        error:
+          "Missing Cloudinary credentials. Set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET on Vercel.",
+      },
+      { status: 500 }
+    );
+  }
+
   const pdfUrl = resolvePdfUrl(rawUrl, req.nextUrl.origin);
 
   try {
@@ -131,15 +242,7 @@ export async function GET(req: NextRequest) {
         );
       }
 
-      let pdfBytes = await fetchCloudinaryPdf(
-        parsed.publicId,
-        parsed.resourceType
-      );
-
-      if (!pdfBytes && parsed.resourceType === "image") {
-        pdfBytes = await fetchCloudinaryPdf(parsed.publicId, "raw");
-      }
-
+      const pdfBytes = await fetchCloudinaryPdf(parsed, pdfUrl);
       if (!pdfBytes) {
         return NextResponse.json(
           { error: "Failed to fetch PDF from storage" },
@@ -150,7 +253,7 @@ export async function GET(req: NextRequest) {
       return pdfResponse(pdfBytes);
     }
 
-    const upstream = await fetch(pdfUrl);
+    const upstream = await fetch(pdfUrl, { cache: "no-store" });
     if (!upstream.ok) {
       return NextResponse.json(
         { error: "Upstream fetch failed" },
