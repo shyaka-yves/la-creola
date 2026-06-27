@@ -1,9 +1,14 @@
+import { getMenuMediaKind } from "@/lib/menuMedia";
 import { cloudinary } from "@/lib/cloudinary";
 
 type CloudinaryAsset = {
   publicId: string;
   resourceType: "image" | "raw" | "video";
 };
+
+export type MenuDisplay =
+  | { mode: "image"; src: string }
+  | { mode: "pdf"; embedUrl: string; openUrl: string };
 
 export function parseCloudinaryUrl(url: string): CloudinaryAsset | null {
   try {
@@ -37,13 +42,17 @@ export function parseCloudinaryUrl(url: string): CloudinaryAsset | null {
   }
 }
 
+function cloudinaryDeliveryType(resourceType: CloudinaryAsset["resourceType"]): "image" | "raw" {
+  return resourceType === "raw" ? "raw" : "image";
+}
+
 export function getCloudinarySignedUrl(url: string): string | null {
   const asset = parseCloudinaryUrl(url);
   if (!asset) return null;
 
   return cloudinary.url(asset.publicId, {
     secure: true,
-    resource_type: asset.resourceType,
+    resource_type: cloudinaryDeliveryType(asset.resourceType),
     type: "upload",
     sign_url: true,
   });
@@ -53,7 +62,8 @@ export async function fetchMenuBytes(url: string): Promise<{
   buffer: ArrayBuffer;
   contentType: string;
 } | null> {
-  const candidates = [url, getCloudinarySignedUrl(url)].filter(
+  const signed = getCloudinarySignedUrl(url);
+  const candidates = [signed, url].filter(
     (candidate, index, arr) => candidate && arr.indexOf(candidate) === index
   ) as string[];
 
@@ -69,11 +79,20 @@ export async function fetchMenuBytes(url: string): Promise<{
   return null;
 }
 
-/** Best URL for embedding PDFs in the browser (signed Cloudinary when needed). */
-export function resolveMenuEmbedUrl(url: string): string {
+export async function resolveMenuDisplay(url: string): Promise<MenuDisplay | null> {
   const trimmed = url.trim();
-  if (!trimmed) return "";
+  if (!trimmed) return null;
 
-  const signed = getCloudinarySignedUrl(trimmed);
-  return signed ?? trimmed;
+  const kind = getMenuMediaKind(trimmed);
+  if (kind === "image") {
+    return { mode: "image", src: trimmed };
+  }
+
+  const openUrl = getCloudinarySignedUrl(trimmed) ?? trimmed;
+
+  return {
+    mode: "pdf",
+    embedUrl: `/api/menu-pdf?url=${encodeURIComponent(trimmed)}`,
+    openUrl,
+  };
 }

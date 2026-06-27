@@ -1,7 +1,6 @@
 import { FadeIn } from "@/components/FadeIn";
 import { MenuViewer } from "@/components/MenuViewer";
-import { getMenuMediaKind } from "@/lib/menuMedia";
-import { resolveMenuEmbedUrl } from "@/lib/menuMediaServer";
+import { resolveMenuDisplay } from "@/lib/menuMediaServer";
 import { getSiteContent } from "@/lib/siteContent";
 import { Metadata } from "next";
 
@@ -15,9 +14,9 @@ export const dynamic = "force-dynamic";
 export default async function MenuPage() {
   const content = await getSiteContent();
   const menuUrl = content.menu.pdfUrl?.trim() ?? "";
-  const menuKind = menuUrl ? getMenuMediaKind(menuUrl) : "unknown";
-  const menuEmbedUrl = menuUrl && menuKind === "pdf" ? resolveMenuEmbedUrl(menuUrl) : menuUrl;
-  const menuOpenUrl = menuEmbedUrl || menuUrl;
+  const menuDisplay = menuUrl ? await resolveMenuDisplay(menuUrl) : null;
+  const menuOpenUrl =
+    menuDisplay?.mode === "pdf" ? menuDisplay.openUrl : menuUrl;
 
   return (
     <div className="relative overflow-hidden">
@@ -35,10 +34,10 @@ export default async function MenuPage() {
 
       <section className="pb-16 sm:pb-24 bg-black/90">
         <div className="mx-auto max-w-4xl px-4">
-          {menuUrl ? (
+          {menuDisplay ? (
             <FadeIn>
               <div className="rounded-2xl border border-zinc-700/70 bg-zinc-800/80 p-2 sm:p-4 md:p-6">
-                <MenuViewer url={menuUrl} directEmbedUrl={menuEmbedUrl} />
+                <MenuViewer display={menuDisplay} />
                 <div className="mt-4 flex justify-center">
                   <a
                     href={menuOpenUrl}
@@ -63,4 +62,3 @@ export default async function MenuPage() {
     </div>
   );
 }
-
