@@ -1,4 +1,5 @@
 import { FadeIn } from "@/components/FadeIn";
+import { MenuViewer } from "@/components/MenuViewer";
 import { getSiteContent } from "@/lib/siteContent";
 import { Metadata } from "next";
 
@@ -31,13 +32,7 @@ export default async function MenuPage() {
           {content.menu.pdfUrl ? (
             <FadeIn>
               <div className="rounded-2xl border border-zinc-700/70 bg-zinc-800/80 p-2 sm:p-4 md:p-6">
-                <div className="relative mx-auto w-full overflow-hidden rounded-lg border border-zinc-600/50 bg-white shadow-xl">
-                  <iframe
-                    src={content.menu.pdfUrl}
-                    className="h-[50vh] min-h-[500px] w-full rounded-lg md:h-[80vh] md:min-h-[600px]"
-                    title="Menu PDF"
-                  />
-                </div>
+                <MenuViewer url={content.menu.pdfUrl} />
                 <div className="mt-4 flex justify-center">
                   <a
                     href={content.menu.pdfUrl}
@@ -45,7 +40,7 @@ export default async function MenuPage() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded border border-[#D4AF37] bg-transparent px-6 py-2.5 text-sm font-medium uppercase tracking-wide text-[#D4AF37] transition-colors hover:bg-[#D4AF37] hover:text-black"
                   >
-                    Download Menu PDF
+                    Open Menu in New Tab
                   </a>
                 </div>
               </div>
