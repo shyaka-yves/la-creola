@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { getOptimizedImageUrl, IMAGE_PRESETS } from "@/lib/imageUtils";
 // The instruction provided `import { FadeIn } from "./FadeIn";` but FadeIn is not used in the provided code.
 // I will add it as per instruction, but note it's unused in the current context.
@@ -106,12 +105,6 @@ export function EventCarousel({ events }: Props) {
                                     </p>
                                     <h2 className="mt-2 text-sm font-semibold text-white leading-tight">{event.title}</h2>
                                     <p className="mt-2 text-xs text-zinc-400 font-light line-clamp-2">{event.description}</p>
-                                    <Link
-                                        href={event.href}
-                                        className="gold-gradient mt-4 inline-flex items-center justify-center rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.1em] text-black shadow-lg shadow-yellow-500/10 hover:brightness-110 active:scale-95 transition-all w-full whitespace-nowrap overflow-hidden"
-                                    >
-                                        Learn More
-                                    </Link>
                                 </div>
                             </article>
                         </div>

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { formatDateTimeHHMM } from "@/lib/dateFormat";
 import { addReservation, type ReservationRecord } from "@/lib/reservationsDb";
 
 export const runtime = "nodejs";
@@ -20,7 +21,7 @@ async function sendReservationEmail(record: ReservationRecord) {
     `Name: ${record.name}`,
     `Email: ${record.email}`,
     record.phone ? `Phone: ${record.phone}` : null,
-    record.date ? `Date & Time: ${record.date}` : null,
+    record.date ? `Date & Time: ${formatDateTimeHHMM(record.date)}` : null,
     record.guests ? `Guests: ${record.guests}` : null,
     record.notes ? `Notes:\n${record.notes}` : null,
   ].filter(Boolean);
@@ -29,7 +30,7 @@ async function sendReservationEmail(record: ReservationRecord) {
     from,
     to: [RESERVATIONS_EMAIL],
     subject: `[La Creola] New reservation from ${record.name}`,
-    text: `New table reservation request:\n\n${lines.join("\n")}\n\nSubmitted at: ${new Date(record.createdAt).toLocaleString()}`,
+    text: `New table reservation request:\n\n${lines.join("\n")}\n\nSubmitted at: ${formatDateTimeHHMM(record.createdAt)}`,
   });
 }
 
@@ -84,7 +85,7 @@ export async function POST(req: Request) {
       );
     }
 
-    normalizedDate = requested.toISOString();
+    normalizedDate = formatDateTimeHHMM(requested);
   }
 
   const record = await addReservation({

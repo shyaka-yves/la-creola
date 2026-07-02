@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { formatDateTimeHHMM } from "@/lib/dateFormat";
 
 type Reservation = {
   id: string;
@@ -66,10 +67,10 @@ export default function AdminReservationsPage() {
       r.name,
       r.email,
       r.phone || "",
-      r.date || "",
+      r.date ? formatDateTimeHHMM(r.date) : "",
       r.guests?.toString() || "",
       r.status,
-      new Date(r.createdAt).toLocaleString(),
+      formatDateTimeHHMM(r.createdAt),
       (r.notes || "").replace(/"/g, '""')
     ]);
 
@@ -210,7 +211,9 @@ export default function AdminReservationsPage() {
                           </div>
                         ) : null}
                       </td>
-                      <td className="px-4 py-3 text-xs">{r.date || "—"}</td>
+                      <td className="px-4 py-3 text-xs">
+                        {r.date ? formatDateTimeHHMM(r.date) : "—"}
+                      </td>
                       <td className="px-4 py-3 text-xs">
                         {r.guests ?? "—"}
                       </td>
@@ -227,7 +230,7 @@ export default function AdminReservationsPage() {
                         </span>
                       </td>
                       <td className="px-4 py-3 text-[11px] text-zinc-500">
-                        {new Date(r.createdAt).toLocaleString()}
+                        {formatDateTimeHHMM(r.createdAt)}
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex flex-wrap gap-1.5">
